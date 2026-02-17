@@ -1,0 +1,80 @@
+import type { Service } from '@/types';
+import { ServiceId } from './constants';
+
+export const SERVICES_DATA: Service[] = [
+  {
+    id: ServiceId.PENETRATION_TESTING,
+    title: 'Penetration Testing',
+    description: 'Comprehensive ethical hacking services to identify vulnerabilities before malicious actors do. Our expert team simulates real-world attacks to test your defenses.',
+    icon: 'Shield',
+    features: [
+      'External & Internal Network Testing',
+      'Web Application Security Assessment',
+      'Mobile Application Testing',
+      'Social Engineering Simulations',
+      'Red Team Operations',
+      'Detailed Remediation Reports',
+    ],
+    color: 'primary',
+  },
+  {
+    id: ServiceId.SECURITY_AUDIT,
+    title: 'Security Audit',
+    description: 'Thorough evaluation of your security posture, policies, and compliance status. We ensure your organization meets industry standards and best practices.',
+    icon: 'FileSearch',
+    features: [
+      'Compliance Assessment (ISO 27001, SOC 2, PCI DSS)',
+      'Security Policy Review',
+      'Access Control Audits',
+      'Configuration Reviews',
+      'Third-Party Risk Assessment',
+      'Gap Analysis & Recommendations',
+    ],
+    color: 'secondary',
+  },
+  {
+    id: ServiceId.NETWORK_SECURITY,
+    title: 'Network Security',
+    description: 'Advanced network protection solutions to safeguard your infrastructure from unauthorized access, attacks, and data breaches.',
+    icon: 'Network',
+    features: [
+      'Firewall Configuration & Management',
+      'Intrusion Detection & Prevention Systems',
+      'VPN & Secure Remote Access',
+      'Network Segmentation',
+      'DDoS Protection',
+      '24/7 Network Monitoring',
+    ],
+    color: 'accent',
+  },
+  {
+    id: ServiceId.CLOUD_SECURITY,
+    title: 'Cloud Monitoring & Observability',
+    description: 'Gain complete visibility into your cloud infrastructure with real-time monitoring, logging, and observability solutions across AWS, Azure, and GCP.',
+    icon: 'Activity',
+    features: [
+      'Real-time Infrastructure Monitoring',
+      'Application Performance Monitoring (APM)',
+      'Centralized Logging & Log Analytics',
+      'Custom Metrics & Dashboards',
+      'Intelligent Alerting & Notifications',
+      'Distributed Tracing & Debugging',
+    ],
+    color: 'primary',
+  },
+  {
+    id: ServiceId.IT_INFRASTRUCTURE,
+    title: 'IT Infrastructure',
+    description: 'Build and maintain robust, scalable IT infrastructure with enterprise-grade reliability, security, and performance.',
+    icon: 'Server',
+    features: [
+      'Infrastructure Design & Implementation',
+      'Data Center Management',
+      'Disaster Recovery & Business Continuity',
+      'System Integration',
+      'Performance Optimization',
+      'Infrastructure as Code (IaC)',
+    ],
+    color: 'secondary',
+  },
+];
