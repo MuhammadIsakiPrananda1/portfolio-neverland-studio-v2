@@ -1,197 +1,311 @@
 # Installation Guide
 
-Panduan instalasi lengkap untuk Neverland Studio.
+Detailed installation instructions for Neverland Studio. For a quick overview, see [README.md](README.md).
 
-## Quick Start (5 Menit)
+---
 
-### Menggunakan Docker (Disarankan)
+## Quick Start (Docker — 5 Minutes)
 
 ```bash
-# 1. Clone repository
-git clone https://github.com/neverland-studio/portofolio.git
+# 1. Clone the repository
+git clone https://github.com/MuhammadIsakiPrananda/portfolio-neverland-studio-v2.git
 cd portofolio-neverland-studio
 
-# 2. Buat network
+# 2. Create Docker network
 docker network create app-network
 
 # 3. Copy environment file
 cp .env.example .env
 
-# 4. Jalankan Docker Compose
+# 4. Start all services
 docker-compose up -d --build
 
-# 5. Selesai!
-# Akses: http://localhost:5173
+# 5. Done!
+# Dev frontend:  http://localhost:5173
+# Prod frontend: http://localhost:3000
+# Backend API:   http://localhost:8001
+# phpMyAdmin:    http://localhost:8080
 ```
 
 ---
 
-## Persiapan Sistem
+## System Preparation
 
 ### Windows
 
 1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop)
-2. Install [Git](https://git-scm.com)
-3. Install [VS Code](https://code.visualstudio.com) (disarankan)
+2. Install [Git for Windows](https://git-scm.com)
+3. Install [Node.js LTS](https://nodejs.org)
+4. *(Recommended)* Install [VS Code](https://code.visualstudio.com)
 
 ### macOS
 
 ```bash
-# Install Homebrew (jika belum ada)
+# Install Homebrew (if not already installed)
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-# Install Docker
+# Install Docker Desktop
 brew install --cask docker
 
 # Install Git
 brew install git
+
+# Install Node.js
+brew install node
 ```
 
-### Linux (Ubuntu)
+### Linux (Ubuntu / Debian)
 
 ```bash
-# Update system
+# Update system packages
 sudo apt update && sudo apt upgrade -y
 
 # Install Docker
-sudo apt install docker.io docker-compose
+sudo apt install -y docker.io
+sudo systemctl enable --now docker
+sudo usermod -aG docker $USER
+
+# Install Docker Compose (plugin)
+sudo apt install -y docker-compose-plugin
 
 # Install Git
-sudo apt install git
+sudo apt install -y git
 
-# Install PHP & Composer
-sudo apt install php php-cli php-mbstring php-xml php-curl
+# Install Node.js 22.x
+curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+sudo apt install -y nodejs
+
+# Install PHP 8.3+ and extensions
+sudo apt install -y php php-cli php-mbstring php-xml php-curl php-pdo php-mysql
+
+# Install Composer
 curl -sS https://getcomposer.org/installer | php
 sudo mv composer.phar /usr/local/bin/composer
-
-# Install Node.js
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-sudo apt install nodejs
 ```
 
 ---
 
-## Instalasi Lengkap
+## Full Installation (Without Docker)
 
-### Frontend Saja
+### Step 1 — Clone the Repository
 
 ```bash
-# Install dependencies
+git clone https://github.com/MuhammadIsakiPrananda/portfolio-neverland-studio-v2.git
+cd portofolio-neverland-studio
+```
+
+### Step 2 — Frontend Setup
+
+```bash
+# Install npm dependencies
 npm install
 
-# Copy environment
+# Copy and configure environment
 cp .env.example .env
+# Edit .env: set VITE_API_URL to your backend URL
 
-# Run development server
+# Start development server
 npm run dev
 ```
 
-### Backend Saja
+Frontend available at **http://localhost:5173**
+
+### Step 3 — Backend Setup
 
 ```bash
 cd backend
 
-# Install dependencies
+# Install PHP dependencies
 composer install
 
-# Copy environment
+# Copy and configure environment
 cp .env.example .env
+# Edit .env: set DB_*, APP_KEY, FRONTEND_URL, REVERB_* values
 
-# Generate key
+# Generate application key
 php artisan key:generate
 
-# Setup database
-mysql -u root -p -e "CREATE DATABASE neverland_portfolio;"
+# Create the database
+mysql -u root -p -e "CREATE DATABASE neverland_portfolio CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 
-# Run migrations
+# Run all migrations
 php artisan migrate
 
-# Seed data
+# Seed with initial data (optional)
 php artisan db:seed
 
-# Run server
+# Start the API server
 php artisan serve --host=0.0.0.0 --port=8001
 ```
 
-### Full Stack (Tanpa Docker)
+Backend API available at **http://localhost:8001**
+
+### Step 4 — Start WebSocket Server (Real-Time Features)
 
 ```bash
-# Terminal 1 - Backend
 cd backend
-php artisan serve --host=0.0.0.0 --port=8001
-
-# Terminal 2 - Frontend
-npm run dev
+php artisan reverb:start
 ```
 
 ---
 
-## Setup Setelah Instalasi
+## Post-Installation Setup
 
-### Login Admin Default
+### Default Admin Credentials
+
+> ⚠️ **Change these immediately after first login!**
 
 ```
-Email: admin@neverlandstudio.com
+Email:    admin@neverlandstudio.com
 Password: password
 ```
 
-### Konfigurasi Awal
+### Initial Configuration Checklist
 
-1. **Ubah password admin**
-   - Login ke dashboard
-   - Pergi ke Settings > Security
-   - Ubah password
+1. **Change Admin Password**
+   - Log in to the dashboard
+   - Navigate to **Settings → Security**
+   - Update your password
 
-2. **Setup email**
-   - Edit `.env` dengan konfigurasi email
-   - Jalankan `php artisan config:clear`
+2. **Configure Email (for contact form)**
+   - Edit `backend/.env` with your SMTP credentials:
+     ```env
+     MAIL_MAILER=smtp
+     MAIL_HOST=smtp.yourprovider.com
+     MAIL_PORT=587
+     MAIL_USERNAME=your@email.com
+     MAIL_PASSWORD=yourpassword
+     MAIL_FROM_ADDRESS=noreply@neverlandstudio.my.id
+     ```
+   - Clear config cache: `php artisan config:clear`
 
-3. **Setup 2FA** (opsional)
-   - Pergi ke Settings > Security
-   - Scan QR code dengan Google Authenticator
-   - Simpan backup codes
+3. **Enable Two-Factor Authentication (2FA)** *(Recommended)*
+   - Navigate to **Settings → Security**
+   - Scan the QR code with Google Authenticator
+   - Save your backup codes securely
+
+4. **Configure CORS** (if hosted on a custom domain)
+   - Edit `backend/config/cors.php`
+   - Add your production frontend domain to `allowed_origins`
+
+---
+
+## Building for Production
+
+### Frontend
+
+```bash
+# Type-check and build
+npm run build
+
+# Preview the build locally
+npm run preview
+```
+
+Output is in the `dist/` directory, served by Nginx in Docker.
+
+### Backend
+
+```bash
+cd backend
+
+# Cache config, routes, and views for production
+php artisan optimize
+
+# Or step by step:
+composer dump-autoload -o
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+### Docker Production Deployment
+
+```bash
+# Build and start production containers
+docker-compose up -d --build
+
+# Check all containers are running
+docker-compose ps
+
+# View logs
+docker-compose logs -f
+```
 
 ---
 
 ## Troubleshooting
 
-### Port Sudah Digunakan
+### Port Already in Use
 
 ```bash
 # Windows
 netstat -ano | findstr :5173
 taskkill /PID <PID> /F
 
-# Linux/Mac
+# Linux / macOS
 lsof -i :5173
 kill -9 <PID>
 ```
 
-### Error Database
+### Database Error
 
 ```bash
 cd backend
+
+# Clear config cache first
 php artisan config:clear
+
+# Fresh migration with seed (⚠️ destroys existing data)
 php artisan migrate:fresh --seed
 ```
 
-### Error Node Modules
+### Node Modules Error
 
 ```bash
 rm -rf node_modules package-lock.json
 npm install
 ```
 
+### Composer Error
+
+```bash
+cd backend
+composer clear-cache
+rm -rf vendor
+composer install --no-interaction
+```
+
+### Docker Build Issues
+
+```bash
+# Full clean rebuild
+docker-compose down -v --rmi all
+docker-compose build --no-cache
+docker-compose up -d
+```
+
+### Real-Time Dashboard Not Updating
+
+```bash
+# Verify Reverb is running
+php artisan reverb:start
+
+# Check .env values
+cat backend/.env | grep REVERB
+cat .env | grep VITE_REVERB
+```
+
 ---
 
-## Langkah Selanjutnya
+## Next Steps
 
-Setelah instalasi berhasil:
+After a successful installation:
 
-1. [Baca README.md](../README.md) untuk overview
-2. [Baca API Documentation](backend/README.md) untuk API reference
-3. [Kontribusi](CONTRIBUTING.md) jika ingin berkontribusi
+1. Read [README.md](README.md) for a full project overview
+2. Explore the [API Reference](README.md#api-reference) for available endpoints
+3. Read [CONTRIBUTING.md](CONTRIBUTING.md) if you'd like to contribute
 
 ---
 
-Butuh bantuan? Email: Arlianto032@gmail.com
+**Need help?** Open a GitHub issue or email: **Arlianto032@gmail.com**

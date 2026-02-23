@@ -1,60 +1,72 @@
-# Kode Etik Contributor
+# Contributor Code of Conduct
 
-## Komitmen Kami
+## Our Pledge
 
-Kami sebagai kontributor dan maintainer berkomitmen untuk menjadikan partisipasi dalam proyek ini pengalaman yang bebas dari pelecehan untuk semua orang, terlepas dari tingkat pengalaman, gender, identitas gender dan ekspresi, orientasi seksual, kemampuan, penampilan fisik, ras, etnis, usia, religion, atau kebangsaan.
-
-## Standar Kami
-
-Contoh perilaku yang berkontribusi pada lingkungan positif:
-- Menggunakan bahasa yangwelcoming dan inklusif
-- Menghormati perspektif dan pengalaman berbeda
-- Menerima kritik konstruktif dengan baik
-- Fokus pada apa yang terbaik untuk komunitas
-- Menunjukkan empati terhadap anggota komunitas lain
-
-Contoh perilaku yang tidak dapat diterima:
-- Penggunaan bahasa atau imagery seksual
-- Komentar pribadi/politik yang ofensif
-- Doxxing atau ancaman
-- Pelecehan publik atau private
-- Informasi pribadi lainnya yang tidak diminta
-- Perilaku lain yang secara wajar dapat dianggap tidak profesional
-
-## Tanggung Jawab Maintainer
-
-Maintainer bertanggung jawab untuk menjelaskan standar perilaku yang dapat diterima dan diharapkan untuk menindaklanjuti semua kasus perilaku yang tidak dapat diterima.
-
-Maintainer memiliki hak dan tanggung jawab untuk menghapus, mengedit, atau menolak komentar, commit, kode, wiki edits, issues, dan kontribusi lain yang tidak sesuai dengan Kode Etik ini.
-
-## Lingkup
-
-Kode Etik ini berlaku baik di ruang publik maupun ketika seseorang mewakili proyek atau komunitas.
-
-## Enforcement
-
-Laporan kasus perilaku yang melanggar dapat dilaporkan kepada tim maintainer di Arlianto032@gmail.com.
-
-Semua keluhan akan ditinjau dan diselidiki secara adil dan hati-hati.
-
-Maintainer berkewajiban untuk menjaga kerahasiaan pelapor.
-
-## Enforcement Guidelines
-
-Maintainer akan menentukan konsekuensi yang tepat untuk setiap kasus yang dilaporkan:
-
-1. **Peringatan**
-   - Dampak: Peringatan tertulis
-   - Situasi: Pelanggaran pertama kali
-
-2. **Peringatan Sementara**
-   - Dampak: Tidak ada interaksi dengan orang yang terlibat
-   - Situasi: Pelanggaran berulang
-
-3. **Pemblokiran Permanen**
-   - Dinsipkan dari proyek
-   - Situasi: Pelanggaran berat atau ancaman
+We as contributors and maintainers pledge to make participation in the Neverland Studio project a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, nationality, personal appearance, race, religion, or sexual identity and orientation.
 
 ---
 
-**Catatan**: Kode Etik ini telah diadaptasi dari [Contributor Covenant](https://www.contributor-covenant.org).
+## Our Standards
+
+### Examples of behavior that contributes to a positive environment
+
+- Using welcoming and inclusive language
+- Being respectful of differing viewpoints and experiences
+- Gracefully accepting constructive criticism
+- Focusing on what is best for the community
+- Showing empathy toward other community members
+
+### Examples of unacceptable behavior
+
+- The use of sexualized language or imagery
+- Personal attacks or derogatory political comments
+- Public or private harassment
+- Publishing others' private information without explicit permission (doxxing)
+- Threats of violence or intimidation
+- Any other conduct that could reasonably be considered unprofessional
+
+---
+
+## Maintainer Responsibilities
+
+Project maintainers are responsible for clarifying the standards of acceptable behavior and are expected to take appropriate and fair corrective action in response to any instances of unacceptable behavior.
+
+Maintainers have the right and responsibility to remove, edit, or reject comments, commits, code, wiki edits, issues, and other contributions that are not aligned with this Code of Conduct, and to temporarily or permanently ban any contributor for behaviors they deem inappropriate, threatening, offensive, or harmful.
+
+---
+
+## Scope
+
+This Code of Conduct applies both within project spaces (GitHub repository, issues, pull requests, discussions) and in public spaces when an individual is representing the project or its community.
+
+---
+
+## Enforcement
+
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting the project team at:
+
+**📧 Arlianto032@gmail.com**
+
+All complaints will be reviewed and investigated promptly and fairly. The project team is obligated to maintain confidentiality with regard to the reporter of an incident.
+
+---
+
+## Enforcement Guidelines
+
+Project maintainers will follow these guidelines when determining consequences:
+
+### 1. Warning
+- **Trigger**: Minor, first-time violation
+- **Consequence**: A private written warning explaining the nature of the violation
+
+### 2. Temporary Ban
+- **Trigger**: Repeated violations or a more serious single incident
+- **Consequence**: Temporary ban from all project interaction for a specified period
+
+### 3. Permanent Ban
+- **Trigger**: A pattern of violations, sustained harassment, or serious threats
+- **Consequence**: Permanent exclusion from all project-related spaces
+
+---
+
+*This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org), version 2.1.*

@@ -1,71 +1,109 @@
-# Dukungan
+# Support
 
-## Butuh Bantuan?
+## Need Help?
 
-Jangan ragu untuk menghubungi kami jika Anda membutuhkan bantuan dengan Neverland Studio.
+Don't hesitate to reach out if you need assistance with Neverland Studio.
 
-## Cara Mendapatkan Dukungan
+## Getting Support
 
-### 1. Email
-- **Email**: Arlianto032@gmail.com
-- **Waktu respons**: 24-48 jam kerja
+### 📧 Email
+- **Address**: Arlianto032@gmail.com
+- **Response time**: 24–48 business hours
 
-### 2. GitHub Issues
-- Buat issue baru di [GitHub Repository](https://github.com/neverland-studio/portofolio/issues)
-- Gunakan template yang tersedia
+### 🐛 GitHub Issues
+- Open a new issue at [GitHub Repository](https://github.com/MuhammadIsakiPrananda/portfolio-neverland-studio-v2/issues)
+- Use the appropriate issue template (Bug Report / Feature Request)
 
-### 3. Dokumentasi
-- [README.md](README.md) - Dokumentasi utama
-- [INSTALL.md](INSTALL.md) - Panduan instalasi
-- [backend/README.md](backend/README.md) - Dokumentasi API
-
----
-
-## Pertanyaan Umum
-
-### Bagaimana cara menjalankan proyek ini?
-
-Silakan lihat [INSTALL.md](INSTALL.md) untuk panduan instalasi lengkap.
-
-### Apa saja requirements yang diperlukan?
-
-- Node.js 20+
-- PHP 8.2+
-- Composer
-- MySQL 8.0+
-- Docker (opsional)
-
-### Bagaimana cara melaporkan bug?
-
-Silakan buat issue di GitHub dengan detail:
-- Langkah mereproduksi bug
-- Hasil yang diharapkan
-- Hasil aktual
-- Screenshot jika ada
-
-### Apakah proyek ini gratis?
-
-Ya, proyek ini adalah open source dan gratis untuk digunakan.
-
-### Bagaimana cara berkontribusi?
-
-Silakan baca [CONTRIBUTING.md](CONTRIBUTING.md) untuk panduan kontribusi.
+### 📖 Documentation
+- [README.md](README.md) — Project overview and setup guide
+- [INSTALL.md](INSTALL.md) — Detailed installation guide
+- [CONTRIBUTING.md](CONTRIBUTING.md) — How to contribute
+- [SECURITY.md](SECURITY.md) — Security policy and reporting
 
 ---
 
-## Sumber Daya
+## Frequently Asked Questions
 
-### Link Penting
-- Website: https://neverland-studio.com
-- GitHub: https://github.com/neverland-studio
-- Documentation: https://docs.neverland-studio.com
+### How do I run this project?
 
-### Teknologi yang Digunakan
-- [React Documentation](https://react.dev)
-- [Laravel Documentation](https://laravel.com/docs)
-- [TypeScript Documentation](https://www.typescriptlang.org/docs/)
-- [Tailwind CSS](https://tailwindcss.com/docs)
+See [INSTALL.md](INSTALL.md) for the full installation guide. For a quick start:
+
+```bash
+git clone https://github.com/MuhammadIsakiPrananda/portfolio-neverland-studio-v2.git
+cd portofolio-neverland-studio
+cp .env.example .env
+docker-compose up -d --build
+```
+
+Then visit **http://localhost:5173** (dev) or **http://localhost:3000** (production).
+
+### What are the system requirements?
+
+| Component | Minimum |
+|-----------|---------|
+| Node.js | 22.x |
+| PHP | 8.2+ |
+| Composer | 2.x |
+| MySQL / MariaDB | 8.4 |
+| Docker (optional) | 24.x+ |
+
+### How do I report a bug?
+
+1. Check existing [GitHub Issues](https://github.com/MuhammadIsakiPrananda/portfolio-neverland-studio-v2/issues) first
+2. Create a new issue including:
+   - Steps to reproduce
+   - Expected vs. actual behavior
+   - Screenshots or screen recordings (if applicable)
+   - Your environment (OS, Node.js version, browser)
+
+### How do I report a security vulnerability?
+
+**Do not open a public issue.** Email us directly at **Arlianto032@gmail.com**. See [SECURITY.md](SECURITY.md) for our full security policy.
+
+### Is this project free to use?
+
+Yes. Neverland Studio is open source and released under the [MIT License](LICENSE).
+
+### How can I contribute?
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines, code standards, and the PR process.
+
+### The dashboard is not showing real-time data. What's wrong?
+
+Make sure Laravel Reverb is running and properly configured. Check your `.env` for:
+
+```env
+BROADCAST_CONNECTION=reverb
+REVERB_APP_ID=your_app_id
+REVERB_APP_KEY=your_app_key
+REVERB_APP_SECRET=your_app_secret
+REVERB_HOST=localhost
+REVERB_PORT=8080
+```
+
+Then start the Reverb server:
+```bash
+php artisan reverb:start
+```
+
+### The VM Playground says I need to log in. Is that normal?
+
+Yes. The Virtual Machine Playground requires authentication to prevent abuse. Log in to your account first, then you can start a VM session.
 
 ---
 
-Terima kasih telah menggunakan Neverland Studio!
+## Useful Resources
+
+| Resource | Link |
+|----------|------|
+| Live Website | [portfolio.neverlandstudio.my.id](https://portfolio.neverlandstudio.my.id) |
+| GitHub | [MuhammadIsakiPrananda](https://github.com/MuhammadIsakiPrananda) |
+| React Docs | [react.dev](https://react.dev) |
+| Laravel Docs | [laravel.com/docs](https://laravel.com/docs) |
+| TypeScript Docs | [typescriptlang.org/docs](https://www.typescriptlang.org/docs/) |
+| Tailwind CSS Docs | [tailwindcss.com/docs](https://tailwindcss.com/docs) |
+| Framer Motion Docs | [framer.com/motion](https://www.framer.com/motion/) |
+
+---
+
+Thank you for using Neverland Studio! ✨

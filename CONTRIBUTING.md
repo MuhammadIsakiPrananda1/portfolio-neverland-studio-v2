@@ -1,96 +1,166 @@
-# Kontribusi
+# Contributing to Neverland Studio
 
-Terima kasih telah mempertimbangkan untuk berkontribusi pada proyek Neverland Studio!
+Thank you for considering contributing to the Neverland Studio portfolio project! We welcome contributions from developers of all skill levels.
 
-## Kode Etik
+## Code of Conduct
 
-Dengan berpartisipasi dalam proyek ini, Anda diharapkan untuk menjunjung tinggi kode etik kami. Harap baca dan patuhi aturan berikut:
+By participating in this project, you agree to uphold our [Code of Conduct](CODE_OF_CONDUCT.md). Please read it before contributing.
 
-1. **Hormati** - Semua kontribusi harus bersifat konstruktif dan menghormati
-2. **Inklusi** - Kami welcome semua orang terlepas dari latar belakang
-3. **Kualitas** - Kode yang dihasilkan harus memenuhi standar kualitas kami
+---
 
-## Cara Berkontribusi
+## How to Contribute
 
-### Pelaporan Bug
+### Reporting Bugs
 
-1. Cari apakah bug sudah pernah dilaporkan
-2. Jika belum, buat issue baru dengan format:
-   - **Title**: Deskripsi singkat bug
-   - **Description**: Penjelasan detail
-   - **Steps to Reproduce**: Langkah-langkah mereproduksi
-   - **Expected Behavior**: Hasil yang diharapkan
-   - **Actual Behavior**: Hasil aktual
-   - **Screenshots**: Screenshot jika ada
+Before submitting a bug report, please search existing issues to avoid duplicates.
 
-### Request Fitur
+When creating a bug report, include:
 
-1. Cari apakah fitur sudah pernah diminta
-2. Jika belum, buat issue baru dengan format:
-   - **Title**: Nama fitur
-   - **Description**: Penjelasan detail fitur
-   - **Use Case**: Kasus penggunaan
-   - **Alternatives**: Alternatif yang dipertimbangkan
+| Field | Description |
+|-------|-------------|
+| **Title** | A clear, concise summary of the bug |
+| **Description** | A detailed explanation of the issue |
+| **Steps to Reproduce** | Exact steps to reproduce the behavior |
+| **Expected Behavior** | What you expected to happen |
+| **Actual Behavior** | What actually happened |
+| **Environment** | OS, browser, Node.js version, PHP version |
+| **Screenshots** | If applicable, add screenshots |
 
-### Pull Request
+### Requesting Features
 
-1. Fork repository ini
-2. Buat branch baru (`git checkout -b feature/AmazingFeature`)
-3. Commit perubahan (`git commit -m 'Add: AmazingFeature'`)
-4. Push ke branch (`git push origin feature/AmazingFeature`)
-5. Buka Pull Request
+1. Check existing issues to see if the feature has already been requested
+2. Open a new issue with the label `feature-request` and include:
+   - **Title** — Feature name
+   - **Description** — Detailed explanation of the feature
+   - **Use Case** — Why this feature would be valuable
+   - **Alternatives** — Any alternative solutions you considered
 
-### Standar Kode
+### Submitting Pull Requests
 
-#### Frontend (React/TypeScript)
+1. **Fork** the repository
+2. **Create a branch** from `main`:
+   ```bash
+   git checkout -b feature/YourAmazingFeature
+   # or for bug fixes:
+   git checkout -b fix/YourBugFix
+   ```
+3. **Make your changes** following the code standards below
+4. **Commit** with a descriptive message:
+   ```bash
+   git commit -m 'Add: YourAmazingFeature'
+   # Prefixes: Add, Fix, Update, Remove, Refactor, Docs, Style, Test
+   ```
+5. **Push** to your branch:
+   ```bash
+   git push origin feature/YourAmazingFeature
+   ```
+6. **Open a Pull Request** against the `main` branch
+
+---
+
+## Code Standards
+
+### Frontend (React / TypeScript)
 
 ```typescript
-// Gunakan functional components
-const Component: React.FC<Props> = ({ title }) => {
-  return <div>{title}</div>
+// Use functional components with typed props
+interface Props {
+  title: string;
+  onClick?: () => void;
 }
 
-// Gunakan TypeScript strict mode
-interface Props {
-  title: string
-  onClick?: () => void
-}
+const MyComponent: React.FC<Props> = ({ title, onClick }) => {
+  return (
+    <div onClick={onClick}>
+      {title}
+    </div>
+  );
+};
+
+export default MyComponent;
 ```
 
-#### Backend (Laravel)
+**Rules:**
+- Always use TypeScript with strict mode enabled
+- Use `React.FC<Props>` interface for typed components
+- Follow the Atomic Design pattern: atoms → molecules → organisms → pages
+- Use Tailwind CSS utility classes for styling
+- Add Framer Motion animations for interactive elements
+- Always handle loading, success, and error states in async UI
+
+### Backend (Laravel)
 
 ```php
-// Gunakan controller untuk logic
-public function index(Request $request)
+// Use controllers for business logic
+public function index(Request $request): JsonResponse
 {
     return response()->json([
-        'data' => $request->user()
+        'data' => Service::paginate(15),
     ]);
 }
 
-// Validasi dengan Form Request
-public function store(StoreProjectRequest $request)
+// Validate using Form Requests
+public function store(StoreProjectRequest $request): JsonResponse
 {
     $project = Project::create($request->validated());
     return response()->json($project, 201);
 }
 ```
 
-### Proses Review
+**Rules:**
+- Follow PSR-12 coding standards
+- Use Form Requests for validation — never validate in controllers
+- Use Eloquent resources (`JsonResource`) to transform API responses
+- Write PHPDoc blocks for all public methods
+- Add middleware for authentication and authorization checks
 
-1. Maintainer akan mereview PR dalam 1-3 hari
-2. Mohon respond terhadap feedback
-3. Setelah approved, PR akan di-merge
+---
 
-### Prioritas Kontribusi
+## Development Setup
 
-Kami sangat membutuhkan kontribusi di area:
-- Documentation
-- Bug fixes
-- Performance optimization
-- Security improvements
-- New features
+See [INSTALL.md](INSTALL.md) for full setup instructions.
 
-## Pertanyaan?
+**Quick start:**
 
-Jika ada pertanyaan, hubungi kami di Arlianto032@gmail.com
+```bash
+# Clone and install
+git clone https://github.com/MuhammadIsakiPrananda/portfolio-neverland-studio-v2.git
+cd portofolio-neverland-studio
+npm install
+cd backend && composer install
+
+# Environment
+cp .env.example .env
+cd backend && cp .env.example .env && php artisan key:generate
+
+# Start development
+npm run dev        # Frontend
+php artisan serve  # Backend
+```
+
+---
+
+## Review Process
+
+1. A maintainer will review your PR within **1–3 business days**
+2. You may be asked to make changes — please respond to feedback promptly
+3. Once approved, your PR will be merged into `main`
+
+---
+
+## Priority Areas
+
+We especially welcome contributions in:
+
+- 🐛 **Bug fixes** — Any reported and confirmed bugs
+- ⚡ **Performance** — Bundle size, query optimization, caching
+- 🔒 **Security** — Vulnerability fixes, hardening
+- 📖 **Documentation** — Improving guides and code comments
+- ✅ **Tests** — Unit and feature test coverage for backend
+- 🎨 **UI Polish** — Animation, accessibility, responsive improvements
+
+---
+
+## Questions?
+
+Open a GitHub Discussion or email us at **Arlianto032@gmail.com**.

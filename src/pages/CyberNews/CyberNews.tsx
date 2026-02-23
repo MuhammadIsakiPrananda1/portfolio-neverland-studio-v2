@@ -14,7 +14,8 @@ import {
 
   ChevronDown,
   Globe,
-  Check
+  Check,
+  RefreshCw
 } from 'lucide-react';
 import { staggerContainer, staggerItem, slideUp } from '@utils/animations';
 
@@ -229,7 +230,7 @@ export default function CyberNews() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState('all');
   const [isLive, setIsLive] = useState(false);
-
+  const [, setCurrentTime] = useState(new Date());
 
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -503,11 +504,9 @@ export default function CyberNews() {
               <button
                 onClick={() => fetchNews()}
                 disabled={isRefreshing}
-                className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-white/[0.03] border border-white/10 text-sm font-medium text-white hover:bg-white/[0.08] transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 border border-blue-500/50 text-sm font-medium text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap shadow-lg shadow-blue-500/20"
               >
-                <div className={`${isRefreshing ? 'animate-spin' : ''}`}>
-                  <Rss className="w-4 h-4" />
-                </div>
+                <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
                 <span className="hidden sm:inline">{isRefreshing ? 'Updating...' : 'Update'}</span>
               </button>
             </div>

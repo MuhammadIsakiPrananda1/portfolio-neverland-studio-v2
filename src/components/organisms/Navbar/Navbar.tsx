@@ -7,7 +7,7 @@ import {
   FileSearch, Cloud, Target, Server, Flag, Globe, ShoppingCart, Zap,
   Palette, Box, ArrowUpCircle, FileCode, TrendingDown, Headphones,
   Database, HardDrive, Layers, Activity, LogOut, Swords, MessageSquare, Library,
-  Terminal, Lock, Cpu, Rss, Binary, Eye, Search, Smartphone, Bug
+  Terminal, Lock, Cpu, Rss, Binary, Eye, Search, Smartphone, Bug, Map, FileText, Wrench
 } from 'lucide-react';
 import Logo from '@components/atoms/Logo';
 import AuthModal from '@components/organisms/AuthModal';
@@ -107,52 +107,58 @@ const mainNavItems: NavItem[] = [
 ];
 
 const playgroundItems: NavItem[] = [
+  { path: Routes.PLAYGROUND, label: 'All Challenges', icon: Swords },
+  { path: Routes.PLAYGROUND_CVE, label: 'CVE Lab', icon: Bug },
+  { path: Routes.PLAYGROUND_VM, label: 'Virtual Machine', icon: CloudCog },
   {
-    path: Routes.PLAYGROUND,
-    label: 'Playground Hub',
-    icon: Swords,
+    path: '#web-security',
+    label: 'Web Security',
+    icon: Globe,
     subItems: [
-      { path: Routes.PLAYGROUND, label: 'All Challenges', icon: Swords },
-      { path: Routes.PLAYGROUND_CVE, label: 'CVE Lab', icon: Bug },
-      { path: Routes.PLAYGROUND_VM, label: 'Virtual Machine', icon: CloudCog },
-      {
-        path: '#web-security', // Unique ID
-        label: 'Web Security',
-        icon: Globe,
-        subItems: [
-          { path: Routes.PLAYGROUND_SQL, label: 'SQL Injection', icon: Database },
-          { path: Routes.PLAYGROUND_WEB, label: 'Web Security (XSS)', icon: Code },
-        ]
-      },
-      {
-        path: '#system-security', // Unique ID
-        label: 'System Security',
-        icon: Terminal,
-        subItems: [
-          { path: Routes.PLAYGROUND_SYSTEM, label: 'System Exploitation', icon: Terminal },
-          { path: '/playground/binary-exploitation', label: 'Binary Exploitation', icon: Cpu },
-          { path: '/playground/reverse-engineering', label: 'Reverse Engineering', icon: Binary },
-        ]
-      },
-      {
-        path: '#crypto-forensics', // Unique ID
-        label: 'Cryptography & Forensics',
-        icon: Lock,
-        subItems: [
-          { path: Routes.PLAYGROUND_CRYPTO, label: 'Cryptography', icon: Lock },
-          { path: '/playground/forensics', label: 'Forensics', icon: FileSearch },
-          { path: '/playground/steganography', label: 'Steganography', icon: Eye },
-        ]
-      },
-      {
-        path: '#endpoint-security', // Unique ID
-        label: 'Endpoint Security',
-        icon: Shield,
-        subItems: [
-          { path: '/playground/mobile-security', label: 'Mobile Security', icon: Smartphone },
-          { path: '/playground/osint', label: 'OSINT', icon: Search },
-        ]
-      },
+      { path: Routes.PLAYGROUND_SQL, label: 'SQL Injection', icon: Database },
+      { path: Routes.PLAYGROUND_WEB, label: 'Web Security (XSS)', icon: Code },
+    ]
+  },
+  {
+    path: '#system-security',
+    label: 'System Security',
+    icon: Terminal,
+    subItems: [
+      { path: Routes.PLAYGROUND_SYSTEM, label: 'System Exploitation', icon: Terminal },
+      { path: '/playground/binary-exploitation', label: 'Binary Exploitation', icon: Cpu },
+      { path: '/playground/reverse-engineering', label: 'Reverse Engineering', icon: Binary },
+    ]
+  },
+  {
+    path: '#crypto-forensics',
+    label: 'Cryptography & Forensics',
+    icon: Lock,
+    subItems: [
+      { path: Routes.PLAYGROUND_CRYPTO, label: 'Cryptography', icon: Lock },
+      { path: '/playground/forensics', label: 'Forensics', icon: FileSearch },
+      { path: '/playground/steganography', label: 'Steganography', icon: Eye },
+    ]
+  },
+  {
+    path: '#endpoint-security',
+    label: 'Endpoint Security',
+    icon: Shield,
+    subItems: [
+      { path: '/playground/mobile-security', label: 'Mobile Security', icon: Smartphone },
+      { path: '/playground/osint', label: 'OSINT', icon: Search },
+    ]
+  },
+];
+
+const learningItems: NavItem[] = [
+  {
+    path: Routes.PLAYGROUND_LEARNING,
+    label: 'Learning Hub',
+    icon: BookOpen,
+    subItems: [
+      { path: Routes.PLAYGROUND_LEARNING_WRITEUPS, label: 'CTF Write-ups', icon: FileText },
+      { path: Routes.PLAYGROUND_LEARNING_TOOLS, label: 'Tools & Cheatsheets', icon: Wrench },
+      { path: Routes.PLAYGROUND_LEARNING_ROADMAP, label: 'Learning Roadmap', icon: Map },
     ]
   },
 ];
@@ -223,7 +229,7 @@ function MenuItem({ item, isActive, isMobile = false, depth = 0, expandedItems =
           {/* Active indicator - left bar */}
           {shouldHighlight && (
             <motion.div
-              layoutId="activeIndicator"
+              layoutId={`activeIndicator-${isMobile ? 'mobile' : 'desktop'}-${depth}`}
               className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-8 bg-gradient-to-b from-primary via-secondary to-primary rounded-r-full shadow-lg shadow-primary/50"
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             />
@@ -234,7 +240,7 @@ function MenuItem({ item, isActive, isMobile = false, depth = 0, expandedItems =
             <div className={`relative z-10 flex-shrink-0 ${shouldHighlight ? 'text-primary' : ''} transition-colors duration-300`}>
               <Icon className="w-4 h-4" />
               {shouldHighlight && (
-                <div className="absolute inset-0 blur-md bg-primary/50 -z-10" />
+                <div className="absolute inset-0 blur-md bg-primary/50 -z-10 hidden md:block" />
               )}
             </div>
 
@@ -259,8 +265,8 @@ function MenuItem({ item, isActive, isMobile = false, depth = 0, expandedItems =
             ) : null}
           </div>
 
-          {/* Hover shine effect */}
-          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+          {/* Hover shine effect (disabled on mobile) */}
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 hidden md:block">
             <div className="absolute top-0 -left-full h-full w-1/2 bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-12 group-hover:left-full transition-all duration-700" />
           </div>
         </div>
@@ -273,8 +279,9 @@ function MenuItem({ item, isActive, isMobile = false, depth = 0, expandedItems =
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.2, ease: "easeInOut" }}
             className="overflow-hidden"
+            style={{ willChange: "height, opacity" }}
           >
             <div className={`mt-1 space-y-1 border-l-2 border-white/10 ${depth === 0 ? 'ml-3 pl-3' : 'ml-2 pl-2'}`}>
               {item.subItems?.map((subItem) => {
@@ -532,13 +539,13 @@ export default function Sidebar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIsOpen(false)}
-            className="lg:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[45]"
+            className="lg:hidden fixed inset-0 bg-black/80 z-[45]"
           />
         )}
       </AnimatePresence>
 
       {/* Desktop Sidebar - Always Open */}
-      <aside className="hidden lg:flex fixed left-0 top-0 h-screen w-[280px] glass backdrop-blur-2xl border-r border-white/10 z-50 flex-col shadow-2xl">
+      <aside className="hidden lg:flex fixed left-0 top-0 h-[100dvh] w-[280px] glass backdrop-blur-2xl border-r border-white/10 z-50 flex-col shadow-2xl">
         {/* Decorative top gradient bar */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-primary opacity-60" />
 
@@ -591,6 +598,22 @@ export default function Sidebar() {
               const isActive = checkActive(item);
               return (
                 <MenuItem key={item.path} item={item} index={index + mainNavItems.length} isActive={isActive} expandedItems={expandedItems} onToggle={handleToggle} />
+              );
+            })}
+          </div>
+
+          {/* Divider */}
+          <div className="mx-4 my-2 h-px bg-white/10" />
+
+          {/* Learning Section */}
+          <div className="space-y-1">
+            <div className="mb-3">
+              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3">Learning</span>
+            </div>
+            {learningItems.map((item, index) => {
+              const isActive = checkActive(item);
+              return (
+                <MenuItem key={item.path} item={item} index={index} isActive={isActive} expandedItems={expandedItems} onToggle={handleToggle} />
               );
             })}
           </div>
@@ -661,7 +684,7 @@ export default function Sidebar() {
         {
           isOpen && (
             <motion.aside
-              className="lg:hidden fixed left-0 top-0 h-screen w-80 glass backdrop-blur-2xl border-r border-white/10 z-50 flex flex-col shadow-2xl overflow-y-auto"
+              className="lg:hidden fixed left-0 top-0 h-[100dvh] w-80 bg-[#0f172a] border-r border-white/10 z-50 flex flex-col shadow-2xl overflow-hidden"
               initial="hidden"
               animate="visible"
               exit="hidden"
@@ -715,6 +738,22 @@ export default function Sidebar() {
                     <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3">Playground</span>
                   </div>
                   {playgroundItems.map((item, index) => {
+                    const isActive = checkActive(item);
+                    return (
+                      <MenuItem key={item.path} item={item} index={index} isActive={isActive} isMobile={true} expandedItems={expandedItems} onToggle={handleToggle} />
+                    );
+                  })}
+                </div>
+
+                {/* Divider */}
+                <div className="mx-4 my-2 h-px bg-white/10" />
+
+                {/* Learning Section */}
+                <div className="space-y-1">
+                  <div className="mb-2">
+                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3">Learning</span>
+                  </div>
+                  {learningItems.map((item, index) => {
                     const isActive = checkActive(item);
                     return (
                       <MenuItem key={item.path} item={item} index={index} isActive={isActive} isMobile={true} expandedItems={expandedItems} onToggle={handleToggle} />

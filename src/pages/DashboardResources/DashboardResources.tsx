@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Search, FolderOpen, FileText, Download, Eye, Link as LinkIcon, Image, Video, Archive } from 'lucide-react';
+import { Search, FolderOpen, FileText, Download, Eye, Link as LinkIcon, Image, Video, Archive, Sparkles } from 'lucide-react';
 import { staggerContainer, staggerItem, slideUp } from '@utils/animations';
 
 interface Resource {
@@ -71,96 +71,151 @@ export default function DashboardResources() {
   return (
     <div className="space-y-6">
       <motion.div variants={slideUp} initial="hidden" animate="visible" className="relative">
-        <div className="relative border border-white/5 rounded-xl sm:rounded-2xl p-6 sm:p-8 overflow-hidden bg-gradient-to-b from-white/[0.02] to-transparent">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 sm:w-32 h-px bg-gradient-to-r from-transparent via-orange-500/50 to-transparent" />
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+        <div className="relative border border-white/10 rounded-2xl sm:rounded-3xl p-8 sm:p-10 overflow-hidden glass shadow-2xl">
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-orange-500/5 via-transparent to-amber-500/5" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 sm:w-48 h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-70" />
+          <div className="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
             <div>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-orange-500/20 bg-orange-500/5">
-                  <FolderOpen className="w-3 h-3 text-orange-400" />
-                  <span className="text-xs font-semibold text-orange-400 uppercase tracking-wider">Resources</span>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-purple-400/20 bg-purple-500/5 backdrop-blur-sm shadow-lg shadow-purple-500/5">
+                  <Sparkles className="w-3.5 h-3.5 text-purple-400 animate-pulse" />
+                  <span className="text-xs font-bold text-purple-300 uppercase tracking-widest">Files</span>
                 </div>
               </div>
-              <h1 className="text-3xl sm:text-4xl font-heading font-black mb-2">
-                <span className="bg-gradient-to-r from-white via-purple-100 to-white bg-clip-text text-transparent">
-                  Resource Management
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-black mb-4 tracking-tight">
+                <span className="text-white drop-shadow-md">
+                  Resource{' '}
+                </span>
+                <span className="bg-gradient-to-r from-orange-400 via-amber-400 to-orange-400 bg-clip-text text-transparent filter drop-shadow-lg">
+                  Archive
                 </span>
               </h1>
-              <p className="text-gray-400 text-sm sm:text-base max-w-xl">
-                Manage and organize your files, documents, and resources.
+              <p className="text-gray-400 text-base sm:text-lg max-w-2xl leading-relaxed">
+                Securely manage, organize, and share your important business files, documents, and media assets.
               </p>
             </div>
+
+            <button
+              className="group relative flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold text-sm hover:shadow-lg hover:shadow-orange-500/25 transition-all duration-300 overflow-hidden border border-white/10"
+            >
+              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+              <FolderOpen className="w-5 h-5 relative z-10 group-hover:scale-110 transition-transform duration-300" />
+              <span className="relative z-10">Upload Files</span>
+            </button>
           </div>
         </div>
       </motion.div>
 
-      <motion.div className="grid grid-cols-2 md:grid-cols-4 gap-4" variants={staggerContainer} initial="hidden" animate="visible">
-        <motion.div variants={staggerItem} className="glass rounded-xl p-5 border border-white/10">
-          <FolderOpen className="w-5 h-5 text-orange-400 mb-3" />
-          <h3 className="text-2xl font-bold text-white">{stats.total}</h3>
-          <p className="text-sm text-gray-400">Total Files</p>
+      <motion.div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6" variants={staggerContainer} initial="hidden" animate="visible">
+        <motion.div variants={staggerItem} className="glass rounded-2xl p-6 border border-white/10 shadow-xl relative overflow-hidden group hover:border-white/20 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative z-10 flex flex-col h-full justify-between">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-xl bg-orange-500/20 border border-orange-500/30 shadow-inner group-hover:scale-110 transition-transform">
+                <FolderOpen className="w-5 h-5 text-orange-400" />
+              </div>
+            </div>
+            <div>
+              <h3 className="text-4xl font-heading font-black text-white mb-1 drop-shadow-md">{stats.total}</h3>
+              <p className="text-sm font-medium text-gray-400 group-hover:text-gray-300 transition-colors uppercase tracking-wider">Total Files</p>
+            </div>
+          </div>
         </motion.div>
-        <motion.div variants={staggerItem} className="glass rounded-xl p-5 border border-white/10">
-          <FileText className="w-5 h-5 text-blue-400 mb-3" />
-          <h3 className="text-2xl font-bold text-white">{stats.documents}</h3>
-          <p className="text-sm text-gray-400">Documents</p>
+
+        <motion.div variants={staggerItem} className="glass rounded-2xl p-6 border border-white/10 shadow-xl relative overflow-hidden group hover:border-white/20 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative z-10 flex flex-col h-full justify-between">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-xl bg-blue-500/20 border border-blue-500/30 shadow-inner group-hover:scale-110 transition-transform">
+                <FileText className="w-5 h-5 text-blue-400" />
+              </div>
+            </div>
+            <div>
+              <h3 className="text-4xl font-heading font-black text-white mb-1 drop-shadow-md">{stats.documents}</h3>
+              <p className="text-sm font-medium text-gray-400 group-hover:text-gray-300 transition-colors uppercase tracking-wider">Documents</p>
+            </div>
+          </div>
         </motion.div>
-        <motion.div variants={staggerItem} className="glass rounded-xl p-5 border border-white/10">
-          <Image className="w-5 h-5 text-purple-400 mb-3" />
-          <h3 className="text-2xl font-bold text-white">{stats.images}</h3>
-          <p className="text-sm text-gray-400">Images</p>
+
+        <motion.div variants={staggerItem} className="glass rounded-2xl p-6 border border-white/10 shadow-xl relative overflow-hidden group hover:border-white/20 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative z-10 flex flex-col h-full justify-between">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-xl bg-purple-500/20 border border-purple-500/30 shadow-inner group-hover:scale-110 transition-transform">
+                <Image className="w-5 h-5 text-purple-400" />
+              </div>
+            </div>
+            <div>
+              <h3 className="text-4xl font-heading font-black text-white mb-1 drop-shadow-md">{stats.images}</h3>
+              <p className="text-sm font-medium text-gray-400 group-hover:text-gray-300 transition-colors uppercase tracking-wider">Images</p>
+            </div>
+          </div>
         </motion.div>
-        <motion.div variants={staggerItem} className="glass rounded-xl p-5 border border-white/10">
-          <Video className="w-5 h-5 text-red-400 mb-3" />
-          <h3 className="text-2xl font-bold text-white">{stats.videos}</h3>
-          <p className="text-sm text-gray-400">Videos</p>
+
+        <motion.div variants={staggerItem} className="glass rounded-2xl p-6 border border-white/10 shadow-xl relative overflow-hidden group hover:border-white/20 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative z-10 flex flex-col h-full justify-between">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-xl bg-red-500/20 border border-red-500/30 shadow-inner group-hover:scale-110 transition-transform">
+                <Video className="w-5 h-5 text-red-400" />
+              </div>
+            </div>
+            <div>
+              <h3 className="text-4xl font-heading font-black text-white mb-1 drop-shadow-md">{stats.videos}</h3>
+              <p className="text-sm font-medium text-gray-400 group-hover:text-gray-300 transition-colors uppercase tracking-wider">Videos</p>
+            </div>
+          </div>
         </motion.div>
       </motion.div>
 
-      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between bg-white/[0.02] p-4 rounded-2xl border border-white/5 backdrop-blur-md">
         <div className="flex flex-wrap items-center gap-3">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-            <input type="text" placeholder="Search resources..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10 pr-4 py-2 rounded-lg bg-white/[0.03] border border-white/10 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-orange-500/50 w-64" />
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-amber-500/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-orange-400 transition-colors z-10" />
+            <input type="text" placeholder="Search resources..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="relative pl-11 pr-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-orange-500/50 focus:bg-white/[0.05] w-64 md:w-80 transition-all duration-300" />
           </div>
-          <select value={filterType} onChange={(e) => setFilterType(e.target.value)} className="px-4 py-2 rounded-lg bg-white/[0.03] border border-white/10 text-sm text-white focus:outline-none">
-            <option value="all">All Types</option>
-            <option value="document">Documents</option>
-            <option value="image">Images</option>
-            <option value="video">Videos</option>
-            <option value="archive">Archives</option>
-          </select>
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 to-orange-500/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity" />
+            <select value={filterType} onChange={(e) => setFilterType(e.target.value)} className="relative px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-sm text-white focus:outline-none focus:border-orange-500/50 focus:bg-white/[0.05] appearance-none transition-all duration-300 pr-10 cursor-pointer">
+              <option value="all" className="bg-dark-900">All Types</option>
+              <option value="document" className="bg-dark-900">Documents</option>
+              <option value="image" className="bg-dark-900">Images</option>
+              <option value="video" className="bg-dark-900">Videos</option>
+              <option value="archive" className="bg-dark-900">Archives</option>
+            </select>
+          </div>
         </div>
-        <p className="text-sm text-gray-500">{filteredResources.length} files found</p>
+        <p className="text-sm font-medium text-gray-400 bg-white/5 px-4 py-2 rounded-lg border border-white/5">{filteredResources.length} files found</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {filteredResources.map((resource) => (
-          <motion.div key={resource.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass rounded-xl border border-white/10 p-4 hover:border-orange-500/30 transition-all group">
-            <div className="flex items-start gap-3">
-              <div className={`p-2 rounded-lg ${getTypeColor(resource.type)}`}>
+          <motion.div key={resource.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass rounded-2xl border border-white/10 p-5 hover:border-orange-500/30 hover:shadow-xl transition-all duration-300 group relative overflow-hidden flex flex-col">
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+            <div className="flex items-start gap-4 mb-4 relative z-10 flex-1">
+              <div className={`p-3 rounded-2xl ${getTypeColor(resource.type)} shadow-inner group-hover:scale-110 transition-transform shrink-0`}>
                 {getTypeIcon(resource.type)}
               </div>
-              <div className="flex-1 min-w-0">
-                <h3 className="text-white font-medium truncate group-hover:text-orange-400 transition-colors">{resource.name}</h3>
-                <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
-                  <span>{resource.category}</span>
-                  <span>•</span>
-                  <span>{resource.size}</span>
-                  <span>•</span>
-                  <span>{new Date(resource.date).toLocaleDateString()}</span>
+              <div className="flex-1 min-w-0 pr-2">
+                <h3 className="text-lg font-heading font-black text-white truncate group-hover:text-orange-400 transition-colors mb-1">{resource.name}</h3>
+                <div className="flex flex-wrap items-center gap-2 mt-2">
+                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest bg-white/5 px-2 py-0.5 rounded border border-white/5">{resource.category}</span>
+                  <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest bg-black/20 px-2 py-0.5 rounded border border-white/5">{resource.size}</span>
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-2 mt-3 pt-3 border-t border-white/5">
-              <button className="flex-1 flex items-center justify-center gap-1 px-3 py-1.5 rounded-lg bg-white/5 text-gray-400 text-xs hover:bg-white/10 hover:text-white transition-colors">
-                <Eye className="w-3 h-3" />
-                Preview
-              </button>
-              <button className="flex-1 flex items-center justify-center gap-1 px-3 py-1.5 rounded-lg bg-orange-500/10 text-orange-400 text-xs hover:bg-orange-500/20 transition-colors">
-                <Download className="w-3 h-3" />
-                Download
-              </button>
+            {/* Meta & Actions */}
+            <div className="flex items-center justify-between mt-auto pt-4 border-t border-white/10 relative z-10">
+              <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest bg-black/20 px-3 py-1.5 rounded-full border border-white/5">{new Date(resource.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+              <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 max-lg:opacity-100">
+                <button className="p-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 text-gray-400 hover:text-white transition-all shadow-sm" title="Preview">
+                  <Eye className="w-4 h-4" />
+                </button>
+                <button className="p-2.5 rounded-xl bg-orange-500/10 border border-orange-500/20 hover:border-orange-500/30 text-orange-400 hover:bg-orange-500/20 transition-all shadow-sm" title="Download">
+                  <Download className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           </motion.div>
         ))}

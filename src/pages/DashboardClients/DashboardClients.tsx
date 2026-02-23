@@ -14,6 +14,7 @@ import {
   AlertCircle,
   X,
   Globe,
+  Sparkles,
 } from 'lucide-react';
 import { staggerContainer, staggerItem, slideUp } from '@utils/animations';
 
@@ -133,177 +134,224 @@ export default function DashboardClients() {
         animate="visible"
         className="relative"
       >
-        <div className="relative border border-white/5 rounded-xl sm:rounded-2xl p-6 sm:p-8 overflow-hidden bg-gradient-to-b from-white/[0.02] to-transparent">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 sm:w-32 h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
-          
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+        <div className="relative border border-white/10 rounded-2xl sm:rounded-3xl p-8 sm:p-10 overflow-hidden glass shadow-2xl">
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-accent/5 via-transparent to-primary/5" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 sm:w-48 h-1 bg-gradient-to-r from-transparent via-accent to-transparent opacity-70" />
+
+          <div className="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
             <div>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-accent/20 bg-accent/5">
-                  <Users className="w-3 h-3 text-accent" />
-                  <span className="text-xs font-semibold text-accent uppercase tracking-wider">Clients</span>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-purple-400/20 bg-purple-500/5 backdrop-blur-sm shadow-lg shadow-purple-500/5">
+                  <Sparkles className="w-3.5 h-3.5 text-purple-400 animate-pulse" />
+                  <span className="text-xs font-bold text-purple-300 uppercase tracking-widest">Clients</span>
                 </div>
               </div>
-              <h1 className="text-3xl sm:text-4xl font-heading font-black mb-2">
-                <span className="bg-gradient-to-r from-white via-purple-100 to-white bg-clip-text text-transparent">
-                  Client Management
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-black mb-4 tracking-tight">
+                <span className="text-white drop-shadow-md">
+                  Client{' '}
+                </span>
+                <span className="bg-gradient-to-r from-accent via-primary to-accent bg-clip-text text-transparent filter drop-shadow-lg">
+                  Management
                 </span>
               </h1>
-              <p className="text-gray-400 text-sm sm:text-base max-w-xl">
-                Manage your client relationships and track their projects and revenue.
+              <p className="text-gray-400 text-base sm:text-lg max-w-2xl leading-relaxed">
+                Manage your client relationships, track projects, and monitor revenue streams.
               </p>
             </div>
 
             <button
               onClick={() => { setShowAddModal(true); setEditingClient(null); setFormData({}); }}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-accent to-primary text-white font-semibold text-sm hover:shadow-lg hover:shadow-accent/20 transition-all"
+              className="group relative flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-accent to-primary text-white font-bold text-sm hover:shadow-lg hover:shadow-accent/25 transition-all duration-300 overflow-hidden border border-white/10"
             >
-              <Plus className="w-4 h-4" />
-              Add Client
+              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+              <Plus className="w-5 h-5 relative z-10 group-hover:rotate-90 transition-transform duration-300" />
+              <span className="relative z-10">Add Client</span>
             </button>
           </div>
         </div>
       </motion.div>
 
       <motion.div
-        className="grid grid-cols-2 md:grid-cols-4 gap-4"
+        className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6"
         variants={staggerContainer}
         initial="hidden"
         animate="visible"
       >
-        <motion.div variants={staggerItem} className="glass rounded-xl p-5 border border-white/10">
-          <div className="flex items-center justify-between mb-3">
-            <Users className="w-5 h-5 text-accent" />
+        <motion.div variants={staggerItem} className="glass rounded-2xl p-6 border border-white/10 shadow-xl relative overflow-hidden group hover:border-white/20 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-accent/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative z-10 flex flex-col h-full justify-between">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-xl bg-accent/20 border border-accent/30 shadow-inner group-hover:scale-110 transition-transform">
+                <Users className="w-5 h-5 text-accent" />
+              </div>
+            </div>
+            <div>
+              <h3 className="text-4xl font-heading font-black text-white mb-1 drop-shadow-md">{stats.total}</h3>
+              <p className="text-sm font-medium text-gray-400 group-hover:text-gray-300 transition-colors uppercase tracking-wider">Total Clients</p>
+            </div>
           </div>
-          <h3 className="text-2xl font-bold text-white">{stats.total}</h3>
-          <p className="text-sm text-gray-400">Total Clients</p>
         </motion.div>
-        <motion.div variants={staggerItem} className="glass rounded-xl p-5 border border-white/10">
-          <div className="flex items-center justify-between mb-3">
-            <Building2 className="w-5 h-5 text-emerald-400" />
+
+        <motion.div variants={staggerItem} className="glass rounded-2xl p-6 border border-white/10 shadow-xl relative overflow-hidden group hover:border-white/20 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative z-10 flex flex-col h-full justify-between">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-xl bg-emerald-500/20 border border-emerald-500/30 shadow-inner group-hover:scale-110 transition-transform">
+                <Building2 className="w-5 h-5 text-emerald-400" />
+              </div>
+            </div>
+            <div>
+              <h3 className="text-4xl font-heading font-black text-white mb-1 drop-shadow-md">{stats.active}</h3>
+              <p className="text-sm font-medium text-gray-400 group-hover:text-gray-300 transition-colors uppercase tracking-wider">Active Clients</p>
+            </div>
           </div>
-          <h3 className="text-2xl font-bold text-white">{stats.active}</h3>
-          <p className="text-sm text-gray-400">Active Clients</p>
         </motion.div>
-        <motion.div variants={staggerItem} className="glass rounded-xl p-5 border border-white/10">
-          <div className="flex items-center justify-between mb-3">
-            <DollarSign className="w-5 h-5 text-purple-400" />
+
+        <motion.div variants={staggerItem} className="glass rounded-2xl p-6 border border-white/10 shadow-xl relative overflow-hidden group hover:border-white/20 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative z-10 flex flex-col h-full justify-between">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-xl bg-purple-500/20 border border-purple-500/30 shadow-inner group-hover:scale-110 transition-transform">
+                <DollarSign className="w-5 h-5 text-purple-400" />
+              </div>
+            </div>
+            <div>
+              <h3 className="text-4xl font-heading font-black text-white mb-1 drop-shadow-md">${(stats.revenue / 1000).toFixed(0)}K</h3>
+              <p className="text-sm font-medium text-gray-400 group-hover:text-gray-300 transition-colors uppercase tracking-wider">Total Revenue</p>
+            </div>
           </div>
-          <h3 className="text-2xl font-bold text-white">${(stats.revenue / 1000).toFixed(0)}K</h3>
-          <p className="text-sm text-gray-400">Total Revenue</p>
         </motion.div>
-        <motion.div variants={staggerItem} className="glass rounded-xl p-5 border border-white/10">
-          <div className="flex items-center justify-between mb-3">
-            <Globe className="w-5 h-5 text-orange-400" />
+
+        <motion.div variants={staggerItem} className="glass rounded-2xl p-6 border border-white/10 shadow-xl relative overflow-hidden group hover:border-white/20 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative z-10 flex flex-col h-full justify-between">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-xl bg-orange-500/20 border border-orange-500/30 shadow-inner group-hover:scale-110 transition-transform">
+                <Globe className="w-5 h-5 text-orange-400" />
+              </div>
+            </div>
+            <div>
+              <h3 className="text-4xl font-heading font-black text-white mb-1 drop-shadow-md">{stats.prospects}</h3>
+              <p className="text-sm font-medium text-gray-400 group-hover:text-gray-300 transition-colors uppercase tracking-wider">Prospects</p>
+            </div>
           </div>
-          <h3 className="text-2xl font-bold text-white">{stats.prospects}</h3>
-          <p className="text-sm text-gray-400">Prospects</p>
         </motion.div>
       </motion.div>
 
-      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between bg-white/[0.02] p-4 rounded-2xl border border-white/5 backdrop-blur-md">
         <div className="flex flex-wrap items-center gap-3">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-accent/20 to-primary/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-accent transition-colors z-10" />
             <input
               type="text"
               placeholder="Search clients..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2 rounded-lg bg-white/[0.03] border border-white/10 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-accent/50 w-64"
+              className="relative pl-11 pr-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-accent/50 focus:bg-white/[0.05] w-64 md:w-80 transition-all duration-300"
             />
           </div>
-          <select
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value)}
-            className="px-4 py-2 rounded-lg bg-white/[0.03] border border-white/10 text-sm text-white focus:outline-none focus:border-accent/50"
-          >
-            <option value="all">All Status</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-            <option value="prospect">Prospect</option>
-          </select>
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity" />
+            <select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+              className="relative px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-sm text-white focus:outline-none focus:border-accent/50 focus:bg-white/[0.05] appearance-none transition-all duration-300 pr-10 cursor-pointer"
+            >
+              <option value="all" className="bg-dark-900">All Status</option>
+              <option value="active" className="bg-dark-900">Active</option>
+              <option value="inactive" className="bg-dark-900">Inactive</option>
+              <option value="prospect" className="bg-dark-900">Prospect</option>
+            </select>
+          </div>
         </div>
-        <p className="text-sm text-gray-500">{filteredClients.length} clients found</p>
+        <p className="text-sm font-medium text-gray-400 bg-white/5 px-4 py-2 rounded-lg border border-white/5">{filteredClients.length} clients found</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <AnimatePresence>
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <AnimatePresence mode="popLayout">
           {filteredClients.map((client) => (
             <motion.div
+              layout
               key={client.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="glass rounded-xl border border-white/10 overflow-hidden hover:border-accent/30 transition-all duration-300 group"
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ duration: 0.2 }}
+              className="glass rounded-2xl border border-white/10 shadow-xl overflow-hidden hover:border-accent/40 hover:shadow-2xl hover:shadow-accent/5 transition-all duration-300 group flex flex-col"
             >
-              <div className="p-5">
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-12 h-12 rounded-full ${client.bgColor} flex items-center justify-center text-white font-bold text-sm`}>
+              <div className="p-6 md:p-8 flex flex-col flex-1 relative">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-bl-full -mr-16 -mt-16 transition-transform group-hover:scale-110 duration-500 pointer-events-none" />
+                <div className="flex items-start justify-between mb-6 relative z-10">
+                  <div className="flex items-center gap-4">
+                    <div className={`w-14 h-14 rounded-2xl shadow-lg ${client.bgColor} flex items-center justify-center text-white font-heading font-black text-lg group-hover:rotate-6 transition-transform duration-300`}>
                       {client.avatar}
                     </div>
                     <div>
-                      <h3 className="text-base font-bold text-white group-hover:text-accent transition-colors">{client.name}</h3>
-                      <p className="text-xs text-gray-500">{client.contact}</p>
+                      <h3 className="text-lg font-bold text-white group-hover:text-accent transition-colors truncate max-w-[150px]">{client.name}</h3>
+                      <p className="text-sm text-gray-400 font-medium truncate max-w-[150px]">{client.contact}</p>
                     </div>
                   </div>
-                  <div className="flex gap-1">
+                  <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <button
                       onClick={() => { setEditingClient(client); setFormData(client); setShowAddModal(true); }}
-                      className="p-2 rounded-lg hover:bg-white/5 text-gray-400 hover:text-accent transition-colors"
+                      className="p-2 rounded-xl bg-white/5 border border-white/10 hover:bg-accent/20 hover:border-accent/30 text-gray-400 hover:text-accent transition-all shadow-sm"
                     >
                       <Edit className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => setDeletingClient(client)}
-                      className="p-2 rounded-lg hover:bg-red-500/10 text-gray-400 hover:text-red-400 transition-colors"
+                      className="p-2 rounded-xl bg-white/5 border border-white/10 hover:bg-red-500/20 hover:border-red-500/30 text-gray-400 hover:text-red-400 transition-all shadow-sm"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
                 </div>
 
-                <div className="space-y-2 mb-4 text-sm text-gray-400">
-                  <div className="flex items-center gap-2">
-                    <Mail className="w-4 h-4" />
-                    <span className="truncate">{client.email}</span>
+                <div className="space-y-3 mb-6 text-sm text-gray-400 font-medium flex-1">
+                  <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer group/item">
+                    <Mail className="w-4 h-4 text-gray-500 group-hover/item:text-accent transition-colors" />
+                    <span className="truncate group-hover/item:text-gray-300 transition-colors">{client.email}</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Phone className="w-4 h-4" />
-                    <span>{client.phone}</span>
+                  <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer group/item">
+                    <Phone className="w-4 h-4 text-gray-500 group-hover/item:text-accent transition-colors" />
+                    <span className="group-hover/item:text-gray-300 transition-colors">{client.phone}</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4" />
-                    <span>{client.location}</span>
+                  <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors cursor-pointer group/item">
+                    <MapPin className="w-4 h-4 text-gray-500 group-hover/item:text-accent transition-colors" />
+                    <span className="group-hover/item:text-gray-300 transition-colors">{client.location}</span>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between mb-3">
-                  <select
-                    value={client.status}
-                    onChange={(e) => handleStatusChange(client.id, e.target.value)}
-                    className={`px-2 py-1 rounded-full text-xs font-medium border bg-transparent cursor-pointer ${
-                      client.status === 'active' ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' :
-                      client.status === 'inactive' ? 'bg-gray-500/10 border-gray-500/30 text-gray-400' :
-                      'bg-orange-500/10 border-orange-500/30 text-orange-400'
-                    }`}
-                  >
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                    <option value="prospect">Prospect</option>
-                  </select>
-                  <span className="text-xs text-gray-500">{client.industry}</span>
+                <div className="flex items-center justify-between mb-6 pt-4 border-t border-white/5">
+                  <div className="relative group/select">
+                    <select
+                      value={client.status}
+                      onChange={(e) => handleStatusChange(client.id, e.target.value)}
+                      className={`px-3 py-1.5 rounded-full text-xs font-bold border appearance-none cursor-pointer pr-8 shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-dark-900 ${client.status === 'active' ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400 focus:ring-emerald-500/50' :
+                          client.status === 'inactive' ? 'bg-gray-500/10 border-gray-500/30 text-gray-400 focus:ring-gray-500/50' :
+                            'bg-orange-500/10 border-orange-500/30 text-orange-400 focus:ring-orange-500/50'
+                        }`}
+                    >
+                      <option value="active" className="bg-dark-900 text-emerald-500">Active</option>
+                      <option value="inactive" className="bg-dark-900 text-gray-400">Inactive</option>
+                      <option value="prospect" className="bg-dark-900 text-orange-500">Prospect</option>
+                    </select>
+                    <div className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-current opacity-70">
+                      <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                    </div>
+                  </div>
+                  <span className="text-xs font-bold uppercase tracking-wider text-gray-500 bg-white/5 px-2 py-1 rounded-md">{client.industry}</span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 p-3 rounded-lg bg-white/5">
+                <div className="grid grid-cols-2 gap-3 p-4 rounded-xl bg-black/20 border border-white/5 shadow-inner">
                   <div>
-                    <p className="text-xs text-gray-500">Projects</p>
-                    <p className="text-sm font-bold text-white">{client.projects}</p>
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Projects</p>
+                    <p className="text-2xl font-heading font-black text-white">{client.projects}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500">Revenue</p>
-                    <p className="text-sm font-bold text-white">${(client.revenue / 1000).toFixed(0)}K</p>
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Revenue</p>
+                    <p className="text-2xl font-heading font-black text-white">${(client.revenue / 1000).toFixed(0)}K</p>
                   </div>
                 </div>
               </div>

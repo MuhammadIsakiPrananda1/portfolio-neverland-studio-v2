@@ -12,6 +12,7 @@ import {
   CheckCircle2,
   AlertCircle,
   X,
+  Sparkles,
 } from 'lucide-react';
 import { staggerContainer, staggerItem, slideUp } from '@utils/animations';
 
@@ -147,181 +148,228 @@ export default function DashboardProjects() {
         animate="visible"
         className="relative"
       >
-        <div className="relative border border-white/5 rounded-xl sm:rounded-2xl p-6 sm:p-8 overflow-hidden bg-gradient-to-b from-white/[0.02] to-transparent">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 sm:w-32 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
-          
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+        <div className="relative border border-white/10 rounded-2xl sm:rounded-3xl p-8 sm:p-10 overflow-hidden glass shadow-2xl">
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 sm:w-48 h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-70" />
+
+          <div className="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
             <div>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-secondary/20 bg-secondary/5">
-                  <FolderKanban className="w-3 h-3 text-secondary" />
-                  <span className="text-xs font-semibold text-secondary uppercase tracking-wider">Projects</span>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-purple-400/20 bg-purple-500/5 backdrop-blur-sm shadow-lg shadow-purple-500/5">
+                  <Sparkles className="w-3.5 h-3.5 text-purple-400 animate-pulse" />
+                  <span className="text-xs font-bold text-purple-300 uppercase tracking-widest">Projects</span>
                 </div>
               </div>
-              <h1 className="text-3xl sm:text-4xl font-heading font-black mb-2">
-                <span className="bg-gradient-to-r from-white via-purple-100 to-white bg-clip-text text-transparent">
-                  Project Management
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-black mb-4 tracking-tight">
+                <span className="text-white drop-shadow-md">
+                  Project{' '}
+                </span>
+                <span className="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent filter drop-shadow-lg">
+                  Management
                 </span>
               </h1>
-              <p className="text-gray-400 text-sm sm:text-base max-w-xl">
-                Manage and track all your ongoing projects, milestones, and deliverables in one place.
+              <p className="text-gray-400 text-base sm:text-lg max-w-2xl leading-relaxed">
+                Manage and track all your ongoing projects, milestones, deliverables, and budgets in one place.
               </p>
             </div>
 
             <button
               onClick={() => { setShowAddModal(true); setEditingProject(null); setFormData({}); }}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-semibold text-sm hover:shadow-lg hover:shadow-primary/20 transition-all"
+              className="group relative flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-bold text-sm hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 overflow-hidden border border-white/10"
             >
-              <Plus className="w-4 h-4" />
-              New Project
+              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+              <Plus className="w-5 h-5 relative z-10 group-hover:rotate-90 transition-transform duration-300" />
+              <span className="relative z-10">New Project</span>
             </button>
           </div>
         </div>
       </motion.div>
 
       <motion.div
-        className="grid grid-cols-2 md:grid-cols-4 gap-4"
+        className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6"
         variants={staggerContainer}
         initial="hidden"
         animate="visible"
       >
-        <motion.div variants={staggerItem} className="glass rounded-xl p-5 border border-white/10">
-          <div className="flex items-center justify-between mb-3">
-            <FolderKanban className="w-5 h-5 text-primary" />
+        <motion.div variants={staggerItem} className="glass rounded-2xl p-6 border border-white/10 shadow-xl relative overflow-hidden group hover:border-white/20 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative z-10 flex flex-col h-full justify-between">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-xl bg-primary/20 border border-primary/30 shadow-inner group-hover:scale-110 transition-transform">
+                <FolderKanban className="w-5 h-5 text-primary" />
+              </div>
+            </div>
+            <div>
+              <h3 className="text-4xl font-heading font-black text-white mb-1 drop-shadow-md">{stats.total}</h3>
+              <p className="text-sm font-medium text-gray-400 group-hover:text-gray-300 transition-colors uppercase tracking-wider">Total Projects</p>
+            </div>
           </div>
-          <h3 className="text-2xl font-bold text-white">{stats.total}</h3>
-          <p className="text-sm text-gray-400">Total Projects</p>
         </motion.div>
-        <motion.div variants={staggerItem} className="glass rounded-xl p-5 border border-white/10">
-          <div className="flex items-center justify-between mb-3">
-            <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+
+        <motion.div variants={staggerItem} className="glass rounded-2xl p-6 border border-white/10 shadow-xl relative overflow-hidden group hover:border-white/20 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative z-10 flex flex-col h-full justify-between">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-xl bg-emerald-500/20 border border-emerald-500/30 shadow-inner group-hover:scale-110 transition-transform">
+                <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+              </div>
+            </div>
+            <div>
+              <h3 className="text-4xl font-heading font-black text-white mb-1 drop-shadow-md">{stats.active}</h3>
+              <p className="text-sm font-medium text-gray-400 group-hover:text-gray-300 transition-colors uppercase tracking-wider">Active Projects</p>
+            </div>
           </div>
-          <h3 className="text-2xl font-bold text-white">{stats.active}</h3>
-          <p className="text-sm text-gray-400">Active Projects</p>
         </motion.div>
-        <motion.div variants={staggerItem} className="glass rounded-xl p-5 border border-white/10">
-          <div className="flex items-center justify-between mb-3">
-            <CheckCircle2 className="w-5 h-5 text-blue-400" />
+
+        <motion.div variants={staggerItem} className="glass rounded-2xl p-6 border border-white/10 shadow-xl relative overflow-hidden group hover:border-white/20 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative z-10 flex flex-col h-full justify-between">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-xl bg-blue-500/20 border border-blue-500/30 shadow-inner group-hover:scale-110 transition-transform">
+                <CheckCircle2 className="w-5 h-5 text-blue-400" />
+              </div>
+            </div>
+            <div>
+              <h3 className="text-4xl font-heading font-black text-white mb-1 drop-shadow-md">{stats.completed}</h3>
+              <p className="text-sm font-medium text-gray-400 group-hover:text-gray-300 transition-colors uppercase tracking-wider">Completed</p>
+            </div>
           </div>
-          <h3 className="text-2xl font-bold text-white">{stats.completed}</h3>
-          <p className="text-sm text-gray-400">Completed</p>
         </motion.div>
-        <motion.div variants={staggerItem} className="glass rounded-xl p-5 border border-white/10">
-          <div className="flex items-center justify-between mb-3">
-            <DollarSign className="w-5 h-5 text-purple-400" />
-            <span className="text-xs text-purple-400">${(stats.totalSpent / 1000).toFixed(0)}K / ${(stats.totalBudget / 1000).toFixed(0)}K</span>
+
+        <motion.div variants={staggerItem} className="glass rounded-2xl p-6 border border-white/10 shadow-xl relative overflow-hidden group hover:border-white/20 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative z-10 flex flex-col h-full justify-between">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-xl bg-purple-500/20 border border-purple-500/30 shadow-inner group-hover:scale-110 transition-transform">
+                <DollarSign className="w-5 h-5 text-purple-400" />
+              </div>
+              <span className="text-xs font-bold text-purple-400 bg-purple-500/10 px-2 py-1 rounded-md mb-2 truncate max-w-[120px]">${(stats.totalSpent / 1000).toFixed(0)}K / ${(stats.totalBudget / 1000).toFixed(0)}K</span>
+            </div>
+            <div>
+              <h3 className="text-4xl font-heading font-black text-white mb-1 drop-shadow-md">{(stats.totalSpent / stats.totalBudget * 100).toFixed(0)}%</h3>
+              <p className="text-sm font-medium text-gray-400 group-hover:text-gray-300 transition-colors uppercase tracking-wider">Budget Used</p>
+            </div>
           </div>
-          <h3 className="text-2xl font-bold text-white">{(stats.totalSpent / stats.totalBudget * 100).toFixed(0)}%</h3>
-          <p className="text-sm text-gray-400">Budget Used</p>
         </motion.div>
       </motion.div>
 
-      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between bg-white/[0.02] p-4 rounded-2xl border border-white/5 backdrop-blur-md">
         <div className="flex flex-wrap items-center gap-3">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-primary transition-colors z-10" />
             <input
               type="text"
               placeholder="Search projects..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2 rounded-lg bg-white/[0.03] border border-white/10 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-primary/50 w-64"
+              className="relative pl-11 pr-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-primary/50 focus:bg-white/[0.05] w-64 md:w-80 transition-all duration-300"
             />
           </div>
-          <select
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value)}
-            className="px-4 py-2 rounded-lg bg-white/[0.03] border border-white/10 text-sm text-white focus:outline-none focus:border-primary/50"
-          >
-            <option value="all">All Status</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
-            <option value="pending">Pending</option>
-            <option value="on-hold">On Hold</option>
-          </select>
-          <select
-            value={filterCategory}
-            onChange={(e) => setFilterCategory(e.target.value)}
-            className="px-4 py-2 rounded-lg bg-white/[0.03] border border-white/10 text-sm text-white focus:outline-none focus:border-primary/50"
-          >
-            <option value="all">All Categories</option>
-            {categories.map(cat => (
-              <option key={cat} value={cat}>{cat}</option>
-            ))}
-          </select>
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-secondary/20 to-accent/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity" />
+            <select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+              className="relative px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-sm text-white focus:outline-none focus:border-primary/50 focus:bg-white/[0.05] appearance-none transition-all duration-300 pr-10 cursor-pointer"
+            >
+              <option value="all" className="bg-dark-900">All Status</option>
+              <option value="active" className="bg-dark-900">Active</option>
+              <option value="completed" className="bg-dark-900">Completed</option>
+              <option value="pending" className="bg-dark-900">Pending</option>
+              <option value="on-hold" className="bg-dark-900">On Hold</option>
+            </select>
+          </div>
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-accent/20 to-primary/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity" />
+            <select
+              value={filterCategory}
+              onChange={(e) => setFilterCategory(e.target.value)}
+              className="relative px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-sm text-white focus:outline-none focus:border-primary/50 focus:bg-white/[0.05] appearance-none transition-all duration-300 pr-10 cursor-pointer"
+            >
+              <option value="all" className="bg-dark-900">All Categories</option>
+              {categories.map(cat => (
+                <option key={cat} value={cat} className="bg-dark-900">{cat}</option>
+              ))}
+            </select>
+          </div>
         </div>
-        <p className="text-sm text-gray-500">{filteredProjects.length} projects found</p>
+        <p className="text-sm font-medium text-gray-400 bg-white/5 px-4 py-2 rounded-lg border border-white/5">{filteredProjects.length} projects found</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <AnimatePresence>
+      <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-6">
+        <AnimatePresence mode="popLayout">
           {filteredProjects.map((project) => (
             <motion.div
+              layout
               key={project.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="glass rounded-xl border border-white/10 overflow-hidden hover:border-primary/30 transition-all duration-300 group"
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ duration: 0.2 }}
+              className="glass rounded-2xl border border-white/10 shadow-xl overflow-hidden hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 group flex flex-col"
             >
-              <div className="p-5">
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className={`text-xs font-medium ${getCategoryColor(project.category)}`}>{project.category}</span>
-                      <span className="text-gray-600">•</span>
-                      <span className={`px-2 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(project.status)}`}>
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+              <div className="p-6 md:p-8 flex flex-col flex-1 relative z-10">
+                <div className="flex items-start justify-between mb-6">
+                  <div className="flex-1 pr-4">
+                    <div className="flex items-center gap-3 mb-3 flex-wrap">
+                      <span className={`text-xs font-bold uppercase tracking-widest ${getCategoryColor(project.category)}`}>{project.category}</span>
+                      <span className="text-gray-600 font-bold">•</span>
+                      <span className={`px-2.5 py-1 rounded-full text-xs font-bold border shadow-sm uppercase tracking-wider ${getStatusColor(project.status)}`}>
                         {project.status}
                       </span>
                     </div>
-                    <h3 className="text-lg font-bold text-white group-hover:text-primary transition-colors">{project.name}</h3>
-                    <p className="text-sm text-gray-500">{project.client}</p>
+                    <h3 className="text-2xl font-heading font-black text-white group-hover:text-primary transition-colors leading-tight mb-2 line-clamp-2">{project.name}</h3>
+                    <p className="text-sm font-medium text-gray-400 bg-white/5 inline-flex px-3 py-1 rounded-md">{project.client}</p>
                   </div>
-                  <div className="flex gap-1">
+                  <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shrink-0">
                     <button
                       onClick={() => { setEditingProject(project); setFormData(project); setShowAddModal(true); }}
-                      className="p-2 rounded-lg hover:bg-white/5 text-gray-400 hover:text-primary transition-colors"
+                      className="p-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-primary/20 hover:border-primary/30 text-gray-400 hover:text-primary transition-all shadow-sm"
                     >
                       <Edit className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => setDeletingProject(project)}
-                      className="p-2 rounded-lg hover:bg-red-500/10 text-gray-400 hover:text-red-400 transition-colors"
+                      className="p-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-red-500/20 hover:border-red-500/30 text-gray-400 hover:text-red-400 transition-all shadow-sm"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
                 </div>
 
-                <div className="mb-4">
-                  <div className="flex justify-between text-xs mb-2">
-                    <span className="text-gray-400">Progress</span>
-                    <span className="text-white font-medium">{project.progress}%</span>
+                <div className="mb-6 flex-1">
+                  <div className="flex justify-between text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">
+                    <span>Progress</span>
+                    <span className="text-white bg-white/10 px-2 py-0.5 rounded">{project.progress}%</span>
                   </div>
-                  <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                  <div className="h-3 bg-white/5 rounded-full overflow-hidden border border-white/10 shadow-inner relative">
                     <motion.div
-                      className="h-full bg-gradient-to-r from-primary to-secondary rounded-full"
+                      className="absolute top-0 left-0 h-full bg-gradient-to-r from-primary via-secondary to-accent"
                       initial={{ width: 0 }}
                       animate={{ width: `${project.progress}%` }}
-                      transition={{ duration: 0.5 }}
+                      transition={{ duration: 0.8, ease: "easeOut" }}
                     />
+                    <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4xKSIvPjwvc3ZnPg==')] opacity-50" />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-2 text-center">
-                  <div className="bg-white/5 rounded-lg p-2">
-                    <DollarSign className="w-4 h-4 text-gray-500 mx-auto mb-1" />
-                    <p className="text-xs text-white font-medium">${(project.budget / 1000).toFixed(0)}K</p>
-                    <p className="text-[10px] text-gray-500">Budget</p>
+                <div className="grid grid-cols-3 gap-3 text-center pt-4 border-t border-white/10">
+                  <div className="bg-black/20 rounded-xl p-3 border border-white/5 shadow-inner">
+                    <DollarSign className="w-5 h-5 text-emerald-400 mx-auto mb-2" />
+                    <p className="text-sm font-heading font-black text-white">${(project.budget / 1000).toFixed(0)}K</p>
+                    <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-1">Budget</p>
                   </div>
-                  <div className="bg-white/5 rounded-lg p-2">
-                    <Calendar className="w-4 h-4 text-gray-500 mx-auto mb-1" />
-                    <p className="text-xs text-white font-medium">{new Date(project.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
-                    <p className="text-[10px] text-gray-500">Deadline</p>
+                  <div className="bg-black/20 rounded-xl p-3 border border-white/5 shadow-inner">
+                    <Calendar className="w-5 h-5 text-blue-400 mx-auto mb-2" />
+                    <p className="text-sm font-heading font-black text-white">{new Date(project.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
+                    <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-1">Deadline</p>
                   </div>
-                  <div className="bg-white/5 rounded-lg p-2">
-                    <Users className="w-4 h-4 text-gray-500 mx-auto mb-1" />
-                    <p className="text-xs text-white font-medium">{Array.isArray(project.team) ? project.team.length : '-'}</p>
-                    <p className="text-[10px] text-gray-500">Team</p>
+                  <div className="bg-black/20 rounded-xl p-3 border border-white/5 shadow-inner">
+                    <Users className="w-5 h-5 text-purple-400 mx-auto mb-2" />
+                    <p className="text-sm font-heading font-black text-white">{Array.isArray(project.team) ? project.team.length : '-'}</p>
+                    <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mt-1">Team</p>
                   </div>
                 </div>
               </div>

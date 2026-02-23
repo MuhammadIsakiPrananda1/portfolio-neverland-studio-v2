@@ -1,7 +1,11 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import apiClient from '@services/api.client';
+import dashboardService from '@services/dashboard.service';
+import { Contact as ContactType } from '@services/contact.service';
 import {
   Users,
+  User,
   Mail,
   FolderKanban,
   Clock,
@@ -20,8 +24,10 @@ import {
   UserPlus,
   FileText,
   Globe,
-  Zap,
   X,
+  Briefcase,
+  Activity,
+  Sparkles,
 } from 'lucide-react';
 import { staggerContainer, staggerItem, slideUp } from '@utils/animations';
 import { Link } from 'react-router-dom';
@@ -36,18 +42,6 @@ interface Project {
   budget: number;
   deadline: string;
   category: string;
-}
-
-interface Contact {
-  id: number;
-  name: string;
-  email: string;
-  company: string;
-  phone: string;
-  status: 'new' | 'read' | 'replied' | 'archived';
-  message: string;
-  type: string;
-  created_at: string;
 }
 
 interface Client {
@@ -74,71 +68,7 @@ interface AnalyticsData {
   updatedAt: string;
 }
 
-const STORAGE_KEYS = {
-  PROJECTS: 'dashboard_projects',
-  CONTACTS: 'dashboard_contacts',
-  CLIENTS: 'dashboard_clients',
-  ANALYTICS: 'dashboard_analytics',
-};
 
-const defaultProjects: Project[] = [
-  { id: 1, name: 'E-Commerce Security Audit', client: 'Tokopedia', status: 'active', progress: 75, budget: 15000, deadline: '2026-03-15', category: 'Security' },
-  { id: 2, name: 'Cloud Migration', client: 'Gojek', status: 'active', progress: 45, budget: 50000, deadline: '2026-04-20', category: 'Cloud' },
-  { id: 3, name: 'Network Infrastructure', client: 'Bank BTN', status: 'pending', progress: 0, budget: 75000, deadline: '2026-05-01', category: 'Infrastructure' },
-  { id: 4, name: 'Penetration Testing', client: 'Traveloka', status: 'completed', progress: 100, budget: 12000, deadline: '2026-02-10', category: 'Security' },
-  { id: 5, name: 'Mobile App Development', client: 'Grab', status: 'on-hold', progress: 30, budget: 45000, deadline: '2026-06-15', category: 'Development' },
-  { id: 6, name: 'Compliance Audit', client: 'Bank Mandiri', status: 'active', progress: 60, budget: 25000, deadline: '2026-03-30', category: 'Compliance' },
-];
-
-const defaultContacts: Contact[] = [
-  { id: 1, name: 'Ahmad Rizki', email: 'ahmad@techcorp.com', company: 'TechCorp Indonesia', phone: '+62812345678', status: 'new', message: 'Interested in penetration testing services for our e-commerce platform', type: 'security-audit', created_at: new Date(Date.now() - 1000 * 60 * 15).toISOString() },
-  { id: 2, name: 'Sarah Chen', email: 'sarah@cloudasia.io', company: 'CloudAsia', phone: '+62898765432', status: 'new', message: 'Need cloud security assessment and compliance review', type: 'cloud-security', created_at: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString() },
-  { id: 3, name: 'Budi Santoso', email: 'budi@startup.id', company: 'StartupID', phone: '+62811223344', status: 'read', message: 'Web application security audit request for our fintech product', type: 'penetration-testing', created_at: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString() },
-  { id: 4, name: 'Lisa Wang', email: 'lisa@megadata.com', company: 'MegaData Solutions', phone: '+62855667788', status: 'replied', message: 'Follow up on infrastructure monitoring proposal sent last week', type: 'consulting', created_at: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString() },
-  { id: 5, name: 'Dimas Prasetyo', email: 'dimas@fintech.co.id', company: 'FinTech Co', phone: '+62899887766', status: 'new', message: 'PCI DSS compliance consultation for our payment system', type: 'compliance', created_at: new Date(Date.now() - 1000 * 60 * 60 * 36).toISOString() },
-  { id: 6, name: 'Ayu Lestari', email: 'ayu@govtech.go.id', company: 'GovTech Agency', phone: '+62844556677', status: 'read', message: 'Government network security assessment RFP', type: 'network-security', created_at: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString() },
-  { id: 7, name: 'Kevin Tan', email: 'kevin@ecom.sg', company: 'E-Com Singapore', phone: '+651234567', status: 'archived', message: 'E-commerce platform security review completed', type: 'security-audit', created_at: new Date(Date.now() - 1000 * 60 * 60 * 72).toISOString() },
-];
-
-const defaultClients: Client[] = [
-  { id: 1, name: 'Ahmad Rizki', email: 'ahmad@techcorp.com', company: 'TechCorp Indonesia', phone: '+62812345678', industry: 'Technology', status: 'active', totalProjects: 3, totalSpent: 45000, joined: '2025-06-15' },
-  { id: 2, name: 'Sarah Chen', email: 'sarah@cloudasia.io', company: 'CloudAsia', phone: '+62898765432', industry: 'Cloud Services', status: 'active', totalProjects: 5, totalSpent: 125000, joined: '2025-03-20' },
-  { id: 3, name: 'Budi Santoso', email: 'budi@startup.id', company: 'StartupID', phone: '+62811223344', industry: 'Startups', status: 'active', totalProjects: 2, totalSpent: 18000, joined: '2025-09-08' },
-  { id: 4, name: 'Lisa Wang', email: 'lisa@megadata.com', company: 'MegaData Solutions', phone: '+62855667788', industry: 'Data Analytics', status: 'inactive', totalProjects: 1, totalSpent: 8000, joined: '2025-01-14' },
-  { id: 5, name: 'Dimas Prasetyo', email: 'dimas@fintech.co.id', company: 'FinTech Co', phone: '+62899887766', industry: 'Financial Services', status: 'active', totalProjects: 4, totalSpent: 85000, joined: '2025-07-22' },
-  { id: 6, name: 'Ayu Lestari', email: 'ayu@govtech.go.id', company: 'GovTech Agency', phone: '+62844556677', industry: 'Government', status: 'prospect', totalProjects: 0, totalSpent: 0, joined: '2026-02-01' },
-  { id: 7, name: 'Kevin Tan', email: 'kevin@ecom.sg', company: 'E-Commerce Singapore', phone: '+651234567', industry: 'E-Commerce', status: 'active', totalProjects: 2, totalSpent: 24000, joined: '2025-11-18' },
-];
-
-const defaultAnalytics: AnalyticsData = {
-  visitors: 12450,
-  pageViews: 45670,
-  bounceRate: 32.5,
-  avgSessionDuration: 245,
-  conversions: 187,
-  revenue: 285000,
-  updatedAt: new Date().toISOString(),
-};
-
-const loadFromStorage = <T,>(key: string, defaultValue: T): T => {
-  try {
-    const stored = localStorage.getItem(key);
-    if (stored) {
-      return JSON.parse(stored);
-    }
-  } catch (e) {
-    console.error(`Error loading ${key} from storage:`, e);
-  }
-  return defaultValue;
-};
-
-const saveToStorage = <T,>(key: string, value: T): void => {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-  } catch (e) {
-    console.error(`Error saving ${key} to storage:`, e);
-  }
-};
 
 const quickActions = [
   { id: 'projects', label: 'New Project', icon: FolderKanban, color: 'from-primary to-secondary', path: Routes.DASHBOARD_PROJECTS },
@@ -156,13 +86,15 @@ const recentActivities = [
 ];
 
 export default function Dashboard() {
-  const [projects, setProjects] = useState<Project[]>(() => loadFromStorage(STORAGE_KEYS.PROJECTS, defaultProjects));
-  const [contacts, setContacts] = useState<Contact[]>(() => loadFromStorage(STORAGE_KEYS.CONTACTS, defaultContacts));
-  const [clients, setClients] = useState<Client[]>(() => loadFromStorage(STORAGE_KEYS.CLIENTS, defaultClients));
-  const [analytics, setAnalytics] = useState<AnalyticsData>(() => loadFromStorage(STORAGE_KEYS.ANALYTICS, defaultAnalytics));
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [contacts, setContacts] = useState<ContactType[]>([]);
+  const [clients, setClients] = useState<Client[]>([]);
+  const [analytics, setAnalytics] = useState<AnalyticsData>({
+    visitors: 0, pageViews: 0, bounceRate: 0, avgSessionDuration: 0, conversions: 0, revenue: 0, updatedAt: new Date().toISOString()
+  });
 
   const [activeTab, setActiveTab] = useState<'overview' | 'projects' | 'contacts' | 'clients'>('overview');
-  const [lastUpdated, setLastUpdated] = useState<Date>(new Date(analytics.updatedAt));
+  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
@@ -174,28 +106,34 @@ export default function Dashboard() {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const currentUserName = localStorage.getItem('dashboardUserName') || 'Admin';
 
-  useEffect(() => {
-    saveToStorage(STORAGE_KEYS.PROJECTS, projects);
-  }, [projects]);
+  const fetchData = useCallback(async () => {
+    try {
+      setIsRefreshing(true);
+      const [projectsRes, contactsRes, clientsRes, analyticsRes] = await Promise.all([
+        apiClient.get('/projects'),
+        dashboardService.getContacts(),
+        apiClient.get('/clients'),
+        dashboardService.getOverview()
+      ]);
+      if (projectsRes.data?.data) setProjects(projectsRes.data.data);
+      if (contactsRes?.data?.data) setContacts(contactsRes.data.data);
+      if (clientsRes.data?.data) setClients(clientsRes.data.data);
+      if (analyticsRes?.data?.overview) setAnalytics(analyticsRes.data.overview);
+      setLastUpdated(new Date());
+    } catch (e) {
+      console.error('Error fetching dashboard data', e);
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, []);
 
   useEffect(() => {
-    saveToStorage(STORAGE_KEYS.CONTACTS, contacts);
-  }, [contacts]);
-
-  useEffect(() => {
-    saveToStorage(STORAGE_KEYS.CLIENTS, clients);
-  }, [clients]);
-
-  useEffect(() => {
-    saveToStorage(STORAGE_KEYS.ANALYTICS, analytics);
-  }, [analytics]);
+    fetchData();
+  }, [fetchData]);
 
   const handleRefresh = useCallback(() => {
-    setIsRefreshing(true);
-    setLastUpdated(new Date());
-    setAnalytics(prev => ({ ...prev, updatedAt: new Date().toISOString() }));
-    setTimeout(() => setIsRefreshing(false), 500);
-  }, []);
+    fetchData();
+  }, [fetchData]);
 
   useEffect(() => {
     intervalRef.current = setInterval(() => {
@@ -206,34 +144,49 @@ export default function Dashboard() {
     };
   }, []);
 
-  const handleMarkAsRead = (id: number) => {
-    setContacts(prev => {
-      const updated = prev.map(c => c.id === id ? { ...c, status: 'replied' as const } : c);
-      return updated;
-    });
+  const handleMarkAsRead = async (id: number) => {
+    try {
+      await apiClient.put(`/contacts/${id}/read`);
+      setContacts(prev => prev.map(c => c.id === id ? { ...c, status: 'read' as const } : c));
+    } catch (e) { console.error('Error marking as read', e); }
   };
 
-  const handleDeleteContact = (id: number) => {
-    setContacts(prev => prev.filter(c => c.id !== id));
-    setDeletingItem(null);
+  const handleDeleteContact = async (id: number) => {
+    try {
+      await apiClient.delete(`/contacts/${id}`);
+      setContacts(prev => prev.filter(c => c.id !== id));
+      setDeletingItem(null);
+    } catch (e) { console.error('Error deleting contact', e); }
   };
 
-  const handleDeleteProject = (id: number) => {
-    setProjects(prev => prev.filter(p => p.id !== id));
-    setDeletingItem(null);
+  const handleDeleteProject = async (id: number) => {
+    try {
+      await apiClient.delete(`/projects/${id}`);
+      setProjects(prev => prev.filter(p => p.id !== id));
+      setDeletingItem(null);
+    } catch (e) { console.error('Error deleting project', e); }
   };
 
-  const handleDeleteClient = (id: number) => {
-    setClients(prev => prev.filter(c => c.id !== id));
-    setDeletingItem(null);
+  const handleDeleteClient = async (id: number) => {
+    try {
+      await apiClient.delete(`/clients/${id}`);
+      setClients(prev => prev.filter(c => c.id !== id));
+      setDeletingItem(null);
+    } catch (e) { console.error('Error deleting client', e); }
   };
 
-  const handleStatusChange = (id: number, newStatus: string) => {
-    setProjects(prev => prev.map(p => p.id === id ? { ...p, status: newStatus as any } : p));
+  const handleStatusChange = async (id: number, newStatus: string) => {
+    try {
+      await apiClient.put(`/projects/${id}`, { status: newStatus });
+      setProjects(prev => prev.map(p => p.id === id ? { ...p, status: newStatus as any } : p));
+    } catch (e) { console.error('Error updating project', e); }
   };
 
-  const handleClientStatusChange = (id: number, newStatus: string) => {
-    setClients(prev => prev.map(c => c.id === id ? { ...c, status: newStatus as any } : c));
+  const handleClientStatusChange = async (id: number, newStatus: string) => {
+    try {
+      await apiClient.put(`/clients/${id}`, { status: newStatus });
+      setClients(prev => prev.map(c => c.id === id ? { ...c, status: newStatus as any } : c));
+    } catch (e) { console.error('Error updating client', e); }
   };
 
   const getTimeSince = (dateStr: string) => {
@@ -282,7 +235,7 @@ export default function Dashboard() {
   });
 
   const filteredContacts = contacts.filter(c => {
-    const matchesSearch = c.name.toLowerCase().includes(searchTerm.toLowerCase()) || c.email.toLowerCase().includes(searchTerm.toLowerCase()) || c.company.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = c.name.toLowerCase().includes(searchTerm.toLowerCase()) || c.email.toLowerCase().includes(searchTerm.toLowerCase()) || (c.company?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false);
     const matchesFilter = filterStatus === 'all' || c.status === filterStatus;
     return matchesSearch && matchesFilter;
   });
@@ -344,61 +297,63 @@ export default function Dashboard() {
           animate="visible"
           className="relative"
         >
-          <div className="relative border border-white/5 rounded-xl sm:rounded-2xl p-6 sm:p-8 overflow-hidden bg-gradient-to-b from-white/[0.02] to-transparent">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 sm:w-32 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+          <div className="relative border border-white/10 rounded-2xl sm:rounded-3xl p-8 sm:p-10 overflow-hidden glass shadow-2xl">
+            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 sm:w-48 h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-70" />
 
-            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+            <div className="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
               <div>
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary/20 bg-primary/5">
-                    <Zap className="w-3 h-3 text-primary" />
-                    <span className="text-xs font-semibold text-primary uppercase tracking-wider">Dashboard</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-purple-400/20 bg-purple-500/5 backdrop-blur-sm shadow-lg shadow-purple-500/5">
+                    <Sparkles className="w-3.5 h-3.5 text-purple-400 animate-pulse" />
+                    <span className="text-xs font-bold text-purple-300 uppercase tracking-widest">Dashboard Overview</span>
                   </div>
                 </div>
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-black mb-2">
-                  <span className="bg-gradient-to-r from-white via-purple-100 to-white bg-clip-text text-transparent">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-black mb-4 tracking-tight">
+                  <span className="text-white drop-shadow-md">
                     Welcome back,{' '}
                   </span>
-                  <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent filter drop-shadow-lg">
                     {currentUserName}
                   </span>
                 </h1>
-                <p className="text-gray-400 text-sm sm:text-base max-w-xl">
-                  Here's an overview of your business metrics and recent activities.
+                <p className="text-gray-400 text-base sm:text-lg max-w-2xl leading-relaxed">
+                  Everything you need to manage your security solutions and infrastructure is right here.
                 </p>
               </div>
 
-              <div className="flex flex-wrap items-center gap-3">
-                <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                  <Clock className="w-3 h-3" />
-                  <span>Updated {lastUpdated.toLocaleTimeString()}</span>
+              <div className="flex flex-wrap items-center gap-4 bg-black/20 p-2 rounded-2xl backdrop-blur-md border border-white/5">
+                <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 text-sm text-gray-300 font-medium">
+                  <Clock className="w-4 h-4 text-primary" />
+                  <span>{lastUpdated.toLocaleTimeString()}</span>
                 </div>
 
                 <button
                   onClick={handleRefresh}
                   disabled={isRefreshing}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg glass border border-white/10 text-gray-400 hover:text-white hover:border-primary/30 transition-all disabled:opacity-50 group"
+                  className="group relative flex items-center gap-2 px-6 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all duration-300 disabled:opacity-50 overflow-hidden"
                 >
-                  <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : 'group-hover:text-primary transition-colors'}`} />
-                  <span className="text-sm">Refresh</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                  <RefreshCw className={`relative z-10 w-4 h-4 ${isRefreshing ? 'animate-spin' : 'group-hover:text-primary transition-colors'}`} />
+                  <span className="relative z-10 font-semibold tracking-wide">Sync</span>
                 </button>
               </div>
             </div>
 
-            <div className="mt-6 pt-6 border-t border-white/5">
-              <div className="flex flex-wrap gap-3">
+            <div className="relative z-10 mt-8 pt-8 border-t border-white/10">
+              <div className="flex flex-wrap gap-4">
                 {quickActions.map((action) => {
                   const Icon = action.icon;
                   return (
                     <Link
                       key={action.id}
                       to={action.path}
-                      className="group relative overflow-hidden px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 hover:border-white/20 transition-all duration-300"
+                      className="group relative overflow-hidden px-5 py-3 rounded-xl bg-white/[0.03] border border-white/10 hover:border-white/30 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
                     >
-                      <div className={`absolute inset-0 bg-gradient-to-r ${action.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`} />
-                      <div className="relative z-10 flex items-center gap-2">
-                        <Icon className="w-4 h-4 text-gray-400 group-hover:text-white transition-colors" />
-                        <span className="text-sm font-medium text-gray-400 group-hover:text-white transition-colors">{action.label}</span>
+                      <div className={`absolute inset-0 bg-gradient-to-r ${action.color} opacity-0 group-hover:opacity-15 transition-opacity duration-300`} />
+                      <div className="relative z-10 flex items-center gap-2.5">
+                        <Icon className="w-4 h-4 text-gray-400 group-hover:text-white transition-colors drop-shadow-md" />
+                        <span className="text-sm font-semibold text-gray-300 group-hover:text-white transition-colors tracking-wide">{action.label}</span>
                       </div>
                     </Link>
                   );
@@ -436,18 +391,18 @@ export default function Dashboard() {
                 <p className="text-sm text-gray-400">{stat.label}</p>
               </div>
 
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                <div className="absolute top-0 -left-full h-full w-1/2 bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-12 group-hover:left-full transition-all duration-700" />
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl overflow-hidden">
+                <div className="absolute top-0 -left-full h-full w-1/2 bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-12 group-hover:left-full transition-all duration-700 ease-in-out" />
               </div>
             </motion.div>
           ))}
         </motion.div>
 
-        <div className="flex gap-1 p-1 rounded-lg glass border border-white/10 w-fit">
+        <div className="flex gap-2 p-1.5 rounded-xl glass border border-white/10 bg-black/20 backdrop-blur-xl w-fit drop-shadow-2xl">
           <button
             onClick={() => setActiveTab('overview')}
-            className={`px-5 py-2.5 rounded-md text-sm font-medium transition-all duration-200 flex items-center gap-2 ${activeTab === 'overview'
-              ? 'bg-gradient-to-r from-primary/20 via-secondary/15 to-primary/20 text-white shadow-lg shadow-primary/10 border border-primary/20'
+            className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 flex items-center gap-2.5 ${activeTab === 'overview'
+              ? 'bg-gradient-to-r from-primary via-secondary to-primary/80 text-white shadow-lg shadow-primary/20 border border-white/10 scale-105'
               : 'text-gray-400 hover:text-white hover:bg-white/5'
               }`}
           >
@@ -456,8 +411,8 @@ export default function Dashboard() {
           </button>
           <button
             onClick={() => setActiveTab('projects')}
-            className={`px-5 py-2.5 rounded-md text-sm font-medium transition-all duration-200 flex items-center gap-2 ${activeTab === 'projects'
-              ? 'bg-gradient-to-r from-primary/20 via-secondary/15 to-primary/20 text-white shadow-lg shadow-primary/10 border border-primary/20'
+            className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 flex items-center gap-2.5 ${activeTab === 'projects'
+              ? 'bg-gradient-to-r from-primary via-secondary to-primary/80 text-white shadow-lg shadow-primary/20 border border-white/10 scale-105'
               : 'text-gray-400 hover:text-white hover:bg-white/5'
               }`}
           >
@@ -466,8 +421,8 @@ export default function Dashboard() {
           </button>
           <button
             onClick={() => setActiveTab('contacts')}
-            className={`px-5 py-2.5 rounded-md text-sm font-medium transition-all duration-200 flex items-center gap-2 ${activeTab === 'contacts'
-              ? 'bg-gradient-to-r from-primary/20 via-secondary/15 to-primary/20 text-white shadow-lg shadow-primary/10 border border-primary/20'
+            className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 flex items-center gap-2.5 ${activeTab === 'contacts'
+              ? 'bg-gradient-to-r from-primary via-secondary to-primary/80 text-white shadow-lg shadow-primary/20 border border-white/10 scale-105'
               : 'text-gray-400 hover:text-white hover:bg-white/5'
               }`}
           >
@@ -476,8 +431,8 @@ export default function Dashboard() {
           </button>
           <button
             onClick={() => setActiveTab('clients')}
-            className={`px-5 py-2.5 rounded-md text-sm font-medium transition-all duration-200 flex items-center gap-2 ${activeTab === 'clients'
-              ? 'bg-gradient-to-r from-primary/20 via-secondary/15 to-primary/20 text-white shadow-lg shadow-primary/10 border border-primary/20'
+            className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 flex items-center gap-2.5 ${activeTab === 'clients'
+              ? 'bg-gradient-to-r from-primary via-secondary to-primary/80 text-white shadow-lg shadow-primary/20 border border-white/10 scale-105'
               : 'text-gray-400 hover:text-white hover:bg-white/5'
               }`}
           >
@@ -493,95 +448,96 @@ export default function Dashboard() {
             className="space-y-6"
           >
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="glass rounded-xl p-6 border border-white/10">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-heading font-bold text-white">Projects</h3>
-                  <div className="p-2 rounded-lg bg-primary/10 border border-primary/20">
+              <div className="glass rounded-2xl p-6 border border-white/10 hover:border-primary/30 transition-colors shadow-xl group">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-xl font-heading font-bold text-white group-hover:text-primary transition-colors">Projects</h3>
+                  <div className="p-2.5 rounded-xl bg-primary/10 border border-primary/30 shadow-inner">
                     <FolderKanban className="w-5 h-5 text-primary" />
                   </div>
                 </div>
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-400 text-sm">Active</span>
-                    <span className="text-emerald-400 font-medium">{projects.filter(p => p.status === 'active').length}</span>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] transition-colors border border-transparent hover:border-white/5">
+                    <span className="text-gray-400 text-sm font-medium">Active</span>
+                    <span className="text-emerald-400 font-bold bg-emerald-400/10 px-3 py-1 rounded-lg border border-emerald-400/20">{projects.filter(p => p.status === 'active').length}</span>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-400 text-sm">Completed</span>
-                    <span className="text-blue-400 font-medium">{projects.filter(p => p.status === 'completed').length}</span>
+                  <div className="flex justify-between items-center p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] transition-colors border border-transparent hover:border-white/5">
+                    <span className="text-gray-400 text-sm font-medium">Completed</span>
+                    <span className="text-blue-400 font-bold bg-blue-400/10 px-3 py-1 rounded-lg border border-blue-400/20">{projects.filter(p => p.status === 'completed').length}</span>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-400 text-sm">Pending</span>
-                    <span className="text-yellow-400 font-medium">{projects.filter(p => p.status === 'pending').length}</span>
+                  <div className="flex justify-between items-center p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] transition-colors border border-transparent hover:border-white/5">
+                    <span className="text-gray-400 text-sm font-medium">Pending</span>
+                    <span className="text-yellow-400 font-bold bg-yellow-400/10 px-3 py-1 rounded-lg border border-yellow-400/20">{projects.filter(p => p.status === 'pending').length}</span>
                   </div>
                 </div>
               </div>
 
-              <div className="glass rounded-xl p-6 border border-white/10">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-heading font-bold text-white">Messages</h3>
-                  <div className="p-2 rounded-lg bg-secondary/10 border border-secondary/20">
+              <div className="glass rounded-2xl p-6 border border-white/10 hover:border-secondary/30 transition-colors shadow-xl group">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-xl font-heading font-bold text-white group-hover:text-secondary transition-colors">Messages</h3>
+                  <div className="p-2.5 rounded-xl bg-secondary/10 border border-secondary/30 shadow-inner">
                     <Mail className="w-5 h-5 text-secondary" />
                   </div>
                 </div>
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-400 text-sm">New</span>
-                    <span className="text-primary font-medium">{contacts.filter(c => c.status === 'new').length}</span>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] transition-colors border border-transparent hover:border-white/5">
+                    <span className="text-gray-400 text-sm font-medium">New</span>
+                    <span className="text-primary font-bold bg-primary/10 px-3 py-1 rounded-lg border border-primary/20">{contacts.filter(c => c.status === 'new').length}</span>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-400 text-sm">Read</span>
-                    <span className="text-yellow-400 font-medium">{contacts.filter(c => c.status === 'read').length}</span>
+                  <div className="flex justify-between items-center p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] transition-colors border border-transparent hover:border-white/5">
+                    <span className="text-gray-400 text-sm font-medium">Read</span>
+                    <span className="text-yellow-400 font-bold bg-yellow-400/10 px-3 py-1 rounded-lg border border-yellow-400/20">{contacts.filter(c => c.status === 'read').length}</span>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-400 text-sm">Replied</span>
-                    <span className="text-emerald-400 font-medium">{contacts.filter(c => c.status === 'replied').length}</span>
+                  <div className="flex justify-between items-center p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] transition-colors border border-transparent hover:border-white/5">
+                    <span className="text-gray-400 text-sm font-medium">Replied</span>
+                    <span className="text-emerald-400 font-bold bg-emerald-400/10 px-3 py-1 rounded-lg border border-emerald-400/20">{contacts.filter(c => c.status === 'replied').length}</span>
                   </div>
                 </div>
               </div>
 
-              <div className="glass rounded-xl p-6 border border-white/10">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-heading font-bold text-white">Clients</h3>
-                  <div className="p-2 rounded-lg bg-accent/10 border border-accent/20">
+              <div className="glass rounded-2xl p-6 border border-white/10 hover:border-accent/30 transition-colors shadow-xl group">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-xl font-heading font-bold text-white group-hover:text-accent transition-colors">Clients</h3>
+                  <div className="p-2.5 rounded-xl bg-accent/10 border border-accent/30 shadow-inner">
                     <Users className="w-5 h-5 text-accent" />
                   </div>
                 </div>
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-400 text-sm">Active</span>
-                    <span className="text-emerald-400 font-medium">{clients.filter(c => c.status === 'active').length}</span>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] transition-colors border border-transparent hover:border-white/5">
+                    <span className="text-gray-400 text-sm font-medium">Active</span>
+                    <span className="text-emerald-400 font-bold bg-emerald-400/10 px-3 py-1 rounded-lg border border-emerald-400/20">{clients.filter(c => c.status === 'active').length}</span>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-400 text-sm">Inactive</span>
-                    <span className="text-gray-400 font-medium">{clients.filter(c => c.status === 'inactive').length}</span>
+                  <div className="flex justify-between items-center p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] transition-colors border border-transparent hover:border-white/5">
+                    <span className="text-gray-400 text-sm font-medium">Inactive</span>
+                    <span className="text-gray-400 font-bold bg-gray-400/10 px-3 py-1 rounded-lg border border-gray-400/20">{clients.filter(c => c.status === 'inactive').length}</span>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-400 text-sm">Prospects</span>
-                    <span className="text-purple-400 font-medium">{clients.filter(c => c.status === 'prospect').length}</span>
+                  <div className="flex justify-between items-center p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] transition-colors border border-transparent hover:border-white/5">
+                    <span className="text-gray-400 text-sm font-medium">Prospects</span>
+                    <span className="text-purple-400 font-bold bg-purple-400/10 px-3 py-1 rounded-lg border border-purple-400/20">{clients.filter(c => c.status === 'prospect').length}</span>
                   </div>
                 </div>
               </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="glass rounded-xl border border-white/10 overflow-hidden">
-                <div className="p-6 border-b border-white/10">
-                  <h3 className="text-lg font-heading font-bold text-white flex items-center gap-2">
-                    Activity
+              <div className="glass rounded-2xl border border-white/10 overflow-hidden shadow-xl">
+                <div className="p-6 border-b border-white/10 bg-white/[0.02]">
+                  <h3 className="text-xl font-heading font-bold text-white flex items-center gap-2">
+                    <Activity className="w-5 h-5 text-primary" />
+                    Activity Log
                   </h3>
                 </div>
                 <div className="divide-y divide-white/5">
                   {recentActivities.map((activity) => {
                     const Icon = activity.icon;
                     return (
-                      <div key={activity.id} className="p-4 hover:bg-white/[0.02] transition-colors">
-                        <div className="flex items-start gap-3">
-                          <div className={`p-2 rounded-lg bg-white/5 ${activity.color}`}>
-                            <Icon className="w-4 h-4" />
+                      <div key={activity.id} className="p-5 hover:bg-white/[0.04] transition-colors group">
+                        <div className="flex items-start gap-4">
+                          <div className={`p-3 rounded-xl bg-white/5 border border-white/5 group-hover:scale-110 transition-transform ${activity.color}`}>
+                            <Icon className="w-5 h-5" />
                           </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm text-gray-300">{activity.message}</p>
-                            <p className="text-xs text-gray-500 mt-1">{activity.time}</p>
+                          <div className="flex-1 min-w-0 pt-1">
+                            <p className="text-sm font-medium text-gray-200 group-hover:text-white transition-colors">{activity.message}</p>
+                            <p className="text-xs text-gray-500 mt-1.5 font-mono">{activity.time}</p>
                           </div>
                         </div>
                       </div>
@@ -590,31 +546,32 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              <div className="glass rounded-xl border border-white/10 overflow-hidden">
-                <div className="p-6 border-b border-white/10 flex justify-between items-center">
-                  <h3 className="text-lg font-heading font-bold text-white flex items-center gap-2">
+              <div className="glass rounded-2xl border border-white/10 overflow-hidden shadow-xl">
+                <div className="p-6 border-b border-white/10 bg-white/[0.02] flex justify-between items-center">
+                  <h3 className="text-xl font-heading font-bold text-white flex items-center gap-2">
+                    <Briefcase className="w-5 h-5 text-secondary" />
                     Recent Projects
                   </h3>
-                  <Link to={Routes.DASHBOARD_PROJECTS} className="text-sm text-primary hover:text-primary/80 transition-colors flex items-center gap-1">
+                  <Link to={Routes.DASHBOARD_PROJECTS} className="text-sm font-medium text-primary hover:text-white px-3 py-1.5 rounded-lg bg-primary/10 hover:bg-primary/20 transition-all flex items-center gap-1 border border-primary/20">
                     View All <ChevronRight className="w-4 h-4" />
                   </Link>
                 </div>
                 <div className="divide-y divide-white/5">
                   {projects.slice(0, 5).map((project) => (
-                    <div key={project.id} className="p-4 hover:bg-white/[0.02] transition-colors">
-                      <div className="flex items-center justify-between mb-2">
-                        <h4 className="text-sm font-medium text-white truncate">{project.name}</h4>
-                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium border ${getProjectStatusColor(project.status)}`}>
+                    <div key={project.id} className="p-5 hover:bg-white/[0.04] transition-colors group">
+                      <div className="flex items-center justify-between mb-3">
+                        <h4 className="text-base font-bold text-white truncate group-hover:text-secondary transition-colors">{project.name}</h4>
+                        <span className={`px-3 py-1 rounded-lg text-xs font-bold border ${getProjectStatusColor(project.status)} uppercase tracking-wider`}>
                           {project.status}
                         </span>
                       </div>
-                      <div className="flex items-center justify-between text-xs text-gray-500">
-                        <span>{project.client}</span>
-                        <span>{project.progress}%</span>
+                      <div className="flex items-center justify-between text-sm text-gray-400 mb-3">
+                        <span className="flex items-center gap-1"><User className="w-3.5 h-3.5" /> {project.client}</span>
+                        <span className="font-mono bg-white/5 px-2 py-0.5 rounded text-white">{project.progress}%</span>
                       </div>
-                      <div className="mt-2 h-1 bg-white/10 rounded-full overflow-hidden">
+                      <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-gradient-to-r from-primary to-secondary rounded-full transition-all duration-500"
+                          className="h-full bg-gradient-to-r from-primary via-secondary to-accent rounded-full transition-all duration-1000 ease-out"
                           style={{ width: `${project.progress}%` }}
                         />
                       </div>
@@ -632,40 +589,45 @@ export default function Dashboard() {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-6"
           >
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white/[0.02] p-4 rounded-2xl border border-white/5 backdrop-blur-md">
               <div className="flex flex-wrap items-center gap-3">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-primary transition-colors z-10" />
                   <input
                     type="text"
                     placeholder="Search projects..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 pr-4 py-2 rounded-lg bg-white/[0.03] border border-white/10 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-primary/50 w-64"
+                    className="relative pl-10 pr-4 py-2.5 rounded-lg bg-white/[0.03] border border-white/10 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-primary/50 focus:bg-white/[0.05] w-64 transition-all duration-300"
                   />
                 </div>
-                <select
-                  value={filterStatus}
-                  onChange={(e) => setFilterStatus(e.target.value)}
-                  className="px-4 py-2 rounded-lg bg-white/[0.03] border border-white/10 text-sm text-white focus:outline-none focus:border-primary/50"
-                >
-                  <option value="all">All Status</option>
-                  <option value="active">Active</option>
-                  <option value="completed">Completed</option>
-                  <option value="pending">Pending</option>
-                  <option value="on-hold">On Hold</option>
-                </select>
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-secondary/20 to-accent/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <select
+                    value={filterStatus}
+                    onChange={(e) => setFilterStatus(e.target.value)}
+                    className="relative px-4 py-2.5 rounded-lg bg-white/[0.03] border border-white/10 text-sm text-white focus:outline-none focus:border-secondary/50 focus:bg-white/[0.05] appearance-none transition-all duration-300 pr-10"
+                  >
+                    <option value="all" className="bg-dark-900">All Status</option>
+                    <option value="active" className="bg-dark-900">Active</option>
+                    <option value="completed" className="bg-dark-900">Completed</option>
+                    <option value="pending" className="bg-dark-900">Pending</option>
+                    <option value="on-hold" className="bg-dark-900">On Hold</option>
+                  </select>
+                </div>
               </div>
               <button
                 onClick={() => setShowAddModal('project')}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-primary to-secondary text-white font-medium text-sm hover:shadow-lg hover:shadow-primary/20 transition-all"
+                className="group relative flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-medium text-sm hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 overflow-hidden border border-white/10"
               >
-                <Plus className="w-4 h-4" />
-                Add Project
+                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+                <Plus className="w-4 h-4 relative z-10" />
+                <span className="relative z-10">Add Project</span>
               </button>
             </div>
 
-            <div className="glass rounded-xl border border-white/10 overflow-hidden">
+            <div className="glass rounded-2xl border border-white/10 overflow-hidden shadow-2xl">
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
@@ -747,40 +709,45 @@ export default function Dashboard() {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-6"
           >
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white/[0.02] p-4 rounded-2xl border border-white/5 backdrop-blur-md">
               <div className="flex flex-wrap items-center gap-3">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-primary transition-colors z-10" />
                   <input
                     type="text"
                     placeholder="Search messages..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 pr-4 py-2 rounded-lg bg-white/[0.03] border border-white/10 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-primary/50 w-64"
+                    className="relative pl-10 pr-4 py-2.5 rounded-lg bg-white/[0.03] border border-white/10 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-primary/50 focus:bg-white/[0.05] w-64 transition-all duration-300"
                   />
                 </div>
-                <select
-                  value={filterStatus}
-                  onChange={(e) => setFilterStatus(e.target.value)}
-                  className="px-4 py-2 rounded-lg bg-white/[0.03] border border-white/10 text-sm text-white focus:outline-none focus:border-primary/50"
-                >
-                  <option value="all">All Status</option>
-                  <option value="new">New</option>
-                  <option value="read">Read</option>
-                  <option value="replied">Replied</option>
-                  <option value="archived">Archived</option>
-                </select>
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-secondary/20 to-accent/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <select
+                    value={filterStatus}
+                    onChange={(e) => setFilterStatus(e.target.value)}
+                    className="relative px-4 py-2.5 rounded-lg bg-white/[0.03] border border-white/10 text-sm text-white focus:outline-none focus:border-secondary/50 focus:bg-white/[0.05] appearance-none transition-all duration-300 pr-10"
+                  >
+                    <option value="all" className="bg-dark-900">All Status</option>
+                    <option value="new" className="bg-dark-900">New</option>
+                    <option value="read" className="bg-dark-900">Read</option>
+                    <option value="replied" className="bg-dark-900">Replied</option>
+                    <option value="archived" className="bg-dark-900">Archived</option>
+                  </select>
+                </div>
               </div>
               <button
                 onClick={() => setShowAddModal('contact')}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-primary to-secondary text-white font-medium text-sm hover:shadow-lg hover:shadow-primary/20 transition-all"
+                className="group relative flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-medium text-sm hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 overflow-hidden border border-white/10"
               >
-                <Plus className="w-4 h-4" />
-                Add Message
+                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+                <Plus className="w-4 h-4 relative z-10" />
+                <span className="relative z-10">Add Message</span>
               </button>
             </div>
 
-            <div className="glass rounded-xl border border-white/10 overflow-hidden">
+            <div className="glass rounded-2xl border border-white/10 overflow-hidden shadow-2xl">
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
@@ -803,7 +770,7 @@ export default function Dashboard() {
                           </div>
                         </td>
                         <td className="px-6 py-4 text-gray-400 text-sm">{contact.company}</td>
-                        <td className="px-6 py-4 text-gray-400 text-sm capitalize">{contact.type.replace('-', ' ')}</td>
+                        <td className="px-6 py-4 text-gray-400 text-sm capitalize">{(contact.message_type || 'general').replace('-', ' ')}</td>
                         <td className="px-6 py-4">
                           <span className={`px-2.5 py-1 rounded-full text-xs font-medium border ${getContactStatusColor(contact.status)}`}>
                             {contact.status}
@@ -852,39 +819,44 @@ export default function Dashboard() {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-6"
           >
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white/[0.02] p-4 rounded-2xl border border-white/5 backdrop-blur-md">
               <div className="flex flex-wrap items-center gap-3">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-primary transition-colors z-10" />
                   <input
                     type="text"
                     placeholder="Search clients..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 pr-4 py-2 rounded-lg bg-white/[0.03] border border-white/10 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-primary/50 w-64"
+                    className="relative pl-10 pr-4 py-2.5 rounded-lg bg-white/[0.03] border border-white/10 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-primary/50 focus:bg-white/[0.05] w-64 transition-all duration-300"
                   />
                 </div>
-                <select
-                  value={filterStatus}
-                  onChange={(e) => setFilterStatus(e.target.value)}
-                  className="px-4 py-2 rounded-lg bg-white/[0.03] border border-white/10 text-sm text-white focus:outline-none focus:border-primary/50"
-                >
-                  <option value="all">All Status</option>
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
-                  <option value="prospect">Prospect</option>
-                </select>
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-secondary/20 to-accent/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <select
+                    value={filterStatus}
+                    onChange={(e) => setFilterStatus(e.target.value)}
+                    className="relative px-4 py-2.5 rounded-lg bg-white/[0.03] border border-white/10 text-sm text-white focus:outline-none focus:border-secondary/50 focus:bg-white/[0.05] appearance-none transition-all duration-300 pr-10"
+                  >
+                    <option value="all" className="bg-dark-900">All Status</option>
+                    <option value="active" className="bg-dark-900">Active</option>
+                    <option value="inactive" className="bg-dark-900">Inactive</option>
+                    <option value="prospect" className="bg-dark-900">Prospect</option>
+                  </select>
+                </div>
               </div>
               <button
                 onClick={() => setShowAddModal('client')}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-primary to-secondary text-white font-medium text-sm hover:shadow-lg hover:shadow-primary/20 transition-all"
+                className="group relative flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-medium text-sm hover:shadow-lg hover:shadow-primary/25 transition-all duration-300 overflow-hidden border border-white/10"
               >
-                <Plus className="w-4 h-4" />
-                Add Client
+                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+                <Plus className="w-4 h-4 relative z-10" />
+                <span className="relative z-10">Add Client</span>
               </button>
             </div>
 
-            <div className="glass rounded-xl border border-white/10 overflow-hidden">
+            <div className="glass rounded-2xl border border-white/10 overflow-hidden shadow-2xl">
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
@@ -1185,8 +1157,9 @@ export default function Dashboard() {
                           phone: formData.phone || '',
                           status: 'new' as const,
                           message: formData.message || '',
-                          type: 'general',
+                          message_type: 'general',
                           created_at: new Date().toISOString(),
+                          updated_at: new Date().toISOString(),
                         }, ...prev]);
                       } else if (showAddModal === 'client') {
                         setClients(prev => [{

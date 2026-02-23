@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Search, Shield, CheckCircle, Clock, AlertTriangle } from 'lucide-react';
+import { Search, Shield, CheckCircle, Clock, AlertTriangle, Sparkles } from 'lucide-react';
 import { staggerContainer, staggerItem, slideUp } from '@utils/animations';
 
 interface Task {
@@ -70,89 +70,152 @@ export default function DashboardTasks() {
   return (
     <div className="space-y-6">
       <motion.div variants={slideUp} initial="hidden" animate="visible" className="relative">
-        <div className="relative border border-white/5 rounded-xl sm:rounded-2xl p-6 sm:p-8 overflow-hidden bg-gradient-to-b from-white/[0.02] to-transparent">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 sm:w-32 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+        <div className="relative border border-white/10 rounded-2xl sm:rounded-3xl p-8 sm:p-10 overflow-hidden glass shadow-2xl">
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-emerald-500/5 via-transparent to-teal-500/5" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 sm:w-48 h-1 bg-gradient-to-r from-transparent via-emerald-500 to-transparent opacity-70" />
+
+          <div className="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
             <div>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/5">
-                  <Shield className="w-3 h-3 text-emerald-400" />
-                  <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">Tasks</span>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-purple-400/20 bg-purple-500/5 backdrop-blur-sm shadow-lg shadow-purple-500/5">
+                  <Sparkles className="w-3.5 h-3.5 text-purple-400 animate-pulse" />
+                  <span className="text-xs font-bold text-purple-300 uppercase tracking-widest">Operations</span>
                 </div>
               </div>
-              <h1 className="text-3xl sm:text-4xl font-heading font-black mb-2">
-                <span className="bg-gradient-to-r from-white via-purple-100 to-white bg-clip-text text-transparent">
-                  Task Management
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-black mb-4 tracking-tight">
+                <span className="text-white drop-shadow-md">
+                  Task{' '}
+                </span>
+                <span className="bg-gradient-to-r from-emerald-400 via-teal-400 to-emerald-400 bg-clip-text text-transparent filter drop-shadow-lg">
+                  Management
                 </span>
               </h1>
-              <p className="text-gray-400 text-sm sm:text-base max-w-xl">
-                Track and manage all your project tasks in one place.
+              <p className="text-gray-400 text-base sm:text-lg max-w-2xl leading-relaxed">
+                Track, assign, and manage all project tasks and operational activities across the team.
               </p>
             </div>
+
+            <button
+              className="group relative flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold text-sm hover:shadow-lg hover:shadow-emerald-500/25 transition-all duration-300 overflow-hidden border border-white/10"
+            >
+              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+              <CheckCircle className="w-5 h-5 relative z-10 group-hover:scale-110 transition-transform duration-300" />
+              <span className="relative z-10">Create Task</span>
+            </button>
           </div>
         </div>
       </motion.div>
 
-      <motion.div className="grid grid-cols-2 md:grid-cols-4 gap-4" variants={staggerContainer} initial="hidden" animate="visible">
-        <motion.div variants={staggerItem} className="glass rounded-xl p-5 border border-white/10">
-          <Shield className="w-5 h-5 text-primary mb-3" />
-          <h3 className="text-2xl font-bold text-white">{stats.total}</h3>
-          <p className="text-sm text-gray-400">Total Tasks</p>
+      <motion.div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6" variants={staggerContainer} initial="hidden" animate="visible">
+        <motion.div variants={staggerItem} className="glass rounded-2xl p-6 border border-white/10 shadow-xl relative overflow-hidden group hover:border-white/20 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative z-10 flex flex-col h-full justify-between">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-xl bg-emerald-500/20 border border-emerald-500/30 shadow-inner group-hover:scale-110 transition-transform">
+                <Shield className="w-5 h-5 text-emerald-400" />
+              </div>
+            </div>
+            <div>
+              <h3 className="text-4xl font-heading font-black text-white mb-1 drop-shadow-md">{stats.total}</h3>
+              <p className="text-sm font-medium text-gray-400 group-hover:text-gray-300 transition-colors uppercase tracking-wider">Total Tasks</p>
+            </div>
+          </div>
         </motion.div>
-        <motion.div variants={staggerItem} className="glass rounded-xl p-5 border border-white/10">
-          <Clock className="w-5 h-5 text-gray-400 mb-3" />
-          <h3 className="text-2xl font-bold text-white">{stats.todo}</h3>
-          <p className="text-sm text-gray-400">To Do</p>
+
+        <motion.div variants={staggerItem} className="glass rounded-2xl p-6 border border-white/10 shadow-xl relative overflow-hidden group hover:border-white/20 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative z-10 flex flex-col h-full justify-between">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-xl bg-gray-500/20 border border-gray-500/30 shadow-inner group-hover:scale-110 transition-transform">
+                <Clock className="w-5 h-5 text-gray-400" />
+              </div>
+            </div>
+            <div>
+              <h3 className="text-4xl font-heading font-black text-white mb-1 drop-shadow-md">{stats.todo}</h3>
+              <p className="text-sm font-medium text-gray-400 group-hover:text-gray-300 transition-colors uppercase tracking-wider">To Do</p>
+            </div>
+          </div>
         </motion.div>
-        <motion.div variants={staggerItem} className="glass rounded-xl p-5 border border-white/10">
-          <div className="w-5 h-5 rounded-full border-2 border-blue-400 mb-3" />
-          <h3 className="text-2xl font-bold text-white">{stats.inProgress}</h3>
-          <p className="text-sm text-gray-400">In Progress</p>
+
+        <motion.div variants={staggerItem} className="glass rounded-2xl p-6 border border-white/10 shadow-xl relative overflow-hidden group hover:border-white/20 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative z-10 flex flex-col h-full justify-between">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-xl bg-blue-500/20 border border-blue-500/30 shadow-inner group-hover:scale-110 transition-transform flex items-center justify-center">
+                <div className="w-5 h-5 rounded-full border-2 border-blue-400" />
+              </div>
+            </div>
+            <div>
+              <h3 className="text-4xl font-heading font-black text-white mb-1 drop-shadow-md">{stats.inProgress}</h3>
+              <p className="text-sm font-medium text-gray-400 group-hover:text-gray-300 transition-colors uppercase tracking-wider">In Progress</p>
+            </div>
+          </div>
         </motion.div>
-        <motion.div variants={staggerItem} className="glass rounded-xl p-5 border border-white/10">
-          <CheckCircle className="w-5 h-5 text-emerald-400 mb-3" />
-          <h3 className="text-2xl font-bold text-white">{stats.done}</h3>
-          <p className="text-sm text-gray-400">Completed</p>
+
+        <motion.div variants={staggerItem} className="glass rounded-2xl p-6 border border-white/10 shadow-xl relative overflow-hidden group hover:border-white/20 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative z-10 flex flex-col h-full justify-between">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-xl bg-emerald-500/20 border border-emerald-500/30 shadow-inner group-hover:scale-110 transition-transform">
+                <CheckCircle className="w-5 h-5 text-emerald-400" />
+              </div>
+            </div>
+            <div>
+              <h3 className="text-4xl font-heading font-black text-white mb-1 drop-shadow-md">{stats.done}</h3>
+              <p className="text-sm font-medium text-gray-400 group-hover:text-gray-300 transition-colors uppercase tracking-wider">Completed</p>
+            </div>
+          </div>
         </motion.div>
       </motion.div>
 
-      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between bg-white/[0.02] p-4 rounded-2xl border border-white/5 backdrop-blur-md">
         <div className="flex flex-wrap items-center gap-3">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-            <input type="text" placeholder="Search tasks..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10 pr-4 py-2 rounded-lg bg-white/[0.03] border border-white/10 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-primary/50 w-64" />
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-emerald-400 transition-colors z-10" />
+            <input type="text" placeholder="Search tasks..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="relative pl-11 pr-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/50 focus:bg-white/[0.05] w-64 md:w-80 transition-all duration-300" />
           </div>
-          <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)} className="px-4 py-2 rounded-lg bg-white/[0.03] border border-white/10 text-sm text-white focus:outline-none">
-            <option value="all">All Status</option>
-            <option value="todo">To Do</option>
-            <option value="in-progress">In Progress</option>
-            <option value="review">Review</option>
-            <option value="done">Done</option>
-          </select>
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-teal-500/20 to-emerald-500/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity" />
+            <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)} className="relative px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-sm text-white focus:outline-none focus:border-emerald-500/50 focus:bg-white/[0.05] appearance-none transition-all duration-300 pr-10 cursor-pointer">
+              <option value="all" className="bg-dark-900">All Status</option>
+              <option value="todo" className="bg-dark-900">To Do</option>
+              <option value="in-progress" className="bg-dark-900">In Progress</option>
+              <option value="review" className="bg-dark-900">Review</option>
+              <option value="done" className="bg-dark-900">Done</option>
+            </select>
+          </div>
         </div>
-        <p className="text-sm text-gray-500">{filteredTasks.length} tasks found</p>
+        <p className="text-sm font-medium text-gray-400 bg-white/5 px-4 py-2 rounded-lg border border-white/5">{filteredTasks.length} tasks found</p>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-4">
         {filteredTasks.map((task) => (
-          <motion.div key={task.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass rounded-xl border border-white/10 p-4 hover:border-primary/30 transition-all">
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex items-start gap-3 flex-1">
-                <div className="mt-1">{getPriorityIcon(task.priority)}</div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(task.status)}`}>
+          <motion.div key={task.id} initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="glass rounded-2xl border border-white/10 p-5 hover:border-emerald-500/30 hover:shadow-xl transition-all duration-300 group relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+            <div className="flex flex-col sm:flex-row items-start justify-between gap-6 relative z-10">
+              <div className="flex items-start gap-4 flex-1">
+                <div className="p-3 rounded-xl bg-white/5 border border-white/10 shadow-inner group-hover:scale-110 transition-transform mt-1 shrink-0">
+                  {getPriorityIcon(task.priority)}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-wrap items-center gap-2 mb-2">
+                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border shadow-sm ${getStatusColor(task.status)}`}>
                       {task.status.replace('-', ' ')}
                     </span>
-                    <span className="text-xs text-gray-500">{task.project}</span>
+                    <span className="text-gray-600 font-bold">•</span>
+                    <span className="textxs font-bold text-gray-400 uppercase tracking-widest bg-white/5 px-2 py-0.5 rounded border border-white/5">{task.project}</span>
                   </div>
-                  <h3 className="text-white font-medium">{task.title}</h3>
-                  <p className="text-sm text-gray-500 mt-1">{task.description}</p>
+                  <h3 className="text-xl font-heading font-black text-white group-hover:text-emerald-400 transition-colors mb-2">{task.title}</h3>
+                  <p className="text-sm text-gray-400 leading-relaxed">{task.description}</p>
                 </div>
               </div>
-              <div className="text-right flex-shrink-0">
-                <p className="text-xs text-gray-400">{task.assignee}</p>
-                <p className="text-xs text-gray-500 mt-1">Due {new Date(task.dueDate).toLocaleDateString()}</p>
+              <div className="text-left md:text-right flex-shrink-0 sm:pt-2 w-full sm:w-auto flex sm:flex-col justify-between items-center sm:items-end border-t sm:border-t-0 border-white/10 pt-4 sm:pt-0">
+                <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest bg-black/20 px-3 py-1.5 rounded-full border border-white/5 mb-2 flex items-center gap-2">
+                  <Shield className="w-3 h-3 text-emerald-400" />
+                  {task.assignee}
+                </div>
+                <p className="text-xs font-medium text-gray-500">Due {new Date(task.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
               </div>
             </div>
           </motion.div>

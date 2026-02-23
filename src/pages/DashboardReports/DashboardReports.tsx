@@ -9,9 +9,10 @@ import {
   Users,
   FolderKanban,
   Eye,
-  BarChart3
+  BarChart3,
+  Sparkles
 } from 'lucide-react';
-import { staggerContainer, staggerItem } from '@utils/animations';
+import { staggerContainer, staggerItem, slideUp } from '@utils/animations';
 
 const reports = [
   {
@@ -115,26 +116,51 @@ const quickStats = [
 export default function DashboardReports() {
   return (
     <div className="space-y-6">
-      {/* Page Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 rounded-lg bg-blue-500/10 border border-blue-500/20">
-              <FileText className="w-5 h-5 text-blue-400" />
+      <motion.div
+        variants={slideUp}
+        initial="hidden"
+        animate="visible"
+        className="relative"
+      >
+        <div className="relative border border-white/10 rounded-2xl sm:rounded-3xl p-8 sm:p-10 overflow-hidden glass shadow-2xl">
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 sm:w-48 h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-70" />
+
+          <div className="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-purple-400/20 bg-purple-500/5 backdrop-blur-sm shadow-lg shadow-purple-500/5">
+                  <Sparkles className="w-3.5 h-3.5 text-purple-400 animate-pulse" />
+                  <span className="text-xs font-bold text-purple-300 uppercase tracking-widest">Analytics</span>
+                </div>
+              </div>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-black mb-4 tracking-tight">
+                <span className="text-white drop-shadow-md">
+                  Business{' '}
+                </span>
+                <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 bg-clip-text text-transparent filter drop-shadow-lg">
+                  Reports
+                </span>
+              </h1>
+              <p className="text-gray-400 text-base sm:text-lg max-w-2xl leading-relaxed">
+                Access your business reports, analytics, and performance metrics in one comprehensive view.
+              </p>
             </div>
-            <h1 className="text-2xl lg:text-3xl font-bold text-white">Reports</h1>
+
+            <button
+              className="group relative flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold text-sm hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-300 overflow-hidden border border-white/10"
+            >
+              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+              <FileText className="w-5 h-5 relative z-10 group-hover:scale-110 transition-transform duration-300" />
+              <span className="relative z-10">Generate Report</span>
+            </button>
           </div>
-          <p className="text-gray-400">Access your business reports and analytics</p>
         </div>
-        <button className="px-4 py-2.5 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold text-sm transition-all duration-300 flex items-center gap-2 hover:scale-105">
-          <FileText className="w-4 h-4" />
-          Generate Report
-        </button>
-      </div>
+      </motion.div>
 
       {/* Quick Stats */}
       <motion.div
-        className="grid grid-cols-1 sm:grid-cols-3 gap-4"
+        className="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6"
         variants={staggerContainer}
         initial="hidden"
         animate="visible"
@@ -143,91 +169,99 @@ export default function DashboardReports() {
           <motion.div
             key={stat.label}
             variants={staggerItem as any}
-            className={`relative rounded-xl p-6 border border-white/5 ${stat.bgColor}`}
+            className={`glass relative rounded-2xl p-6 border border-white/10 shadow-xl overflow-hidden group hover:border-white/20 transition-all duration-300`}
           >
-            <stat.icon className={`w-5 h-5 ${stat.iconColor} mb-3`} />
-            <h3 className="text-2xl lg:text-3xl font-bold text-white mb-1">{stat.value}</h3>
-            <p className="text-sm text-gray-500 font-medium">{stat.label}</p>
+            <div className={`absolute inset-0 bg-gradient-to-br ${stat.bgColor.replace('bg-', 'from-').replace('/10', '/5')} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
+            <div className="relative z-10 flex flex-col h-full justify-between">
+              <div className="flex items-center justify-between mb-4">
+                <div className={`p-3 rounded-xl ${stat.bgColor} border border-white/5 shadow-inner group-hover:scale-110 transition-transform`}>
+                  <stat.icon className={`w-5 h-5 ${stat.iconColor}`} />
+                </div>
+              </div>
+              <div>
+                <h3 className="text-4xl font-heading font-black text-white mb-1 drop-shadow-md">{stat.value}</h3>
+                <p className="text-sm font-medium text-gray-400 group-hover:text-gray-300 transition-colors uppercase tracking-wider">{stat.label}</p>
+              </div>
+            </div>
           </motion.div>
         ))}
       </motion.div>
 
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-3">
-        <div className="flex gap-2">
-          <button className="px-4 py-2 rounded-lg bg-blue-500/20 border border-blue-500/30 text-blue-400 text-sm font-medium transition-all duration-300">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-white/[0.02] p-4 rounded-2xl border border-white/5 backdrop-blur-md gap-4">
+        <div className="flex flex-wrap gap-2">
+          <button className="px-5 py-2.5 rounded-xl bg-blue-500/20 border border-blue-500/30 text-blue-400 text-sm font-bold tracking-wide transition-all duration-300 shadow-inner">
             All Reports
           </button>
-          <button className="px-4 py-2 rounded-lg bg-white/[0.02] border border-white/5 text-gray-400 hover:text-white hover:border-white/10 text-sm font-medium transition-all duration-300">
+          <button className="px-5 py-2.5 rounded-xl bg-white/[0.02] border border-white/5 text-gray-400 hover:text-white hover:border-white/10 hover:bg-white/5 text-sm font-bold tracking-wide transition-all duration-300">
             Financial
           </button>
-          <button className="px-4 py-2 rounded-lg bg-white/[0.02] border border-white/5 text-gray-400 hover:text-white hover:border-white/10 text-sm font-medium transition-all duration-300">
+          <button className="px-5 py-2.5 rounded-xl bg-white/[0.02] border border-white/5 text-gray-400 hover:text-white hover:border-white/10 hover:bg-white/5 text-sm font-bold tracking-wide transition-all duration-300">
             Analytics
           </button>
-          <button className="px-4 py-2 rounded-lg bg-white/[0.02] border border-white/5 text-gray-400 hover:text-white hover:border-white/10 text-sm font-medium transition-all duration-300">
+          <button className="px-5 py-2.5 rounded-xl bg-white/[0.02] border border-white/5 text-gray-400 hover:text-white hover:border-white/10 hover:bg-white/5 text-sm font-bold tracking-wide transition-all duration-300">
             Operations
           </button>
         </div>
-        <button className="px-4 py-2 rounded-lg bg-white/[0.02] border border-white/5 text-gray-400 hover:text-white hover:border-white/10 transition-all duration-300 flex items-center gap-2 sm:ml-auto">
-          <Filter className="w-4 h-4" />
-          More Filters
+        <button className="px-5 py-2.5 rounded-xl bg-white/[0.02] border border-white/5 text-gray-400 hover:text-white hover:border-white/10 hover:bg-white/5 transition-all duration-300 flex items-center gap-2 group">
+          <Filter className="w-4 h-4 group-hover:text-blue-400 transition-colors" />
+          <span className="text-sm font-bold uppercase tracking-wider">Filters</span>
         </button>
       </div>
 
       {/* Reports List */}
-      <div className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
         {reports.map((report, index) => (
           <motion.div
             key={report.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.3, delay: index * 0.05 }}
-            className="rounded-xl border border-white/5 bg-white/[0.02] p-6 hover:border-white/10 transition-all duration-300 group"
+            className="glass rounded-2xl border border-white/10 p-6 hover:border-white/20 hover:shadow-xl transition-all duration-300 group relative overflow-hidden flex flex-col"
           >
-            <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4">
+            <div className={`absolute inset-0 bg-gradient-to-br ${report.bgColor.replace('bg-', 'from-').replace('/10', '/5')} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none`} />
+
+            <div className="flex items-start gap-4 mb-6 relative z-10 flex-1">
               {/* Icon */}
-              <div className={`p-3 rounded-xl ${report.bgColor} border border-white/5`}>
+              <div className={`p-4 rounded-2xl ${report.bgColor} border border-white/5 shadow-inner group-hover:scale-110 transition-transform shrink-0`}>
                 <report.icon className={`w-6 h-6 ${report.iconColor}`} />
               </div>
 
               {/* Info */}
-              <div className="flex-1">
-                <div className="flex items-start justify-between mb-2">
-                  <div>
-                    <h3 className="text-base font-bold text-white group-hover:text-blue-400 transition-colors mb-1">
-                      {report.title}
-                    </h3>
-                    <p className="text-sm text-gray-500">{report.description}</p>
-                  </div>
-                </div>
-                <div className="flex flex-wrap items-center gap-3 text-xs text-gray-500">
-                  <span className="px-2.5 py-1 rounded-lg bg-white/[0.02] border border-white/5">
-                    {report.type}
-                  </span>
-                  <div className="flex items-center gap-1">
-                    <Calendar className="w-3 h-3" />
-                    <span>{new Date(report.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
-                  </div>
-                  <span>{report.size}</span>
-                  <span className={`px-2 py-0.5 rounded-md font-medium ${
-                    report.status === 'Ready'
-                      ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                      : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-                  }`}>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-2 flex-wrap">
+                  <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border shadow-sm ${report.status === 'Ready'
+                      ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                      : 'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                    }`}>
                     {report.status}
                   </span>
+                  <span className="text-gray-600 font-bold">•</span>
+                  <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">{report.type}</span>
                 </div>
+                <h3 className="text-xl font-heading font-black text-white group-hover:text-blue-400 transition-colors mb-1 truncate">
+                  {report.title}
+                </h3>
+                <p className="text-sm text-gray-400 line-clamp-2 leading-relaxed">{report.description}</p>
+              </div>
+            </div>
+
+            {/* Meta & Actions */}
+            <div className="flex items-center justify-between pt-4 border-t border-white/10 relative z-10">
+              <div className="flex items-center gap-4 text-xs font-bold text-gray-500 uppercase tracking-widest">
+                <div className="flex items-center gap-1.5 bg-black/20 px-3 py-1.5 rounded-full border border-white/5">
+                  <Calendar className="w-3.5 h-3.5" />
+                  <span>{new Date(report.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                </div>
+                <span className="bg-black/20 px-3 py-1.5 rounded-full border border-white/5">{report.size}</span>
               </div>
 
-              {/* Actions */}
-              <div className="flex items-center gap-2">
-                <button className="px-4 py-2 rounded-lg bg-white/[0.02] border border-white/5 text-gray-400 hover:text-white hover:border-white/10 transition-all duration-300 flex items-center gap-2">
+              <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 max-sm:opacity-100">
+                <button className="p-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 text-gray-400 hover:text-white transition-all shadow-sm" title="Preview">
                   <Eye className="w-4 h-4" />
-                  <span className="text-sm">Preview</span>
                 </button>
-                <button className="px-4 py-2 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 hover:bg-blue-500/20 transition-all duration-300 flex items-center gap-2">
+                <button className={`p-2.5 rounded-xl ${report.bgColor} border border-white/5 hover:border-${report.iconColor.split('-')[1]}-500/30 ${report.iconColor} transition-all shadow-sm flex items-center gap-2`} title="Download">
                   <Download className="w-4 h-4" />
-                  <span className="text-sm">Download</span>
                 </button>
               </div>
             </div>

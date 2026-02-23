@@ -10,9 +10,9 @@ import {
   AlertCircle,
   Eye,
   EyeOff,
-  Settings as SettingsIcon,
   Building,
-  Phone
+  Phone,
+  Sparkles,
 } from 'lucide-react';
 
 export default function DashboardSettings() {
@@ -148,16 +148,34 @@ export default function DashboardSettings() {
 
   return (
     <div className="space-y-6">
-      {/* Page Header */}
-      <div className="flex items-center gap-3">
-        <div className="p-2.5 rounded-xl bg-primary/10 border border-primary/20">
-          <SettingsIcon className="w-5 h-5 text-primary" />
+      <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} initial="hidden" animate="visible" className="relative">
+        <div className="relative border border-white/10 rounded-2xl sm:rounded-3xl p-8 sm:p-10 overflow-hidden glass shadow-2xl">
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 sm:w-48 h-1 bg-gradient-to-r from-transparent via-primary to-transparent opacity-70" />
+
+          <div className="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-purple-400/20 bg-purple-500/5 backdrop-blur-sm shadow-lg shadow-purple-500/5">
+                  <Sparkles className="w-3.5 h-3.5 text-purple-400 animate-pulse" />
+                  <span className="text-xs font-bold text-purple-300 uppercase tracking-widest">Preferences</span>
+                </div>
+              </div>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-black mb-4 tracking-tight">
+                <span className="text-white drop-shadow-md">
+                  Account{' '}
+                </span>
+                <span className="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent filter drop-shadow-lg">
+                  Settings
+                </span>
+              </h1>
+              <p className="text-gray-400 text-base sm:text-lg max-w-2xl leading-relaxed">
+                Manage your profile, security preferences, and dashboard configurations.
+              </p>
+            </div>
+          </div>
         </div>
-        <div>
-          <h1 className="text-2xl lg:text-3xl font-heading font-bold text-white">Settings</h1>
-          <p className="text-sm text-gray-400">Manage your dashboard account settings</p>
-        </div>
-      </div>
+      </motion.div>
 
       {/* Messages */}
       {success && (
@@ -182,24 +200,26 @@ export default function DashboardSettings() {
         </motion.div>
       )}
 
-      {/* Tabs - pill style matching Dashboard.tsx */}
-      <div className="flex gap-1 p-1 rounded-lg glass border border-white/10 w-fit">
+      {/* Tabs */}
+      <div className="flex gap-2 p-1.5 rounded-xl glass border border-white/10 w-fit sm:w-auto overflow-x-auto no-scrollbar justify-center sm:justify-start">
         <button
           onClick={() => setActiveTab('profile')}
-          className={`px-5 py-2 rounded-md text-sm font-medium transition-all duration-200 ${activeTab === 'profile'
-              ? 'bg-gradient-to-r from-primary/20 to-secondary/20 text-white shadow-lg shadow-primary/10 border border-primary/20'
-              : 'text-gray-400 hover:text-white hover:bg-white/5'
+          className={`flex-1 sm:flex-none px-6 py-2.5 rounded-lg text-sm font-bold tracking-wide transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap ${activeTab === 'profile'
+            ? 'bg-gradient-to-r from-primary/20 to-secondary/20 text-white shadow-lg shadow-primary/10 border border-primary/20'
+            : 'text-gray-400 hover:text-white hover:bg-white/5'
             }`}
         >
+          <User className="w-4 h-4" />
           Profile
         </button>
         <button
           onClick={() => setActiveTab('password')}
-          className={`px-5 py-2 rounded-md text-sm font-medium transition-all duration-200 ${activeTab === 'password'
-              ? 'bg-gradient-to-r from-primary/20 to-secondary/20 text-white shadow-lg shadow-primary/10 border border-primary/20'
-              : 'text-gray-400 hover:text-white hover:bg-white/5'
+          className={`flex-1 sm:flex-none px-6 py-2.5 rounded-lg text-sm font-bold tracking-wide transition-all duration-300 flex items-center justify-center gap-2 whitespace-nowrap ${activeTab === 'password'
+            ? 'bg-gradient-to-r from-primary/20 to-secondary/20 text-white shadow-lg shadow-primary/10 border border-primary/20'
+            : 'text-gray-400 hover:text-white hover:bg-white/5'
             }`}
         >
+          <Lock className="w-4 h-4" />
           Password
         </button>
       </div>
@@ -209,9 +229,10 @@ export default function DashboardSettings() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="rounded-xl glass border border-white/10 p-6"
+          className="glass rounded-2xl border border-white/10 p-6 sm:p-8 relative overflow-hidden"
         >
-          <form onSubmit={handleUpdateProfile} className="space-y-6">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
+          <form onSubmit={handleUpdateProfile} className="space-y-6 relative z-10">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Full Name</label>
               <div className="relative group">
@@ -303,9 +324,10 @@ export default function DashboardSettings() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="rounded-xl glass border border-white/10 p-6"
+          className="glass rounded-2xl border border-white/10 p-6 sm:p-8 relative overflow-hidden"
         >
-          <form onSubmit={handleUpdatePassword} className="space-y-6">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
+          <form onSubmit={handleUpdatePassword} className="space-y-6 relative z-10">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Current Password</label>
               <div className="relative group">

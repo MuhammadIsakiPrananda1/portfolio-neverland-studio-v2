@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Search, Shield, Activity, Server, Cloud, Code } from 'lucide-react';
+import { Search, Shield, Activity, Server, Cloud, Code, Sparkles } from 'lucide-react';
 import { staggerContainer, staggerItem, slideUp } from '@utils/animations';
 
 interface Service {
@@ -63,79 +63,129 @@ export default function DashboardServices() {
   return (
     <div className="space-y-6">
       <motion.div variants={slideUp} initial="hidden" animate="visible" className="relative">
-        <div className="relative border border-white/5 rounded-xl sm:rounded-2xl p-6 sm:p-8 overflow-hidden bg-gradient-to-b from-white/[0.02] to-transparent">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 sm:w-32 h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+        <div className="relative border border-white/10 rounded-2xl sm:rounded-3xl p-8 sm:p-10 overflow-hidden glass shadow-2xl">
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-purple-500/5 via-transparent to-pink-500/5" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 sm:w-48 h-1 bg-gradient-to-r from-transparent via-purple-500 to-transparent opacity-70" />
+          <div className="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
             <div>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-purple-500/20 bg-purple-500/5">
-                  <Activity className="w-3 h-3 text-purple-400" />
-                  <span className="text-xs font-semibold text-purple-400 uppercase tracking-wider">Services</span>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-purple-400/20 bg-purple-500/5 backdrop-blur-sm shadow-lg shadow-purple-500/5">
+                  <Sparkles className="w-3.5 h-3.5 text-purple-400 animate-pulse" />
+                  <span className="text-xs font-bold text-purple-300 uppercase tracking-widest">Offerings</span>
                 </div>
               </div>
-              <h1 className="text-3xl sm:text-4xl font-heading font-black mb-2">
-                <span className="bg-gradient-to-r from-white via-purple-100 to-white bg-clip-text text-transparent">
-                  Service Management
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-black mb-4 tracking-tight">
+                <span className="text-white drop-shadow-md">
+                  Service{' '}
+                </span>
+                <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent filter drop-shadow-lg">
+                  Management
                 </span>
               </h1>
-              <p className="text-gray-400 text-sm sm:text-base max-w-xl">
-                Manage your services, pricing, and offerings.
+              <p className="text-gray-400 text-base sm:text-lg max-w-2xl leading-relaxed">
+                Manage your agency's service offerings, pricing structures, and active client subscriptions.
               </p>
             </div>
+
+            <button
+              className="group relative flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold text-sm hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 overflow-hidden border border-white/10"
+            >
+              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+              <Activity className="w-5 h-5 relative z-10 group-hover:scale-110 transition-transform duration-300" />
+              <span className="relative z-10">Add Service</span>
+            </button>
           </div>
         </div>
       </motion.div>
 
-      <motion.div className="grid grid-cols-2 md:grid-cols-3 gap-4" variants={staggerContainer} initial="hidden" animate="visible">
-        <motion.div variants={staggerItem} className="glass rounded-xl p-5 border border-white/10">
-          <Activity className="w-5 h-5 text-purple-400 mb-3" />
-          <h3 className="text-2xl font-bold text-white">{stats.total}</h3>
-          <p className="text-sm text-gray-400">Total Services</p>
-        </motion.div>
-        <motion.div variants={staggerItem} className="glass rounded-xl p-5 border border-white/10">
-          <Shield className="w-5 h-5 text-emerald-400 mb-3" />
-          <h3 className="text-2xl font-bold text-white">{stats.active}</h3>
-          <p className="text-sm text-gray-400">Active Services</p>
-        </motion.div>
-        <motion.div variants={staggerItem} className="glass rounded-xl p-5 border border-white/10">
-          <div className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 mb-3">
-            <span className="text-sm font-bold">$</span>
+      <motion.div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6" variants={staggerContainer} initial="hidden" animate="visible">
+        <motion.div variants={staggerItem} className="glass rounded-2xl p-6 border border-white/10 shadow-xl relative overflow-hidden group hover:border-white/20 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative z-10 flex flex-col h-full justify-between">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-xl bg-purple-500/20 border border-purple-500/30 shadow-inner group-hover:scale-110 transition-transform">
+                <Activity className="w-5 h-5 text-purple-400" />
+              </div>
+            </div>
+            <div>
+              <h3 className="text-4xl font-heading font-black text-white mb-1 drop-shadow-md">{stats.total}</h3>
+              <p className="text-sm font-medium text-gray-400 group-hover:text-gray-300 transition-colors uppercase tracking-wider">Total Services</p>
+            </div>
           </div>
-          <h3 className="text-2xl font-bold text-white">${(stats.totalRevenue / 1000).toFixed(0)}K</h3>
-          <p className="text-sm text-gray-400">Total Value</p>
+        </motion.div>
+
+        <motion.div variants={staggerItem} className="glass rounded-2xl p-6 border border-white/10 shadow-xl relative overflow-hidden group hover:border-white/20 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative z-10 flex flex-col h-full justify-between">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-xl bg-emerald-500/20 border border-emerald-500/30 shadow-inner group-hover:scale-110 transition-transform">
+                <Shield className="w-5 h-5 text-emerald-400" />
+              </div>
+            </div>
+            <div>
+              <h3 className="text-4xl font-heading font-black text-white mb-1 drop-shadow-md">{stats.active}</h3>
+              <p className="text-sm font-medium text-gray-400 group-hover:text-gray-300 transition-colors uppercase tracking-wider">Active Services</p>
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div variants={staggerItem} className="glass rounded-2xl p-6 border border-white/10 shadow-xl relative overflow-hidden group hover:border-white/20 transition-all duration-300">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative z-10 flex flex-col h-full justify-between">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 rounded-xl bg-blue-500/20 border border-blue-500/30 shadow-inner group-hover:scale-110 transition-transform flex items-center justify-center">
+                <span className="text-lg font-black text-blue-400">$</span>
+              </div>
+            </div>
+            <div>
+              <h3 className="text-4xl font-heading font-black text-white mb-1 drop-shadow-md">${(stats.totalRevenue / 1000).toFixed(0)}K</h3>
+              <p className="text-sm font-medium text-gray-400 group-hover:text-gray-300 transition-colors uppercase tracking-wider">Total Value</p>
+            </div>
+          </div>
         </motion.div>
       </motion.div>
 
-      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
+      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between bg-white/[0.02] p-4 rounded-2xl border border-white/5 backdrop-blur-md">
         <div className="flex flex-wrap items-center gap-3">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-            <input type="text" placeholder="Search services..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10 pr-4 py-2 rounded-lg bg-white/[0.03] border border-white/10 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-purple-500/50 w-64" />
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-purple-400 transition-colors z-10" />
+            <input type="text" placeholder="Search services..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="relative pl-11 pr-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-purple-500/50 focus:bg-white/[0.05] w-64 md:w-80 transition-all duration-300" />
           </div>
-          <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)} className="px-4 py-2 rounded-lg bg-white/[0.03] border border-white/10 text-sm text-white focus:outline-none">
-            <option value="all">All Categories</option>
-            {categories.map(c => <option key={c} value={c}>{c}</option>)}
-          </select>
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-to-r from-pink-500/20 to-purple-500/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity" />
+            <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)} className="relative px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-sm text-white focus:outline-none focus:border-purple-500/50 focus:bg-white/[0.05] appearance-none transition-all duration-300 pr-10 cursor-pointer">
+              <option value="all" className="bg-dark-900">All Categories</option>
+              {categories.map(c => <option key={c} value={c} className="bg-dark-900">{c}</option>)}
+            </select>
+          </div>
         </div>
-        <p className="text-sm text-gray-500">{filteredServices.length} services found</p>
+        <p className="text-sm font-medium text-gray-400 bg-white/5 px-4 py-2 rounded-lg border border-white/5">{filteredServices.length} services found</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredServices.map((service) => (
-          <motion.div key={service.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass rounded-xl border border-white/10 p-5 hover:border-purple-500/30 transition-all">
-            <div className="flex items-start justify-between mb-3">
-              <div className="p-2 rounded-lg bg-white/5">
+          <motion.div key={service.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass rounded-2xl border border-white/10 p-6 hover:border-purple-500/30 hover:shadow-xl transition-all duration-300 group relative overflow-hidden flex flex-col">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+            <div className="flex items-start justify-between mb-4 relative z-10">
+              <div className="p-3 rounded-xl bg-white/5 border border-white/10 shadow-inner group-hover:scale-110 transition-transform">
                 {getCategoryIcon(service.category)}
               </div>
-              <span className={`px-2 py-1 rounded-full text-xs font-medium ${service.status === 'active' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-gray-500/10 text-gray-400'}`}>
+              <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border shadow-sm ${service.status === 'active' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-gray-500/10 text-gray-400 border-gray-500/20'}`}>
                 {service.status}
               </span>
             </div>
-            <h3 className="text-lg font-bold text-white mb-1">{service.name}</h3>
-            <p className="text-sm text-gray-400 mb-3">{service.description}</p>
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-purple-400 font-semibold">${service.price.toLocaleString()}</span>
-              <span className="text-gray-500">{service.clients} clients</span>
+
+            <div className="relative z-10 flex-1">
+              <h3 className="text-xl font-heading font-black text-white group-hover:text-purple-400 transition-colors mb-2">{service.name}</h3>
+              <p className="text-sm text-gray-400 mb-4 line-clamp-2 leading-relaxed">{service.description}</p>
+            </div>
+
+            <div className="flex items-center justify-between pt-4 border-t border-white/10 relative z-10">
+              <span className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 drop-shadow-sm">${service.price.toLocaleString()}</span>
+              <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest bg-black/20 px-3 py-1.5 rounded-full border border-white/5">
+                {service.clients} clients
+              </div>
             </div>
           </motion.div>
         ))}

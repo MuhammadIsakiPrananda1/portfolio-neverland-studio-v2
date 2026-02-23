@@ -1,78 +1,126 @@
-# Keamanan
+# Security Policy
 
-## Melaporkan Kerentanan
+## Reporting a Vulnerability
 
-Jika Anda menemukan kerentanan keamanan, please email kami di **Arlianto032@gmail.com** segera.
+If you discover a security vulnerability in Neverland Studio, **please do not open a public GitHub issue**.
 
-Kami sangat menghargai upaya pelaporan kerentanan secara bertanggung jawab dan akan memberikan pengakuan publik jika diinginkan.
+Instead, please report it responsibly by emailing:
 
-## Kebijakan Keamanan
+**📧 Arlianto032@gmail.com**
 
-### Scope
-
-Kerentanan berikut termasuk dalam scope:
-- Authentication bypass
-- Authorization bypass
-- SQL Injection
-- XSS (Cross-Site Scripting)
-- CSRF (Cross-Site Request Forgery)
-- File inclusion vulnerabilities
-- Remote Code Execution
-- Information Disclosure
-- Denial of Service
-
-### Yang Tidak Included
-
-Yang berikut tidak termasuk dalam scope:
-- Serangan social engineering
-- Serangan fisik
-- Penolakan dari pihak ketiga
-- Bug yang sudah diketahui
-
-## Timeline Respons
-
-| Tahap | Waktu |
-|-------|-------|
-| Initial Response | 24-48 jam |
-| Severity Assessment | 3-5 hari |
-| Fix Verification | 1-2 minggu |
-| Public Disclosure | Setelah fix tersedia |
-
-## Versi yang Didukung
-
-| Versi | Didukung |
-|--------|----------|
-| 1.0.x | ✅ Ya |
-
-## Best Practices
-
-### Untuk Developer
-
-1. **Validasi Input**
-   - Validasi semua input di server side
-   - Gunakan prepared statements untuk query database
-
-2. **Authentication**
-   - Gunakan password hashing yang kuat (bcrypt/argon2)
-   - Implementasikan rate limiting
-   - Enable 2FA untuk akun admin
-
-3. **Authorization**
-   - Gunakan RBAC untuk manajemen izin
-   - Validasi permission di setiap endpoint
-
-4. **Data Protection**
-   - Encrypt data sensitif
-   - Use HTTPS everywhere
-   - Protect sensitive data in logs
-
-### Untuk User
-
-1. Gunakan password yang kuat dan unik
-2. Enable two-factor authentication
-3. Jangan klik link mencurigakan
-4. Update password secara berkala
+Include as much detail as possible to help us reproduce and fix the issue quickly. We appreciate responsible disclosure and will credit you publicly (with your permission) once the fix is released.
 
 ---
 
-Terima kasih telah membantu menjaga keamanan Neverland Studio!
+## Response Timeline
+
+| Stage | Timeframe |
+|-------|-----------|
+| Initial acknowledgement | 24–48 hours |
+| Severity assessment | 3–5 business days |
+| Fix development & verification | 1–2 weeks |
+| Public disclosure | After fix is released |
+
+---
+
+## Supported Versions
+
+| Version | Supported |
+|---------|-----------|
+| 1.2.x (latest) | ✅ Yes |
+| 1.1.x | ✅ Yes |
+| 1.0.x | ⚠️ Critical fixes only |
+| < 1.0 | ❌ No |
+
+---
+
+## Scope
+
+### In Scope
+
+The following vulnerability types are in scope:
+
+- Authentication bypass
+- Authorization bypass (privilege escalation)
+- SQL Injection
+- Cross-Site Scripting (XSS)
+- Cross-Site Request Forgery (CSRF)
+- Remote Code Execution (RCE)
+- Local / Remote File Inclusion
+- Sensitive data exposure
+- Server-Side Request Forgery (SSRF)
+- Insecure Direct Object References (IDOR)
+- Denial of Service (application-level)
+
+### Out of Scope
+
+The following are **not** in scope:
+
+- Social engineering attacks
+- Physical attacks against infrastructure
+- Issues in third-party services or dependencies (report to them directly)
+- Already publicly disclosed / known vulnerabilities
+- Automated scanner results without proof of exploitability
+
+---
+
+## Security Best Practices
+
+### For Developers
+
+1. **Input Validation**
+   - Validate all user input on the server side
+   - Use prepared statements (Eloquent ORM) for all database queries — never raw SQL
+   - Sanitize output to prevent XSS
+
+2. **Authentication**
+   - Use strong password hashing (`bcrypt` / `argon2`)
+   - Implement rate limiting on auth endpoints
+   - Enforce 2FA for admin accounts
+
+3. **Authorization**
+   - Use Role-Based Access Control (Spatie Permission) on all protected routes
+   - Validate permissions at every API endpoint
+   - Never trust client-provided IDs without ownership verification
+
+4. **Data Protection**
+   - Encrypt sensitive data at rest
+   - Use HTTPS everywhere (enforce in production)
+   - Never log sensitive information (passwords, tokens, PII)
+
+5. **Dependencies**
+   - Keep Composer and npm packages up to date
+   - Review dependency audit reports regularly:
+     ```bash
+     npm audit
+     composer audit
+     ```
+
+### For Users
+
+1. Use a strong, unique password for your account
+2. Enable Two-Factor Authentication (2FA) in account settings
+3. Do not share your API tokens or session cookies
+4. Log out of shared or public devices after use
+5. Report any suspicious activity immediately
+
+---
+
+## Security Features
+
+This application implements the following security measures:
+
+| Feature | Implementation |
+|---------|---------------|
+| Authentication | Laravel Sanctum (token-based) |
+| 2FA | Google Authenticator (TOTP) |
+| Role & Permission | Spatie Permission (RBAC) |
+| Activity Audit | Spatie Activitylog |
+| CSRF Protection | Laravel built-in CSRF middleware |
+| Rate Limiting | Laravel rate limiter on API routes |
+| XSS Protection | React's built-in escaping + CSP headers |
+| SQL Injection | Eloquent ORM with prepared statements |
+
+---
+
+Thank you for helping keep Neverland Studio secure!

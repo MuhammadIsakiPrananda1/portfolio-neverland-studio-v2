@@ -2,58 +2,151 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  LayoutDashboard,
-  FolderKanban,
-  MessageSquare,
-  Settings,
-  LogOut,
-  Menu,
-  X,
-  User,
-  Bell,
-  Search,
-  ChevronDown,
-  Home,
-  BarChart3,
-  FileText,
-  Users,
-  Clock,
-  Briefcase,
-  CheckSquare,
-  CreditCard,
-  Calendar,
-  FolderOpen,
+  LayoutDashboard, FolderKanban, MessageSquare, Settings, LogOut,
+  Menu, X, User, Bell, Search, ChevronDown, Home, BarChart3,
+  FileText, Users, Clock, Briefcase, CheckSquare, CreditCard,
+  Calendar, FolderOpen
 } from 'lucide-react';
 import { Routes } from '@config/constants';
 import DashboardLogin from '@pages/DashboardLogin';
 import logoImage from '@/assets/logo.png';
 import Logo from '@components/atoms/Logo';
 
-const menuItems = [
-  { id: 'overview', label: 'Overview', icon: LayoutDashboard, path: '/dashboard' },
-  { id: 'projects', label: 'Projects', icon: FolderKanban, path: '/dashboard/projects' },
-  { id: 'tasks', label: 'Tasks', icon: CheckSquare, path: '/dashboard/tasks' },
-  { id: 'team', label: 'Team', icon: Users, path: '/dashboard/team' },
-  { id: 'services', label: 'Services', icon: Briefcase, path: '/dashboard/services' },
-  { id: 'clients', label: 'Clients', icon: User, path: '/dashboard/clients' },
-  { id: 'invoices', label: 'Invoices', icon: CreditCard, path: '/dashboard/invoices' },
-  { id: 'calendar', label: 'Calendar', icon: Calendar, path: '/dashboard/calendar' },
-  { id: 'messages', label: 'Messages', icon: MessageSquare, path: '/dashboard/messages' },
-  { id: 'analytics', label: 'Analytics', icon: BarChart3, path: '/dashboard/analytics' },
-  { id: 'reports', label: 'Reports', icon: FileText, path: '/dashboard/reports' },
-  { id: 'resources', label: 'Resources', icon: FolderOpen, path: '/dashboard/resources' },
-  { id: 'settings', label: 'Settings', icon: Settings, path: '/dashboard/settings' },
+// Same structure as the main navbar items
+interface NavItem {
+  id: string;
+  path: string;
+  label: string;
+  icon: any;
+  subItems?: NavItem[];
+}
+
+interface NavGroup {
+  title: string;
+  items: NavItem[];
+}
+
+const dashboardNavGroups: NavGroup[] = [
+  {
+    title: 'Overview',
+    items: [
+      { id: 'overview', label: 'Overview', icon: LayoutDashboard, path: '/dashboard' },
+      { id: 'analytics', label: 'Analytics', icon: BarChart3, path: '/dashboard/analytics' },
+    ]
+  },
+  {
+    title: 'Workspace',
+    items: [
+      { id: 'projects', label: 'Projects', icon: FolderKanban, path: '/dashboard/projects' },
+      { id: 'tasks', label: 'Tasks', icon: CheckSquare, path: '/dashboard/tasks' },
+      { id: 'services', label: 'Services', icon: Briefcase, path: '/dashboard/services' },
+    ]
+  },
+  {
+    title: 'People',
+    items: [
+      { id: 'team', label: 'Team', icon: Users, path: '/dashboard/team' },
+      { id: 'clients', label: 'Clients', icon: User, path: '/dashboard/clients' },
+    ]
+  },
+  {
+    title: 'Operations',
+    items: [
+      { id: 'invoices', label: 'Invoices', icon: CreditCard, path: '/dashboard/invoices' },
+      { id: 'calendar', label: 'Calendar', icon: Calendar, path: '/dashboard/calendar' },
+      { id: 'messages', label: 'Messages', icon: MessageSquare, path: '/dashboard/messages' },
+    ]
+  },
+  {
+    title: 'Resources',
+    items: [
+      { id: 'reports', label: 'Reports', icon: FileText, path: '/dashboard/reports' },
+      { id: 'resources', label: 'Resources', icon: FolderOpen, path: '/dashboard/resources' },
+      { id: 'settings', label: 'Settings', icon: Settings, path: '/dashboard/settings' },
+    ]
+  },
 ];
 
+interface MenuItemProps {
+  item: NavItem;
+  isActive: boolean;
+  isMobile?: boolean;
+  onToggle?: () => void;
+}
+
+function MenuItem({ item, isActive, isMobile = false, onToggle }: MenuItemProps) {
+  const Icon = item.icon;
+
+  return (
+    <div>
+      <Link to={item.path} onClick={isMobile ? onToggle : undefined}>
+        <div
+          className={`
+            relative flex items-center justify-between gap-2 px-3 py-2.5 rounded-lg
+            transition-all duration-300 group cursor-pointer overflow-hidden
+            ${isActive
+              ? 'bg-gradient-to-r from-primary/20 via-secondary/15 to-primary/20 text-white shadow-lg shadow-primary/10'
+              : 'text-gray-400 hover:text-white hover:bg-white/5 hover:shadow-md'
+            }
+          `}
+        >
+          {/* Animated background on hover */}
+          <div className={`absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${isActive ? 'opacity-100' : ''}`} />
+
+          {/* Active indicator - left bar */}
+          {isActive && (
+            <motion.div
+              layoutId={`dashActiveIndicator-${isMobile ? 'mobile' : 'desktop'}`}
+              className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-8 bg-gradient-to-b from-primary via-secondary to-primary rounded-r-full shadow-lg shadow-primary/50"
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            />
+          )}
+
+          <div className="flex items-center gap-2 flex-1 min-w-0">
+            {/* Icon with glow effect */}
+            <div className={`relative z-10 flex-shrink-0 ${isActive ? 'text-primary' : ''} transition-colors duration-300`}>
+              <Icon className="w-4 h-4" />
+              {isActive && (
+                <div className="absolute inset-0 blur-md bg-primary/50 -z-10 hidden md:block" />
+              )}
+            </div>
+
+            {/* Label */}
+            <span className="relative z-10 font-medium text-xs tracking-wide truncate">
+              {item.label}
+            </span>
+          </div>
+
+          {/* Active dot */}
+          <div className="relative z-10 flex-shrink-0">
+            {isActive ? (
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-primary to-secondary shadow-lg shadow-primary/50"
+              />
+            ) : null}
+          </div>
+
+          {/* Hover shine effect (disabled on mobile) */}
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 hidden md:block">
+            <div className="absolute top-0 -left-full h-full w-1/2 bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-12 group-hover:left-full transition-all duration-700" />
+          </div>
+        </div>
+      </Link>
+    </div>
+  );
+}
+
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [userEmail, setUserEmail] = useState('');
   const [userName, setUserName] = useState('');
   const [userPhoto, setUserPhoto] = useState<string | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+  
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -93,9 +186,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     return () => window.removeEventListener('dashboardLoginChanged', handleLoginChange);
   }, []);
 
-  // Close mobile sidebar on navigation
   useEffect(() => {
-    setIsMobileMenuOpen(false);
+    if (isOpen) {
+      document.body.classList.add('mobile-sidebar-open');
+      window.dispatchEvent(new CustomEvent('mobileSidebarChange', { detail: { isOpen: true } }));
+    } else {
+      document.body.classList.remove('mobile-sidebar-open');
+      window.dispatchEvent(new CustomEvent('mobileSidebarChange', { detail: { isOpen: false } }));
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    setIsOpen(false);
   }, [location.pathname]);
 
   if (!isLoggedIn) {
@@ -112,223 +214,207 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     navigate(Routes.HOME);
   };
 
-  const isActiveRoute = (path: string) => location.pathname === path;
+  const checkActive = (path: string): boolean => {
+    return location.pathname === path;
+  };
 
-  // Sidebar content (shared between desktop & mobile)
-  const SidebarContent = ({ isMobile = false }: { isMobile?: boolean }) => (
-    <>
-      {/* Decorative top gradient bar */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-primary opacity-60" />
-
-      {/* Logo Section */}
-      <div className="p-6 border-b border-white/10">
-        <div className="flex items-center gap-3 group">
-          <div className="relative">
-            <div className="absolute -inset-1 bg-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <div className="relative w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center shadow-lg overflow-hidden border border-white/10">
-              <img
-                src={logoImage}
-                alt="Neverland Studio Logo"
-                className="w-10 h-10 object-contain"
-              />
-            </div>
-          </div>
-          <div className="flex flex-col">
-            <Logo size="sm" clickable={false} />
-            <span className="text-xs text-gray-400 font-mono">Dashboard</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Navigation Links */}
-      <nav className="flex-1 py-6 px-4 space-y-6 overflow-y-auto custom-scrollbar">
-        <div className="space-y-1">
-          <div className="mb-3">
-            <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3">Navigation</span>
-          </div>
-          {menuItems.map((item) => {
-            const active = isActiveRoute(item.path);
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.id}
-                to={item.path}
-                onClick={isMobile ? () => setIsMobileMenuOpen(false) : undefined}
-              >
-                <div
-                  className={`
-                    relative flex items-center justify-between gap-2 px-3 py-2.5 rounded-lg
-                    transition-all duration-300 group cursor-pointer overflow-hidden
-                    ${active
-                      ? 'bg-gradient-to-r from-primary/20 via-secondary/15 to-primary/20 text-white shadow-lg shadow-primary/10'
-                      : 'text-gray-400 hover:text-white hover:bg-white/5 hover:shadow-md'
-                    }
-                  `}
-                >
-                  {/* Animated background on hover */}
-                  <div className={`absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${active ? 'opacity-100' : ''}`} />
-
-                  {/* Active indicator - left bar */}
-                  {active && (
-                    <motion.div
-                      layoutId="dashActiveIndicator"
-                      className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-8 bg-gradient-to-b from-primary via-secondary to-primary rounded-r-full shadow-lg shadow-primary/50"
-                      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                    />
-                  )}
-
-                  <div className="flex items-center gap-2 flex-1 min-w-0">
-                    <div className={`relative z-10 flex-shrink-0 ${active ? 'text-primary' : ''} transition-colors duration-300`}>
-                      <Icon className="w-4 h-4" />
-                      {active && <div className="absolute inset-0 blur-md bg-primary/50 -z-10" />}
-                    </div>
-                    <span className="relative z-10 font-medium text-xs tracking-wide truncate">{item.label}</span>
-                  </div>
-
-                  <div className="relative z-10 flex-shrink-0">
-                    {active ? (
-                      <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-primary to-secondary shadow-lg shadow-primary/50"
-                      />
-                    ) : null}
-                  </div>
-
-                  {/* Hover shine effect */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <div className="absolute top-0 -left-full h-full w-1/2 bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-12 group-hover:left-full transition-all duration-700" />
-                  </div>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-      </nav>
-
-      {/* Divider */}
-      <div className="px-4">
-        <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-      </div>
-
-      {/* Footer buttons */}
-      <div className="p-4 space-y-2">
-        <Link
-          to={Routes.HOME}
-          onClick={isMobile ? () => setIsMobileMenuOpen(false) : undefined}
-          className="w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-all duration-200"
-        >
-          <Home className="w-4 h-4 flex-shrink-0" />
-          <span className="text-xs font-medium tracking-wide">Back to Site</span>
-        </Link>
-        <button
-          onClick={handleLogout}
-          className="w-full group relative overflow-hidden px-4 py-3 rounded-xl bg-gradient-to-r from-red-500/80 to-red-600/80 hover:from-red-600 hover:to-red-700 border border-red-500/30 transition-all duration-300 shadow-lg shadow-red-500/20 hover:shadow-red-500/40"
-        >
-          <div className="relative z-10 flex items-center justify-center gap-2">
-            <LogOut className="w-4 h-4 text-white" />
-            <span className="text-sm font-semibold text-white">Logout</span>
-          </div>
-          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-            <div className="absolute top-0 -left-full h-full w-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12 group-hover:left-full transition-all duration-700" />
-          </div>
-        </button>
-      </div>
-
-      {/* Bottom gradient bar */}
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-primary opacity-20" />
-    </>
-  );
+  const mobileSidebarVariants = {
+    hidden: { x: '-100%' },
+    visible: { x: 0 },
+  };
 
   return (
     <div className="min-h-screen bg-dark-950">
-      {/* Desktop Sidebar */}
-      <aside
-        className={`fixed left-0 top-0 h-screen glass backdrop-blur-2xl border-r border-white/10 z-30 hidden lg:flex flex-col shadow-2xl transition-all duration-300 ${isSidebarOpen ? 'w-[280px]' : 'w-20'
+      {/* Mobile Menu Button - Fixed top-left */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className={`lg:hidden fixed top-6 z-[60] p-3 rounded-xl glass backdrop-blur-xl border border-white/20 hover:bg-white/10 transition-all duration-300 shadow-lg ${isOpen ? 'left-[264px]' : 'left-6'
           }`}
+        aria-label="Toggle sidebar"
       >
-        {isSidebarOpen ? (
-          <SidebarContent />
-        ) : (
-          <>
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-primary opacity-60" />
-            <div className="p-4 border-b border-white/10 flex justify-center">
-              <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center border border-white/10 overflow-hidden">
-                <img src={logoImage} alt="Logo" className="w-8 h-8 object-contain" />
+        {isOpen ? <X className="w-6 h-6 text-white" /> : <Menu className="w-6 h-6 text-white" />}
+      </button>
+
+      {/* Overlay for mobile */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsOpen(false)}
+            className="lg:hidden fixed inset-0 bg-black/80 z-[45]"
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Desktop Sidebar - Always Open */}
+      <aside className="hidden lg:flex fixed left-0 top-0 h-[100dvh] w-[280px] glass backdrop-blur-2xl border-r border-white/10 z-50 flex-col shadow-2xl">
+        {/* Decorative top gradient bar */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-primary opacity-60" />
+
+        {/* Logo Section */}
+        <div className="p-6 border-b border-white/10">
+          <div className="flex items-center gap-3 group">
+            <div className="relative">
+              <div className="absolute -inset-1 bg-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="relative w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center shadow-lg overflow-hidden border border-white/10">
+                <img
+                  src={logoImage}
+                  alt="Neverland Studio Logo"
+                  className="w-10 h-10 object-contain"
+                />
               </div>
             </div>
-            <nav className="flex-1 py-4 px-2 space-y-1 overflow-y-auto">
-              {menuItems.map((item) => {
-                const active = isActiveRoute(item.path);
-                const Icon = item.icon;
+            <div className="flex flex-col">
+              <Logo size="sm" clickable={false} />
+              <span className="text-xs text-gray-400 font-mono">Dashboard</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Navigation Links */}
+        <nav className="flex-1 py-6 px-4 space-y-6 overflow-y-auto custom-scrollbar">
+          {dashboardNavGroups.map((group, groupIndex) => (
+            <div key={group.title} className="space-y-1">
+              <div className="mb-3 flex items-center gap-2">
+                <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3">{group.title}</span>
+              </div>
+              
+              {group.items.map((item) => {
+                const isActive = checkActive(item.path);
                 return (
-                  <Link key={item.id} to={item.path} title={item.label}>
-                    <div
-                      className={`relative flex items-center justify-center p-2.5 rounded-lg transition-all duration-300 group ${active
-                        ? 'bg-gradient-to-r from-primary/20 to-secondary/20 text-primary'
-                        : 'text-gray-400 hover:text-white hover:bg-white/5'
-                        }`}
-                    >
-                      <Icon className="w-5 h-5" />
-                      {active && (
-                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-6 bg-gradient-to-b from-primary to-secondary rounded-r-full" />
-                      )}
-                    </div>
-                  </Link>
+                  <MenuItem key={item.path} item={item} isActive={isActive} />
                 );
               })}
-            </nav>
-            <div className="p-2 space-y-1 border-t border-white/10">
-              <Link to={Routes.HOME} title="Back to Site">
-                <div className="flex items-center justify-center p-2.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-all">
-                  <Home className="w-5 h-5" />
-                </div>
-              </Link>
-              <button onClick={handleLogout} title="Logout" className="w-full flex items-center justify-center p-2.5 rounded-lg text-red-400 hover:bg-red-500/10 transition-all">
-                <LogOut className="w-5 h-5" />
-              </button>
+              
+              {/* Divider between sections, except last one */}
+              {groupIndex < dashboardNavGroups.length - 1 && (
+                <div className="mx-3 mt-4 h-px bg-white/5" />
+              )}
             </div>
-            <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-primary opacity-20" />
-          </>
-        )}
+          ))}
+        </nav>
+
+        {/* Divider */}
+        <div className="px-4">
+          <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        </div>
+
+        {/* Footer */}
+        <div className="p-4 space-y-2">
+          <Link
+            to={Routes.HOME}
+            className="w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-all duration-200"
+          >
+            <Home className="w-4 h-4 flex-shrink-0" />
+            <span className="text-xs font-medium tracking-wide">Back to Site</span>
+          </Link>
+          <button onClick={handleLogout} className="w-full group relative overflow-hidden px-4 py-3 rounded-xl bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 border border-red-500/30 transition-all duration-300 shadow-lg shadow-red-500/20 hover:shadow-red-500/40">
+            <div className="relative z-10 flex items-center justify-center gap-2">
+              <LogOut className="w-4 h-4 text-white" />
+              <span className="text-sm font-semibold text-white">Logout</span>
+            </div>
+            {/* Shine effect */}
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+              <div className="absolute top-0 -left-full h-full w-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12 group-hover:left-full transition-all duration-700" />
+            </div>
+          </button>
+        </div>
+
+        {/* Bottom gradient bar */}
+        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-primary opacity-20" />
       </aside>
 
       {/* Mobile Sidebar */}
       <AnimatePresence>
-        {isMobileMenuOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[45] lg:hidden"
-            />
-            <motion.aside
-              initial={{ x: '-100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '-100%' }}
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
-              className="lg:hidden fixed left-0 top-0 h-screen w-80 glass backdrop-blur-2xl border-r border-white/10 z-50 flex flex-col shadow-2xl overflow-y-auto"
-            >
-              <SidebarContent isMobile />
-            </motion.aside>
-          </>
+        {isOpen && (
+          <motion.aside
+            className="lg:hidden fixed left-0 top-0 h-[100dvh] w-80 bg-[#0f172a] border-r border-white/10 z-50 flex flex-col shadow-2xl overflow-hidden"
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            variants={mobileSidebarVariants}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+          >
+            {/* Decorative top gradient bar */}
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-primary opacity-60" />
+
+            {/* Logo Section */}
+            <div className="p-6 border-b border-white/10">
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <div className="absolute -inset-1 bg-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="relative w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center shadow-lg overflow-hidden border border-white/10">
+                    <img
+                      src={logoImage}
+                      alt="Neverland Studio Logo"
+                      className="w-10 h-10 object-contain"
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-col">
+                  <Logo size="sm" clickable={false} />
+                  <span className="text-xs text-gray-400 font-mono">Dashboard</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Navigation Links */}
+            <nav className="flex-1 py-4 px-4 space-y-4 overflow-y-auto custom-scrollbar min-h-0">
+              {dashboardNavGroups.map((group, groupIndex) => (
+                <div key={group.title} className="space-y-1">
+                  <div className="mb-2">
+                    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-3">{group.title}</span>
+                  </div>
+                  {group.items.map((item) => {
+                    const isActive = checkActive(item.path);
+                    return (
+                      <MenuItem key={item.path} item={item} isActive={isActive} isMobile={true} onToggle={() => setIsOpen(false)} />
+                    );
+                  })}
+                  {groupIndex < dashboardNavGroups.length - 1 && (
+                    <div className="mx-4 my-2 h-px bg-white/10" />
+                  )}
+                </div>
+              ))}
+            </nav>
+
+            {/* Divider */}
+            <div className="px-4 flex-shrink-0">
+              <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+            </div>
+
+            {/* Footer */}
+            <div className="p-4 flex-shrink-0 bg-[#0A0A0A]/50 backdrop-blur-sm space-y-2">
+              <Link
+                to={Routes.HOME}
+                onClick={() => setIsOpen(false)}
+                className="w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-all duration-200"
+              >
+                <Home className="w-4 h-4 flex-shrink-0" />
+                <span className="text-xs font-medium tracking-wide">Back to Site</span>
+              </Link>
+              <button onClick={handleLogout} className="w-full group relative overflow-hidden px-4 py-3 rounded-xl bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 border border-red-500/30 transition-all duration-300 shadow-lg shadow-red-500/20">
+                <div className="relative z-10 flex items-center justify-center gap-2">
+                  <LogOut className="w-4 h-4 text-white" />
+                  <span className="text-sm font-semibold text-white">Logout</span>
+                </div>
+                {/* Shine effect */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  <div className="absolute top-0 -left-full h-full w-1/2 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12 group-hover:left-full transition-all duration-700" />
+                </div>
+              </button>
+            </div>
+
+            {/* Bottom gradient bar */}
+            <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary to-primary opacity-20" />
+          </motion.aside>
         )}
       </AnimatePresence>
 
-      {/* Mobile toggle button */}
-      <button
-        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        className={`lg:hidden fixed top-6 z-[60] p-3 rounded-xl glass backdrop-blur-xl border border-white/20 hover:bg-white/10 transition-all duration-300 shadow-lg ${isMobileMenuOpen ? 'left-[264px]' : 'left-6'
-          }`}
-        aria-label="Toggle sidebar"
-      >
-        {isMobileMenuOpen ? <X className="w-6 h-6 text-white" /> : <Menu className="w-6 h-6 text-white" />}
-      </button>
-
       {/* Main Content */}
-      <div className={`transition-all duration-300 ${isSidebarOpen ? 'lg:ml-[280px]' : 'lg:ml-20'}`}>
+      <div className="transition-all duration-300 lg:ml-[280px]">
         {/* Decorative Background - Same as Home Page */}
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-0 right-0 w-64 h-64 sm:w-80 sm:h-80 md:w-[400px] md:h-[400px] bg-purple-500/5 rounded-full blur-[100px] sm:blur-[120px]" />
@@ -338,13 +424,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         {/* Top Bar */}
         <header className="sticky top-0 h-16 glass backdrop-blur-2xl border-b border-white/10 z-20">
           <div className="h-full px-4 lg:px-6 flex items-center justify-between gap-4">
-            {/* Sidebar collapse button (desktop) */}
-            <button
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="hidden lg:flex p-2 rounded-lg hover:bg-white/5 transition-colors"
-            >
-              <Menu className="w-4 h-4 text-gray-400" />
-            </button>
+            <div className="hidden lg:block w-4" /> {/* Spacer for left alignment when collapse is removed */}
 
             {/* Search */}
             <div className="flex-1 max-w-xl hidden md:block">
@@ -373,7 +453,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </button>
 
               {/* Profile Dropdown */}
-              <div className="relative">
+              <div className="relative z-50">
                 <button
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
                   className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors"
@@ -397,7 +477,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: -10, scale: 0.95 }}
                       transition={{ duration: 0.2 }}
-                      className="absolute right-0 top-full mt-2 w-56 glass backdrop-blur-2xl border border-white/10 rounded-xl shadow-2xl overflow-hidden"
+                      className="absolute right-0 top-full mt-2 w-56 glass backdrop-blur-2xl border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50"
                     >
                       <div className="p-3 border-b border-white/10">
                         <p className="text-sm font-medium text-white">{userName || 'Admin'}</p>

@@ -26,6 +26,10 @@ export const PlaygroundSteganography = lazyLoad(() => import('@pages/PlaygroundS
 export const PlaygroundOSINT = lazyLoad(() => import('@pages/PlaygroundOSINT'));
 export const PlaygroundMobile = lazyLoad(() => import('@pages/PlaygroundMobile'));
 export const PlaygroundCVE = lazyLoad(() => import('@pages/PlaygroundCVE'));
+export const PlaygroundLearning = lazyLoad(() => import('@pages/PlaygroundLearning'));
+export const PlaygroundLearningWriteups = lazyLoad(() => import('@pages/PlaygroundLearningWriteups'));
+export const PlaygroundLearningTools = lazyLoad(() => import('@pages/PlaygroundLearningTools'));
+export const PlaygroundLearningRoadmap = lazyLoad(() => import('@pages/PlaygroundLearningRoadmap'));
 export const Contact = lazyLoad(() => import('@pages/Contact'));
 export const Help = lazyLoad(() => import('@pages/Help'));
 export const Settings = lazyLoad(() => import('@pages/Settings'));
@@ -115,6 +119,10 @@ export const mainRoutes: RouteConfig[] = [
   { path: '/playground/osint', element: PlaygroundOSINT },
   { path: '/playground/mobile-security', element: PlaygroundMobile },
   { path: AppRoutes.PLAYGROUND_CVE, element: PlaygroundCVE },
+  { path: AppRoutes.PLAYGROUND_LEARNING, element: PlaygroundLearning },
+  { path: AppRoutes.PLAYGROUND_LEARNING_WRITEUPS, element: PlaygroundLearningWriteups },
+  { path: AppRoutes.PLAYGROUND_LEARNING_TOOLS, element: PlaygroundLearningTools },
+  { path: AppRoutes.PLAYGROUND_LEARNING_ROADMAP, element: PlaygroundLearningRoadmap },
   { path: AppRoutes.CONTACT, element: Contact },
   { path: AppRoutes.HELP, element: Help },
   { path: AppRoutes.SETTINGS, element: Settings },

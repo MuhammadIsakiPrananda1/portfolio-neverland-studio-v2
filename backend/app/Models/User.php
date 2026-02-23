@@ -8,12 +8,11 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Traits\HasRoles;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasApiTokens, SoftDeletes, HasRoles, LogsActivity;
+    use HasFactory, Notifiable, HasApiTokens, SoftDeletes, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -52,15 +51,7 @@ class User extends Authenticatable
         ];
     }
 
-    /**
-     * Configure activity log
-     */
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logOnly(['name', 'email', 'status'])
-            ->logOnlyDirty();
-    }
+
 
     /**
      * Relationships
@@ -75,23 +66,5 @@ class User extends Authenticatable
         return $this->hasMany(Media::class);
     }
 
-    public function settings()
-    {
-        return $this->hasOne(UserSettings::class);
-    }
 
-    /**
-     * Get user settings or create default
-     */
-    public function getSettingsOrCreate()
-    {
-        if (!$this->settings) {
-            $this->settings()->create([
-                'theme' => 'light',
-                'language' => 'en',
-                'timezone' => 'UTC',
-            ]);
-        }
-        return $this->settings;
-    }
 }

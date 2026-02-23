@@ -80,6 +80,14 @@ stdout_logfile_maxbytes=0
 stderr_logfile=/dev/stderr
 stderr_logfile_maxbytes=0
 autorestart=true
+
+[program:reverb]
+command=php artisan reverb:start --host=0.0.0.0 --port=8080
+stdout_logfile=/dev/stdout
+stdout_logfile_maxbytes=0
+stderr_logfile=/dev/stderr
+stderr_logfile_maxbytes=0
+autorestart=true
 EOF
 
 # Create log directory

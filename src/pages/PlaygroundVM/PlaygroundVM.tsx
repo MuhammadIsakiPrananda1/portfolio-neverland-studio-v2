@@ -16,13 +16,10 @@ interface TerminalLine {
   content: string;
   timestamp: Date;
 }
-
 const PlaygroundVM = () => {
   const navigate = useNavigate();
-  const { user } = useAuthState();
+  const { user, isAuthenticated } = useAuthState();
   const [showAuthModal, setShowAuthModal] = useState(false);
-
-  // VM States
   const [isVMActive, setIsVMActive] = useState(false);
   const [containerId, setContainerId] = useState<string>('');
   const [vmPassword, setVmPassword] = useState<string>('');
@@ -158,6 +155,11 @@ const PlaygroundVM = () => {
   }, [isVMActive, expiresAt]);
 
   const handleStartVM = async () => {
+    if (!isAuthenticated) {
+      setShowAuthModal(true);
+      return;
+    }
+
     setTerminalLines([]);
     setIsStarting(true);
 

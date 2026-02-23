@@ -1,271 +1,326 @@
-# Neverland Studio - Corporate Website
+# Neverland Studio — Corporate Portfolio Website
 
 > **Last Updated: February 2026**
+>
+> *Securing the Digital Future | Engineering Secure IT Systems*
 
-> **Securing the Digital Future | Engineering Secure IT Systems**
-
-Website korporat profesional untuk perusahaan Cyber Security & IT yang dibangun dengan React, TypeScript, dan teknologi web modern.
+A professional corporate portfolio website for a Cyber Security & IT company, built with React, TypeScript, and a modern web stack — backed by a full Laravel 11 REST API.
 
 [![React](https://img.shields.io/badge/React-19.2-61DAFB?style=flat&logo=react)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat&logo=typescript)](https://www.typescriptlang.org)
+[![Vite](https://img.shields.io/badge/Vite-7.2-646CFF?style=flat&logo=vite)](https://vitejs.dev)
 [![Laravel](https://img.shields.io/badge/Laravel-11-FF2D20?style=flat&logo=laravel)](https://laravel.com)
 [![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker)](https://www.docker.com)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-## Daftar Isi
+---
 
-1. [Tentang Proyek](#tentang-proyek)
-2. [Fitur](#fitur)
-3. [Teknologi yang Digunakan](#teknologi-yang-digunakan)
-4. [Struktur Proyek](#struktur-proyek)
-5. [Persiapan Sebelum Instalasi](#persiapan-sebelum-instalasi)
-6. [Panduan Instalasi](#panduan-instalasi)
-   - [Opsi 1: Docker (Disarankan)](#opsi-1-docker-disarankan)
-   - [Opsi 2: Instalasi Lokal](#opsi-2-instalasi-lokal)
-7. [Konfigurasi Environment](#konfigurasi-environment)
-8. [Menjalankan Aplikasi](#menjalankan-aplikasi)
-9. [Build untuk Produksi](#build-untuk-produksi)
-10. [API Documentation](#api-documentation)
-11. [Fitur Utama](#fitur-utama)
+## Table of Contents
+
+1. [About the Project](#about-the-project)
+2. [Features](#features)
+3. [Tech Stack](#tech-stack)
+4. [Project Structure](#project-structure)
+5. [Prerequisites](#prerequisites)
+6. [Installation](#installation)
+   - [Option 1: Docker (Recommended)](#option-1-docker-recommended)
+   - [Option 2: Local Setup](#option-2-local-setup)
+7. [Environment Configuration](#environment-configuration)
+8. [Running the Application](#running-the-application)
+9. [Building for Production](#building-for-production)
+10. [API Reference](#api-reference)
+11. [Key Features](#key-features)
 12. [Customization](#customization)
 13. [Troubleshooting](#troubleshooting)
-14. [Kontribusi](#kontribusi)
-15. [Lisensi](#lisensi)
-16. [Kontak](#kontak)
+14. [Roadmap](#roadmap)
+15. [Contributing](#contributing)
+16. [License](#license)
+17. [Contact](#contact)
 
 ---
 
-## Tentang Proyek
+## About the Project
 
-Neverland Studio adalah website portfolio profesional untuk perusahaan Cyber Security dan IT. Proyek ini menggabungkan frontend modern berbasis React dengan backend yang kuat menggunakan Laravel, menciptakan pengalaman pengguna yang smooth dan aman.
+**Neverland Studio** is a professional portfolio website for a Cyber Security and IT company. The project combines a modern React frontend with a robust Laravel backend, delivering a smooth, secure, and visually impressive user experience.
 
-### Visi Misi
-- **Visi**: Menjadi mitra terpercaya dalam mengamankan transformasi digital perusahaan
-- **Misi**: Menyediakan solusi IT dan keamanan siber terintegrasi yang inovatif dan dapat diandalkan
+It covers everything from company service pages and project showcases to a full-featured admin dashboard, a CTF Playground with security challenges, and an interactive Learning Hub for cybersecurity learners.
+
+### Vision & Mission
+- **Vision** — To be a trusted partner in securing the digital transformation of businesses.
+- **Mission** — To deliver innovative, integrated IT and cyber security solutions that are reliable and forward-thinking.
 
 ---
 
-## Fitur
+## Features
 
 ### Frontend
-- **Modern UI/UX** - Estetika profesional cyber security dengan efek glassmorphism
-- **Responsif Penuh** - Desain mobile-first yang bekerja sempurna di semua perangkat
-- **Optimasi Performa** - Lazy loading, code splitting, dan ukuran bundle yang optimal
-- **Type-Safe** - Dibangun dengan TypeScript dalam mode strict
-- **Aksesibel** - Sesuai WCAG dengan HTML semantik dan atribut ARIA
-- **SEO Optimal** - Tag meta yang tepat, struktur semantik, dan pemuatan cepat
-- **Animasi Halus** - Ditenagai oleh Framer Motion untuk transisi profesional
+- **Modern UI/UX** — Professional cybersecurity aesthetic with glassmorphism effects, gradient animations, and Framer Motion transitions
+- **Fully Responsive** — Mobile-first design that works seamlessly across all screen sizes
+- **Performance-Optimized** — Lazy loading, code splitting, and optimal bundle sizes
+- **Type-Safe** — Built with TypeScript in strict mode
+- **Accessible** — WCAG-compliant with semantic HTML and ARIA attributes
+- **SEO-Ready** — Proper meta tags, semantic structure, and fast load times
 
 ### Backend
-- **RESTful API** - Arsitektur API yang terstruktur
-- **JWT Authentication** - Autentikasi berbasis token yang aman
-- **Two-Factor Authentication** - Menggunakan Google Authenticator
-- **Activity Logging** - Pencatatan aktivitas pengguna
-- **Role-Based Access** - Manajemen izin berbasis peran
+- **RESTful API** — Well-structured API architecture with versioning
+- **JWT / Sanctum Authentication** — Secure token-based authentication
+- **Two-Factor Authentication** — Google Authenticator (2FA)
+- **Activity Logging** — Full audit trail of user actions (via Spatie Activitylog)
+- **Role-Based Access Control** — Granular permission management (via Spatie Permission)
+- **Real-Time Broadcasting** — Laravel Reverb + Laravel Echo for live dashboard updates
+
+### Playground / CTF Hub
+- Interactive **CTF Challenges** (Web, Binary, Crypto, Forensics, Reverse, OSINT, Steganography, Mobile, CVE)
+- **Security Tools** — Password generator, hash calculator, encoding/decoding utilities
+- **Virtual Machine Playground** — Spin up isolated VM environments (auth-required)
+- **SQL Playground** — Practice SQL injection in a safe environment
+- **Learning Hub** — CTF write-ups, tools & cheatsheets, and learning roadmaps
+
+### Admin Dashboard
+- Analytics, Calendar, Client Management, Invoice Management
+- Task Management, Team Management, Project Tracking
+- Reports, Resources, Messages, and Settings
 
 ### DevOps
-- **Docker Container** - Orkestrasi multi-kontainer
-- **Nginx** - Web server dan reverse proxy
-- **MySQL/MariaDB** - Database relasional
-- **phpMyAdmin** - Manajemen database
+- **Docker + Docker Compose** — Multi-container orchestration
+- **Nginx** — Web server and reverse proxy
+- **MariaDB / MySQL** — Relational database
+- **phpMyAdmin** — Database management UI
 
 ---
 
-## Teknologi yang Digunakan
+## Tech Stack
 
 ### Frontend
-| Teknologi | Versi | Deskripsi |
-|-----------|-------|-----------|
-| React | 19.2 | Library UI modern |
-| TypeScript | 5.9 | Superset JavaScript dengan type safety |
-| Vite | 7.2.5 | Build tool yang cepat |
-| Tailwind CSS | 3.4.19 | Framework CSS utility-first |
-| Framer Motion | 12.33.0 | Library animasi |
-| React Router | 7.13.0 | Routing client-side |
-| Lucide React | 0.563.0 | Library ikon |
+
+| Technology | Version | Description |
+|------------|---------|-------------|
+| React | 19.2 | Modern UI library |
+| TypeScript | 5.9 | JavaScript with static typing |
+| Vite (rolldown-vite) | 7.2.5 | Ultra-fast build tool |
+| Tailwind CSS | 3.4.19 | Utility-first CSS framework |
+| Framer Motion | 12.33.0 | Animation library |
+| React Router DOM | 7.13.0 | Client-side routing |
+| Lucide React | 0.563.0 | Icon library |
 | Axios | 1.13.5 | HTTP client |
+| Laravel Echo | 2.3.0 | Real-time event listener |
+| Pusher JS | 8.4.0 | WebSocket client |
+| xterm.js | 5.3.0 | Terminal emulator for VM Playground |
 
 ### Backend
-| Teknologi | Versi | Deskripsi |
-|-----------|-------|-----------|
-| Laravel | 11 | Framework PHP |
+
+| Technology | Version | Description |
+|------------|---------|-------------|
+| Laravel | 11 | PHP web framework |
 | PHP | 8.2+ | Server-side language |
-| MySQL | 8.4 | Database |
+| MySQL / MariaDB | 8.4 | Relational database |
 | Laravel Sanctum | 4.0 | API authentication |
 | Laravel Socialite | 5.24 | OAuth authentication |
-| Spatie Permission | 6.24 | Role management |
-| Spatie Activitylog | 4.11 | Activity logging |
-| Google2FA | 9.0 | Two-factor auth |
+| Laravel Reverb | — | WebSocket broadcasting server |
+| Spatie Permission | 6.24 | Role & permission management |
+| Spatie Activitylog | 4.11 | User activity logging |
+| Google2FA | 9.0 | Two-factor authentication |
 
 ### DevOps & Tools
-| Teknologi | Deskripsi |
-|-----------|-----------|
+
+| Tool | Purpose |
+|------|---------|
 | Docker | Containerization |
-| Docker Compose | Orkestrasi kontainer |
+| Docker Compose | Multi-container orchestration |
 | Nginx | Web server & reverse proxy |
 | phpMyAdmin | Database management |
 | Git | Version control |
 
 ---
 
-## Struktur Proyek
+## Project Structure
 
 ```
 portofolio-neverland-studio/
-├── src/                      # Source code frontend
-│   ├── assets/              # Gambar, font, static files
-│   ├── components/          # Komponen React (Atomic Design)
-│   │   ├── atoms/           # Button, Input, TextArea, Logo
-│   │   ├── molecules/        # ServiceCard, SectionTitle
-│   │   └── organisms/        # Navbar, Footer, HeroSection
-│   ├── config/              # Konfigurasi dan data aplikasi
-│   ├── layouts/             # Layout halaman
-│   ├── pages/               # Halaman route
-│   ├── styles/              # Global CSS
-│   ├── types/               # Definisi TypeScript
-│   ├── utils/               # Fungsi utility
-│   ├── App.tsx              # Komponen root dengan routing
-│   └── main.tsx             # Entry point
-├── backend/                 # Laravel backend
-│   ├── app/                 # Aplikasi Laravel
-│   ├── bootstrap/           # Bootstrap files
-│   ├── config/              # Konfigurasi Laravel
-│   ├── database/            # Migration, seeder, factory
-│   ├── public/               # Public assets
-│   ├── resources/           # Views, assets
-│   ├── routes/              # Route definitions
-│   ├── storage/             # Logs, cache, uploads
-│   ├── tests/               # Unit & feature tests
-│   └── vendor/              # Composer dependencies
-├── public/                   # Static assets
-├── docker-compose.yml       # Docker orchestration
-├── Dockerfile               # Docker image definition
-├── nginx.conf               # Nginx configuration
-├── package.json             # NPM dependencies
-├── tailwind.config.js       # Tailwind configuration
-├── vite.config.ts           # Vite configuration
-└── tsconfig.json            # TypeScript configuration
+├── src/                          # Frontend source code
+│   ├── assets/                   # Images, fonts, static files
+│   ├── components/               # Reusable React components (Atomic Design)
+│   │   ├── atoms/                # Button, Input, TextArea, Logo
+│   │   ├── molecules/            # ServiceCard, SectionTitle
+│   │   └── organisms/            # Navbar, Footer, HeroSection
+│   ├── config/                   # App configuration and static data
+│   ├── contexts/                 # React context providers
+│   ├── hooks/                    # Custom React hooks
+│   ├── layouts/                  # Page layout wrappers
+│   ├── pages/                    # Route-based page components (73 pages)
+│   ├── services/                 # API service modules
+│   ├── styles/                   # Global CSS
+│   ├── types/                    # TypeScript type definitions
+│   ├── utils/                    # Utility functions
+│   ├── App.tsx                   # Root component with routing
+│   └── main.tsx                  # Application entry point
+├── backend/                      # Laravel 11 backend
+│   ├── app/                      # Application logic (Controllers, Models, etc.)
+│   ├── bootstrap/                # Bootstrap files
+│   ├── config/                   # Laravel configuration
+│   ├── database/                 # Migrations, seeders, factories
+│   ├── public/                   # Public assets
+│   ├── resources/                # Views, raw assets
+│   ├── routes/                   # API & web route definitions
+│   ├── storage/                  # Logs, cache, uploaded files
+│   ├── tests/                    # Unit & feature tests
+│   └── vendor/                   # Composer dependencies
+├── public/                       # Static front-end assets
+├── docker-compose.yml            # Docker orchestration
+├── Dockerfile                    # Docker image definition
+├── nginx.conf                    # Nginx configuration
+├── package.json                  # NPM dependencies & scripts
+├── tailwind.config.js            # Tailwind CSS configuration
+├── vite.config.ts                # Vite configuration
+└── tsconfig.json                 # TypeScript configuration
 ```
 
-### Struktur Halaman
+### Page Structure (`src/pages/`)
 
 ```
-src/pages/
-├── Home/                    # Halaman utama
-├── About/                   # Tentang kami
-├── Services/               # Layanan
+pages/
+├── Home/                         # Landing page
+├── About/                        # About us
+├── Projects/                     # Project portfolio
+├── Team/                         # Team members
+├── Testimonials/                 # Client testimonials
+├── Blog/                         # Blog articles
+├── Contact/                      # Contact form
+├── Help/                         # Help & FAQ
+├── Settings/                     # User settings
+│
+├── Services/                     # Web & IT services
 │   ├── Consulting/
 │   ├── WebDevelopment/
+│   ├── CustomWebApps/
 │   ├── UIUXDesign/
 │   ├── ECommerce/
 │   ├── APIDevelopment/
 │   └── PWA/
+│
 ├── IT Services/
 │   ├── ITInfrastructure/
 │   ├── ITGovernance/
 │   ├── ITStrategyPlanning/
-│   ├── ITConsulting/
-│   └── ManagedServices/
+│   ├── ManagedServices/
+│   ├── ServerManagement/
+│   ├── StorageSolutions/
+│   └── InfrastructureAsCode/
+│
 ├── Cloud Solutions/
 │   ├── CloudSolutions/
 │   ├── CloudSecurity/
 │   ├── CloudSecuritySolutions/
 │   └── CloudMigration/
+│
 ├── Cyber Security/
 │   ├── CyberSecurity/
 │   ├── NetworkSecurity/
+│   ├── NetworkInfrastructure/
 │   ├── SecurityAudit/
 │   ├── PenetrationTesting/
 │   ├── MonitoringMaintenance/
 │   └── Virtualization/
-├── Network/
-│   ├── NetworkInfrastructure/
-│   └── NetworkSecurity/
-├── Digital Transformation/
-├── Cost Optimization/
-├── Projects/                # Portofolio proyek
-├── Team/                    # Tim
-├── Testimonials/            # Testimoni
-├── Resources/               # Resources
-├── Blog/                    # Blog
-├── Contact/                 # Kontak
-├── Help/                   # Bantuan
-├── Settings/               # Pengaturan
-├── CTF/                    # Capture The Flag
-├── Playground/             # Playground
-│   ├── Playground/
-│   ├── PlaygroundSystem/
-│   ├── PlaygroundSQL/
-│   └── PlaygroundVM/
-├── VendorManagement/
-├── TechnologyAssessment/
-└── Dashboard/              # Admin Dashboard
+│
+├── Business Solutions/
+│   ├── DigitalTransformation/
+│   ├── CostOptimization/
+│   ├── VendorManagement/
+│   └── TechnologyAssessment/
+│
+├── Resources/                    # Resources & downloads
+├── CyberNews/                    # Cyber security news feed
+│
+├── Playground/                   # CTF & Security Playground Hub
+│   ├── Playground/               # Playground overview
+│   ├── PlaygroundWeb/            # Web challenges
+│   ├── PlaygroundBinary/         # Binary exploitation
+│   ├── PlaygroundCrypto/         # Cryptography challenges
+│   ├── PlaygroundForensics/      # Digital forensics
+│   ├── PlaygroundReverse/        # Reverse engineering
+│   ├── PlaygroundOSINT/          # OSINT challenges
+│   ├── PlaygroundSteganography/  # Steganography challenges
+│   ├── PlaygroundMobile/         # Mobile security challenges
+│   ├── PlaygroundCVE/            # CVE research & practice
+│   ├── PlaygroundSQL/            # SQL injection practice
+│   ├── PlaygroundSystem/         # System hacking challenges
+│   ├── PlaygroundVM/             # Virtual machine environment (auth-required)
+│   └── PlaygroundLearning/       # Learning Hub
+│       ├── PlaygroundLearning/       # Learning hub overview
+│       ├── PlaygroundLearningWriteups/   # CTF write-ups
+│       ├── PlaygroundLearningTools/      # Tools & cheatsheets
+│       └── PlaygroundLearningRoadmap/    # Learning roadmaps
+│
+└── Dashboard/                    # Admin Dashboard (auth-required)
     ├── DashboardLogin/
+    ├── Dashboard/                # Overview
     ├── DashboardAnalytics/
     ├── DashboardCalendar/
     ├── DashboardClients/
     ├── DashboardInvoices/
+    ├── DashboardMessages/
+    ├── DashboardProjects/
     ├── DashboardReports/
     ├── DashboardResources/
+    ├── DashboardServices/
     ├── DashboardSettings/
+    ├── DashboardTasks/
     └── DashboardTeam/
 ```
 
 ---
 
-## Persiapan Sebelum Instalasi
+## Prerequisites
 
-### Persyaratan Sistem
+### System Requirements
 
-| Komponen | Minimum | Disarankan |
-|----------|---------|-------------|
+| Component | Minimum | Recommended |
+|-----------|---------|-------------|
 | OS | Ubuntu 20.04+ / Windows 10+ / macOS 11+ | Ubuntu 22.04+ |
 | RAM | 4 GB | 8 GB+ |
 | Disk Space | 10 GB | 20 GB+ |
 | Node.js | 22.x | 24.x |
-| PHP | 8.3 | 8.4+ |
+| PHP | 8.2 | 8.4+ |
 | Composer | 2.x | Latest |
-| Docker | 24.x | 25.x |
+| Docker | 24.x | 25.x+ |
 | Docker Compose | 2.x | Latest |
 
-### Software yang Diperlukan
+### Required Software
 
-1. **Node.js & npm** - [Download](https://nodejs.org/)
-2. **PHP 8.3+** - [Download](https://www.php.net/downloads)
-3. **Composer** - [Download](https://getcomposer.org/download/)
-4. **Git** - [Download](https://git-scm.com/downloads)
-5. **Docker & Docker Compose** - [Download](https://www.docker.com/products/docker-desktop/)
+1. **Node.js & npm** — [nodejs.org](https://nodejs.org/)
+2. **PHP 8.2+** — [php.net/downloads](https://www.php.net/downloads)
+3. **Composer** — [getcomposer.org](https://getcomposer.org/download/)
+4. **Git** — [git-scm.com](https://git-scm.com/downloads)
+5. **Docker & Docker Compose** — [docker.com](https://www.docker.com/products/docker-desktop/)
 
 ---
 
-## Panduan Instalasi
+## Installation
 
-### Opsi 1: Docker (Disarankan)
+### Option 1: Docker (Recommended)
 
-Cara termudah untuk menjalankan aplikasi lengkap adalah menggunakan Docker.
+The easiest way to run the full stack is with Docker.
 
-#### Langkah 1: Clone Repository
+#### Step 1 — Clone the Repository
 
 ```bash
-git clone https://github.com/neverland-studio/portofolio.git
+git clone https://github.com/MuhammadIsakiPrananda/portfolio-neverland-studio-v2.git
 cd portofolio-neverland-studio
 ```
 
-#### Langkah 2: Buat Network Docker
+#### Step 2 — Create Docker Network
 
 ```bash
 docker network create app-network
 ```
 
-#### Langkah 3: Konfigurasi Environment
+#### Step 3 — Configure Environment
 
-Salin file `.env.example` ke `.env`:
+Copy the example environment file and update it:
 
 ```bash
 cp .env.example .env
 ```
-
-Edit file `.env` sesuai kebutuhan:
 
 ```env
 # Frontend
@@ -286,64 +341,58 @@ DB_USERNAME=root
 DB_PASSWORD=root
 ```
 
-#### Langkah 4: Jalankan Docker Compose
+#### Step 4 — Start Docker Compose
 
 ```bash
-# Mulai semua layanan
 docker-compose up -d --build
-
-# Atau gunakan script provided
-./deploy.sh
 ```
 
-#### Langkah 5: Verifikasi Layanan
+#### Step 5 — Verify Services
 
-Setelah container berjalan, layanan berikut akan tersedia:
+| Service | URL | Description |
+|---------|-----|-------------|
+| Frontend (Dev) | http://localhost:5173 | Vite dev server with hot reload |
+| Frontend (Prod) | http://localhost:3000 | Nginx-served production build |
+| Backend API | http://localhost:8001 | Laravel REST API |
+| phpMyAdmin | http://localhost:8080 | Database management UI |
+| MariaDB | localhost:3306 | Database |
 
-| Layanan | URL | Keterangan |
-|---------|-----|------------|
-| Frontend (Dev) | http://localhost:5173 | Development server dengan hot reload |
-| Frontend (Prod) | http://localhost:3000 | Production build |
-| Backend API | http://localhost:8001 | Laravel API |
-| phpMyAdmin | http://localhost:8080 | Database management |
-| MySQL | localhost:3306 | Database |
-
-#### Perintah Docker Umum
+#### Common Docker Commands
 
 ```bash
-# Mulai layanan
+# Start services
 docker-compose up -d
 
-# Hentikan layanan
+# Stop services
 docker-compose down
 
-# Restart layanan
+# Restart services
 docker-compose restart
 
-# Lihat logs
+# Stream all logs
 docker-compose logs -f
 
-# Lihat logs service tertentu
+# Stream logs for a specific service
 docker-compose logs -f backend
 
-# Rebuild setelah perubahan kode
+# Rebuild after code changes
 docker-compose up -d --build
 
-# Hapus semua data dan mulai ulang
+# Full reset (removes volumes)
 docker-compose down -v
 docker-compose up -d --build
 ```
 
 ---
 
-### Opsi 2: Instalasi Lokal
+### Option 2: Local Setup
 
-Jika lebih memilih menjalankan tanpa Docker, ikuti langkah berikut:
+Prefer running without Docker? Follow these steps:
 
 #### Frontend
 
 ```bash
-# Navigasi ke direktori proyek
+# Navigate to the project root
 cd portofolio-neverland-studio
 
 # Install dependencies
@@ -352,47 +401,47 @@ npm install
 # Copy environment file
 cp .env.example .env
 
-# Jalankan development server
+# Start the development server
 npm run dev
 ```
 
-Frontend akan berjalan di `http://localhost:5173`
+Frontend will be available at **http://localhost:5173**
 
 #### Backend
 
 ```bash
-# Navigasi ke direktori backend
+# Navigate to the backend directory
 cd backend
 
-# Install dependencies
+# Install PHP dependencies
 composer install
 
-# Copy environment file
+# Copy and configure environment
 cp .env.example .env
 
 # Generate application key
 php artisan key:generate
 
-# Buat database (MySQL)
+# Create the database
 mysql -u root -p -e "CREATE DATABASE neverland_portfolio;"
 
-# Jalankan migration
+# Run database migrations
 php artisan migrate
 
-# Seed database (opsional)
+# (Optional) Seed with sample data
 php artisan db:seed
 
-# Jalankan server
+# Start the development server
 php artisan serve --host=0.0.0.0 --port=8001
 ```
 
-Backend API akan berjalan di `http://localhost:8001`
+Backend API will be available at **http://localhost:8001**
 
 ---
 
-## Konfigurasi Environment
+## Environment Configuration
 
-### Variabel Environment Frontend
+### Frontend Environment Variables
 
 ```env
 VITE_API_URL=http://localhost:8001
@@ -401,7 +450,7 @@ VITE_APP_URL=http://localhost:5173
 VITE_API_VERSION=/api/v1
 ```
 
-### Variabel Environment Backend
+### Backend Environment Variables
 
 ```env
 APP_NAME="Neverland Studio API"
@@ -417,14 +466,23 @@ DB_DATABASE=neverland_portfolio
 DB_USERNAME=root
 DB_PASSWORD=your_password
 
-CACHE_DRIVER=file
+CACHE_STORE=file
 SESSION_DRIVER=database
 QUEUE_CONNECTION=sync
+
+# Laravel Reverb (WebSocket Broadcasting)
+BROADCAST_CONNECTION=reverb
+REVERB_APP_ID=your_app_id
+REVERB_APP_KEY=your_app_key
+REVERB_APP_SECRET=your_app_secret
+REVERB_HOST=localhost
+REVERB_PORT=8080
+REVERB_SCHEME=http
 ```
 
-### Konfigurasi CORS
+### CORS Configuration
 
-Untuk mengizinkan akses dari frontend:
+To allow requests from the frontend:
 
 ```php
 // backend/config/cors.php
@@ -436,92 +494,86 @@ Untuk mengizinkan akses dari frontend:
 
 ---
 
-## Menjalankan Aplikasi
+## Running the Application
 
-### Mode Development
+### Development Mode
 
 ```bash
-# Terminal 1 - Backend
+# Terminal 1 — Backend
 cd backend
 php artisan serve --host=0.0.0.0 --port=8001
 
-# Terminal 2 - Frontend
+# Terminal 2 — Frontend
 npm run dev
 ```
 
-Akses:
 - Frontend: http://localhost:5173
 - Backend API: http://localhost:8001
 
-### Mode Production (Docker)
+### Production Mode (Docker)
 
 ```bash
 docker-compose up -d --build
 ```
 
-Akses:
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:8001
 
-### Mode Development dengan Docker
-
-```bash
-docker-compose --profile dev up -d
-```
-
 ---
 
-## Build untuk Produksi
+## Building for Production
 
 ### Frontend
 
 ```bash
-# Build frontend
+# Type-check and build
 npm run build
 
-# Preview build
+# Preview the production build locally
 npm run preview
 ```
+
+Build output will be in the `dist/` directory.
 
 ### Backend
 
 ```bash
 cd backend
 
-# Optimize autoload
+# Optimize Composer autoloader
 composer dump-autoload -o
 
-# Clear cache
+# Clear all caches
 php artisan config:clear
 php artisan cache:clear
 php artisan route:clear
 php artisan view:clear
 
-# Optimize
+# Cache for production
 php artisan optimize
 ```
 
 ---
 
-## API Documentation
+## API Reference
 
-### Endpoint Utama
+### Core Endpoints
 
-| Method | Endpoint | Deskripsi |
-|--------|----------|-----------|
+| Method | Endpoint | Description |
+|--------|----------|-------------|
 | GET | `/api/health` | Health check |
-| POST | `/api/auth/login` | Login |
-| POST | `/api/auth/register` | Registrasi |
-| POST | `/api/auth/logout` | Logout |
-| GET | `/api/user` | Get current user |
-| GET | `/api/services` | List services |
-| GET | `/api/projects` | List projects |
-| GET | `/api/contact` | Submit contact form |
+| POST | `/api/auth/login` | User login |
+| POST | `/api/auth/register` | User registration |
+| POST | `/api/auth/logout` | User logout |
+| GET | `/api/user` | Get authenticated user |
+| GET | `/api/services` | List all services |
+| GET | `/api/projects` | List all projects |
+| POST | `/api/contact` | Submit contact form |
 
-### Contoh Request
+### Example Requests
 
 ```bash
-# Health Check
+# Health check
 curl http://localhost:8001/api/health
 
 # Login
@@ -529,56 +581,54 @@ curl -X POST http://localhost:8001/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email": "admin@example.com", "password": "password"}'
 
-# Get Services
+# Get services (authenticated)
 curl http://localhost:8001/api/services \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
-Untuk dokumentasi API lengkap, lihat [API_DOCUMENTATION.md](./API_DOCUMENTATION.md)
+For detailed API documentation, see [API_DOCUMENTATION.md](./API_DOCUMENTATION.md).
 
 ---
 
-## Fitur Utama
+## Key Features
 
-### 1. Sistem Navigasi
-- Navbar sticky dengan efek glassmorphism
-- Menu hamburger responsif mobile
-- Penandaan route aktif
-- Perilaku scroll halus
+### 1. Navigation System
+- Sticky glassmorphism navbar with smooth scroll behavior
+- Responsive hamburger menu for mobile
+- Active route highlighting
 
-### 2. Komponen
-- Komponen atom yang dapat digunakan kembali
-- TypeScript typing penuh
-- Animasi Framer Motion
-- Dukungan aksesibilitas
+### 2. Component Architecture
+- Atomic Design pattern (atoms → molecules → organisms)
+- Full TypeScript typing throughout
+- Framer Motion animations for all transitions
+- Full accessibility support
 
-### 3. Formulir
-- Formulir kontak dengan validasi
-- Status loading dan success
-- Penghitung karakter
-- Penanganan error
+### 3. Forms
+- Contact form with client-side and server-side validation
+- Loading, success, and error states
+- Character count indicators
 
-### 4. Performa
-- Halaman lazy-loaded
-- Code splitting per route
-- Ukuran bundle optimal
-- Pemuatan awal cepat
+### 4. Performance
+- Per-route lazy loading with `React.lazy`
+- Automatic code splitting via Vite
+- Optimal bundle sizes and fast initial paint
 
-### 5. Dashboard Admin
-- Analytics dashboard
-- Calendar management
-- Client management
-- Invoice management
-- Team management
-- Reports
-- Resources
-- Settings
+### 5. Real-Time Dashboard
+- Live analytics via Laravel Reverb + Laravel Echo
+- Task, project, and client management
+- Invoice tracking and report generation
+
+### 6. Playground / CTF Hub
+- 10+ CTF challenge categories
+- Isolated SQL and VM practice environments
+- Authentication-gated VM provisioning
+- Learning Hub with write-ups, tools, and roadmaps
 
 ---
 
 ## Customization
 
-### Mengubah Warna
+### Changing the Color Palette
 
 Edit `tailwind.config.js`:
 
@@ -596,16 +646,16 @@ export default {
 }
 ```
 
-### Mengubah Konten
+### Updating Company Content
 
-Update file di `src/config/`:
-- `constants.ts` - Informasi perusahaan
-- `services.ts` - Penawaran layanan
-- `projects.ts` - Studi kasus
+Edit files in `src/config/`:
+- `constants.ts` — Company name, contact info, social links
+- `services.ts` — Service offerings
+- `projects.ts` — Project case studies
 
-### Mengubah Font
+### Changing Fonts
 
-Modifikasi import Google Fonts di `src/styles/globals.css`:
+Modify the Google Fonts import in `src/styles/globals.css`:
 
 ```css
 @import url('https://fonts.googleapis.com/css2?family=Your+Font:wght@400;500;600;700&display=swap');
@@ -615,110 +665,117 @@ Modifikasi import Google Fonts di `src/styles/globals.css`:
 
 ## Troubleshooting
 
-### Masalah Umum
-
-#### 1. Port Sudah Digunakan
+### Port Already in Use
 
 ```bash
-# Cari proses yang menggunakan port
+# Find which process is using the port
 lsof -i :5173
 lsof -i :8001
 
-# Kill proses
+# Kill the process
 kill -9 <PID>
 ```
 
-#### 2. Error Node Modules
+### Node Modules Error
 
 ```bash
-# Hapus node_modules dan install ulang
+# Clean reinstall
 rm -rf node_modules
 rm package-lock.json
 npm install
 ```
 
-#### 3. Error Composer
+### Composer Error
 
 ```bash
-# Clear composer cache
+# Clear cache and reinstall
 composer clear-cache
-
-# Install ulang
 composer install --no-interaction
 ```
 
-#### 4. Database Connection Error
+### Database Connection Error
 
 ```bash
-# Cek konfigurasi database
+# Clear Laravel config cache
 php artisan config:clear
 
-# Test koneksi
+# Test the connection
 php artisan tinker
-DB::connection()->getPdo();
+>>> DB::connection()->getPdo();
 ```
 
-#### 5. Docker Issues
+### Docker Issues
 
 ```bash
-# Hapus semua container, volume, dan image
+# Full rebuild (removes all containers, volumes, and images)
 docker-compose down -v --rmi all
-
-# Build ulang
 docker-compose build --no-cache
 docker-compose up -d
 ```
 
-### Logs
+### Viewing Logs
 
 ```bash
-# Laravel logs
+# Laravel application logs
 tail -f backend/storage/logs/laravel.log
 
-# Docker logs
+# Docker container logs
 docker-compose logs -f
+docker-compose logs -f backend
+docker-compose logs -f frontend
 ```
 
 ---
 
-## Roadmap 2026
+## Roadmap
 
-Fokus pengembangan kami di tahun 2026 meliputi:
+Planned development for 2026 and beyond:
 
-- [ ] **AI-Powered Security Analysis**: Integrasi AI untuk deteksi ancaman real-time
-- [ ] **Blockchain Verification**: Sistem verifikasi sertifikat berbasis blockchain
-- [ ] **Mobile App**: Pengembangan aplikasi native untuk iOS dan Android
-- [ ] **Enhanced Dashboard**: Analytics lebih mendalam dengan predictive modelling
-- [ ] **Global CDN Expansion**: Perluasan infrastruktur edge untuk performa global
-
----
-
-## Kontribusi
-
-1. Fork repository
-2. Buat branch fitur (`git checkout -b feature/AmazingFeature`)
-3. Commit perubahan (`git commit -m 'Add some AmazingFeature'`)
-4. Push ke branch (`git push origin feature/AmazingFeature`)
-5. Buka Pull Request
+- [ ] **AI-Powered Security Analysis** — AI-driven threat detection and analysis
+- [ ] **Blockchain Certificate Verification** — Tamper-proof certification system
+- [ ] **Mobile App** — Native iOS and Android companion app
+- [ ] **Enhanced Dashboard Analytics** — Predictive modelling and deeper insights
+- [ ] **Global CDN Expansion** — Edge infrastructure for better global performance
+- [ ] **Dark / Light Mode Toggle** — User-selectable theme preference
+- [ ] **Multi-Language Support** — Full i18n support (EN / ID)
+- [ ] **Blog Categories & Tags** — Improved content discoverability
+- [ ] **Newsletter Subscription** — Email marketing integration
+- [ ] **PWA Support** — Offline-capable Progressive Web App
 
 ---
 
-## Lisensi
+## Contributing
 
-Proyek ini dilisensikan di bawah MIT License - lihat file [LICENSE](LICENSE) untuk detail lengkap.
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
----
-
-## Kontak
-
-- Email: Arlianto032@gmail.com
-- Website: https://portfolio.neverlandstudio.my.id
-- GitHub: https://github.com/MuhammadIsakiPrananda
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add: AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ---
 
-**Dibuat dengan ❤️ untuk Neverland Studio**
+## License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for full details.
+
+---
+
+## Contact
+
+- **Email** — Arlianto032@gmail.com
+- **Website** — [portfolio.neverlandstudio.my.id](https://portfolio.neverlandstudio.my.id)
+- **GitHub** — [@MuhammadIsakiPrananda](https://github.com/MuhammadIsakiPrananda)
+
+---
+
+<div align="center">
+
+**Made with ❤️ by Neverland Studio**
 
 *Securing the Digital Future*
 
 Copyright © 2026 Neverland Studio. All rights reserved.
+
+</div>

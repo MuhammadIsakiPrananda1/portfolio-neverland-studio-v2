@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Calendar as CalendarIcon, Clock, MapPin, Video, Users, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Calendar as CalendarIcon, Clock, MapPin, Video, Users, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 import { staggerContainer, staggerItem, slideUp } from '@utils/animations';
 
 interface Event {
@@ -48,23 +48,27 @@ export default function DashboardCalendar() {
   return (
     <div className="space-y-6">
       <motion.div variants={slideUp} initial="hidden" animate="visible" className="relative">
-        <div className="relative border border-white/5 rounded-xl sm:rounded-2xl p-6 sm:p-8 overflow-hidden bg-gradient-to-b from-white/[0.02] to-transparent">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-24 sm:w-32 h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent" />
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
+        <div className="relative border border-white/10 rounded-2xl sm:rounded-3xl p-8 sm:p-10 overflow-hidden glass shadow-2xl">
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 sm:w-48 h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-70" />
+          <div className="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
             <div>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-blue-500/20 bg-blue-500/5">
-                  <CalendarIcon className="w-3 h-3 text-blue-400" />
-                  <span className="text-xs font-semibold text-blue-400 uppercase tracking-wider">Calendar</span>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-purple-400/20 bg-purple-500/5 backdrop-blur-sm shadow-lg shadow-purple-500/5">
+                  <Sparkles className="w-3.5 h-3.5 text-purple-400 animate-pulse" />
+                  <span className="text-xs font-bold text-purple-300 uppercase tracking-widest">Calendar</span>
                 </div>
               </div>
-              <h1 className="text-3xl sm:text-4xl font-heading font-black mb-2">
-                <span className="bg-gradient-to-r from-white via-purple-100 to-white bg-clip-text text-transparent">
-                  Calendar & Events
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-black mb-4 tracking-tight">
+                <span className="text-white drop-shadow-md">
+                  Schedule &{' '}
+                </span>
+                <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 bg-clip-text text-transparent filter drop-shadow-lg">
+                  Events
                 </span>
               </h1>
-              <p className="text-gray-400 text-sm sm:text-base max-w-xl">
-                View your schedule, meetings, and deadlines.
+              <p className="text-gray-400 text-base sm:text-lg max-w-2xl leading-relaxed">
+                Manage your meetings, project deadlines, and important milestones.
               </p>
             </div>
           </div>
@@ -72,26 +76,27 @@ export default function DashboardCalendar() {
       </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <motion.div className="lg:col-span-2 glass rounded-xl border border-white/10 p-6" variants={staggerContainer} initial="hidden" animate="visible">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-white">{monthNames[month]} {year}</h2>
+        <motion.div className="lg:col-span-2 glass rounded-2xl border border-white/10 shadow-2xl p-6 lg:p-8 overflow-hidden relative" variants={staggerContainer} initial="hidden" animate="visible">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-transparent opacity-50" />
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-2xl font-heading font-bold text-white tracking-tight">{monthNames[month]} <span className="text-gray-400 font-medium">{year}</span></h2>
             <div className="flex gap-2">
-              <button onClick={prevMonth} className="p-2 rounded-lg hover:bg-white/5 text-gray-400 hover:text-white transition-colors">
+              <button onClick={prevMonth} className="p-2.5 rounded-xl bg-white/[0.03] border border-white/10 hover:bg-white/[0.08] hover:border-white/20 text-gray-400 hover:text-white transition-all shadow-sm">
                 <ChevronLeft className="w-5 h-5" />
               </button>
-              <button onClick={nextMonth} className="p-2 rounded-lg hover:bg-white/5 text-gray-400 hover:text-white transition-colors">
+              <button onClick={nextMonth} className="p-2.5 rounded-xl bg-white/[0.03] border border-white/10 hover:bg-white/[0.08] hover:border-white/20 text-gray-400 hover:text-white transition-all shadow-sm">
                 <ChevronRight className="w-5 h-5" />
               </button>
             </div>
           </div>
 
-          <div className="grid grid-cols-7 gap-1 mb-2">
+          <div className="grid grid-cols-7 gap-2 mb-4">
             {dayNames.map(day => (
-              <div key={day} className="text-center text-xs font-semibold text-gray-500 py-2">{day}</div>
+              <div key={day} className="text-center text-xs font-bold text-gray-500 py-2 uppercase tracking-wider bg-black/20 rounded-lg">{day}</div>
             ))}
           </div>
 
-          <div className="grid grid-cols-7 gap-1">
+          <div className="grid grid-cols-7 gap-2">
             {Array.from({ length: firstDayOfMonth }).map((_, i) => (
               <div key={`empty-${i}`} className="p-2" />
             ))}
@@ -106,13 +111,21 @@ export default function DashboardCalendar() {
                   key={day}
                   variants={staggerItem}
                   onClick={() => setSelectedDate(day)}
-                  className={`p-2 rounded-lg text-sm relative transition-all ${isToday ? 'bg-primary/20 border border-primary/50' : isSelected ? 'bg-white/10 border border-white/20' : 'hover:bg-white/5 border border-transparent'}`}
+                  className={`relative p-3 rounded-xl text-sm font-medium transition-all duration-300 min-h-[60px] flex flex-col items-center justify-start group
+                    ${isToday ? 'bg-gradient-to-b from-blue-500/20 to-blue-500/5 border border-blue-500/50 shadow-[0_0_15px_rgba(59,130,246,0.2)]'
+                      : isSelected ? 'bg-white/10 border border-white/30 shadow-lg scale-105 z-10'
+                        : 'bg-white/[0.02] border border-white/5 hover:bg-white/[0.06] hover:border-white/20'}`}
                 >
-                  <span className={`${isToday || isSelected ? 'text-white' : 'text-gray-400'}`}>{day}</span>
+                  <span className={`${isToday ? 'text-blue-400 font-bold' : isSelected ? 'text-white font-bold' : 'text-gray-400 group-hover:text-gray-200'}`}>{day}</span>
+
                   {dayEvents.length > 0 && (
-                    <div className="absolute bottom-1 left-1/2 -translate-x-1/2 flex gap-0.5">
+                    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1 mt-auto">
                       {dayEvents.slice(0, 3).map((e, idx) => (
-                        <div key={idx} className={`w-1.5 h-1.5 rounded-full ${e.type === 'meeting' ? 'bg-blue-400' : e.type === 'deadline' ? 'bg-red-400' : 'bg-purple-400'}`} />
+                        <div key={idx} className={`w-1.5 h-1.5 rounded-full shadow-sm
+                          ${e.type === 'meeting' ? 'bg-blue-400 shadow-blue-400/50'
+                            : e.type === 'deadline' ? 'bg-red-400 shadow-red-400/50'
+                              : 'bg-purple-400 shadow-purple-400/50'}`}
+                        />
                       ))}
                     </div>
                   )}
@@ -122,23 +135,39 @@ export default function DashboardCalendar() {
           </div>
         </motion.div>
 
-        <div className="glass rounded-xl border border-white/10 p-6">
-          <h2 className="text-lg font-bold text-white mb-4">Events for {monthNames[month]} {selectedDate}</h2>
-          <div className="space-y-3">
+        <div className="glass rounded-2xl border border-white/10 shadow-2xl p-6 lg:p-8 h-fit">
+          <h2 className="text-xl font-heading font-bold text-white mb-6 border-b border-white/10 pb-4">
+            Events for <span className="text-blue-400">{monthNames[month]} {selectedDate}</span>
+          </h2>
+          <div className="space-y-4">
             {getEventsForDate(selectedDate).length === 0 ? (
-              <p className="text-gray-500 text-sm">No events on this day</p>
+              <div className="text-center py-8">
+                <div className="w-16 h-16 rounded-full bg-white/5 mx-auto flex items-center justify-center mb-3 border border-white/10">
+                  <CalendarIcon className="w-6 h-6 text-gray-500" />
+                </div>
+                <p className="text-gray-400 font-medium">No events scheduled</p>
+                <p className="text-xs text-gray-500 mt-1">Enjoy your free day!</p>
+              </div>
             ) : (
-              getEventsForDate(selectedDate).map(event => (
-                <motion.div key={event.id} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className={`p-3 rounded-lg border ${getTypeColor(event.type)}`}>
-                  <div className="flex items-start gap-2">
-                    {event.type === 'meeting' ? <Video className="w-4 h-4 mt-0.5" /> : event.type === 'deadline' ? <Clock className="w-4 h-4 mt-0.5" /> : <MapPin className="w-4 h-4 mt-0.5" />}
-                    <div className="flex-1">
-                      <h3 className="text-sm font-medium">{event.title}</h3>
-                      <p className="text-xs opacity-70 mt-1">{event.time}</p>
+              getEventsForDate(selectedDate).map((event, index) => (
+                <motion.div
+                  key={event.id}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className={`p-4 rounded-xl border bg-gradient-to-br from-white/5 to-transparent backdrop-blur-md shadow-md hover:shadow-lg transition-shadow group ${getTypeColor(event.type)}`}
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="p-2 rounded-lg bg-black/20 text-current shadow-inner">
+                      {event.type === 'meeting' ? <Video className="w-4 h-4" /> : event.type === 'deadline' ? <Clock className="w-4 h-4" /> : <MapPin className="w-4 h-4" />}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-sm font-bold truncate group-hover:text-white transition-colors">{event.title}</h3>
+                      <p className="text-xs font-mono opacity-80 mt-1">{event.time}</p>
                       {event.participants && (
-                        <div className="flex items-center gap-1 mt-2 text-xs opacity-70">
-                          <Users className="w-3 h-3" />
-                          {event.participants.join(', ')}
+                        <div className="flex items-center gap-1.5 mt-3 pt-3 border-t border-current/20 text-xs font-medium">
+                          <Users className="w-3.5 h-3.5 opacity-80" />
+                          <span className="truncate opacity-90">{event.participants.join(', ')}</span>
                         </div>
                       )}
                     </div>
