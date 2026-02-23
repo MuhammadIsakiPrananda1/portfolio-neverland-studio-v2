@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-    Map, CheckCircle, Circle, Lock, ChevronDown, ChevronUp,
+    Map, CheckCircle, ChevronDown, ChevronUp,
     Shield, Globe, Terminal, Cpu, Lock as LockIcon, Eye, Trophy, Star
 } from 'lucide-react';
 
