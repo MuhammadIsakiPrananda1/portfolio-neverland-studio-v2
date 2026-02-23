@@ -34,6 +34,8 @@ export const Contact = lazyLoad(() => import('@pages/Contact'));
 export const Help = lazyLoad(() => import('@pages/Help'));
 export const Settings = lazyLoad(() => import('@pages/Settings'));
 export const NotFound = lazyLoad(() => import('@pages/NotFound'));
+export const ITServicesStore = lazyLoad(() => import('@pages/ITServicesStore'));
+export const ITServicesCheckout = lazyLoad(() => import('@pages/ITServicesCheckout'));
 
 // Service pages - Cyber Security
 export const CyberSecurity = lazyLoad(() => import('@pages/CyberSecurity'));
@@ -126,6 +128,8 @@ export const mainRoutes: RouteConfig[] = [
   { path: AppRoutes.CONTACT, element: Contact },
   { path: AppRoutes.HELP, element: Help },
   { path: AppRoutes.SETTINGS, element: Settings },
+  { path: AppRoutes.IT_SERVICES_STORE, element: ITServicesStore },
+  { path: AppRoutes.IT_SERVICES_CHECKOUT, element: ITServicesCheckout },
 ];
 
 // Service routes configuration

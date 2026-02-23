@@ -202,7 +202,6 @@ const PlaygroundMobile = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-              onClick={() => setSelectedChallenge(null)}
             >
               <motion.div
                 initial={{ scale: 0.9, opacity: 0 }}
@@ -255,8 +254,8 @@ const PlaygroundMobile = () => {
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className={`flex items-center p-4 rounded-lg mb-6 ${isCorrect
-                        ? 'bg-green-500/10 border border-green-500/30'
-                        : 'bg-red-500/10 border border-red-500/30'
+                      ? 'bg-green-500/10 border border-green-500/30'
+                      : 'bg-red-500/10 border border-red-500/30'
                       }`}
                   >
                     {isCorrect ? (

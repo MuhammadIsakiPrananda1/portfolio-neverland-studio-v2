@@ -3,11 +3,12 @@ import { Suspense } from 'react';
 import MainLayout from '@layouts/MainLayout';
 import DashboardLayout from '@layouts/DashboardLayout';
 import ScrollToTop from '@components/ScrollToTop';
-import { 
-  mainRoutes, 
-  serviceRoutes, 
+import { CartProvider } from '@/contexts/CartContext';
+import {
+  mainRoutes,
+  serviceRoutes,
   dashboardRoutes,
-  NotFound 
+  NotFound
 } from '@config/routes.config';
 
 // Loading component
@@ -26,40 +27,42 @@ function PageLoader() {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <ScrollToTop />
-      <Suspense fallback={<PageLoader />}>
-        <Routes>
-          {/* Main Routes with MainLayout */}
-          <Route path="/" element={<MainLayout />}>
-            {/* Main pages */}
-            {mainRoutes.map(({ path, element: Element }) => (
-              <Route key={path} path={path} element={<Element />} />
-            ))}
-            
-            {/* Service pages */}
-            {serviceRoutes.map(({ path, element: Element }) => (
-              <Route key={path} path={path} element={<Element />} />
-            ))}
+    <CartProvider>
+      <BrowserRouter>
+        <ScrollToTop />
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            {/* Main Routes with MainLayout */}
+            <Route path="/" element={<MainLayout />}>
+              {/* Main pages */}
+              {mainRoutes.map(({ path, element: Element }) => (
+                <Route key={path} path={path} element={<Element />} />
+              ))}
 
-            {/* 404 Not Found */}
-            <Route path="*" element={<NotFound />} />
-          </Route>
+              {/* Service pages */}
+              {serviceRoutes.map(({ path, element: Element }) => (
+                <Route key={path} path={path} element={<Element />} />
+              ))}
 
-          {/* Dashboard Routes with DashboardLayout */}
-          {dashboardRoutes.map(({ path, element: Element }) => (
-            <Route 
-              key={path} 
-              path={path} 
-              element={
-                <DashboardLayout>
-                  <Element />
-                </DashboardLayout>
-              } 
-            />
-          ))}
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
+              {/* 404 Not Found */}
+              <Route path="*" element={<NotFound />} />
+            </Route>
+
+            {/* Dashboard Routes with DashboardLayout */}
+            {dashboardRoutes.map(({ path, element: Element }) => (
+              <Route
+                key={path}
+                path={path}
+                element={
+                  <DashboardLayout>
+                    <Element />
+                  </DashboardLayout>
+                }
+              />
+            ))}
+          </Routes>
+        </Suspense>
+      </BrowserRouter>
+    </CartProvider>
   );
 }

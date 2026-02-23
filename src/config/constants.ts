@@ -74,6 +74,8 @@ export enum Routes {
 
   // Main Routes
   CYBER_NEWS = '/cyber-news',
+  IT_SERVICES_STORE = '/store',
+  IT_SERVICES_CHECKOUT = '/store/checkout',
 }
 
 // Service IDs

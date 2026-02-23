@@ -184,10 +184,10 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Security checks
     if (honeypot) return;
-    if (Date.now() - formOpenTime.current < 2000) return;
+    if (Date.now() - formOpenTime.current < 500) return;
     if (view === 'login' && isRateLimited) return;
 
     setLoading(true);
@@ -202,17 +202,17 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           password: loginForm.password,
           remember: loginForm.remember,
         });
-        
+
         setSuccess(response.message || 'Login successful!');
-        
+
         // Reset attempts on successful login
         setLoginAttempts(0);
-        
+
         // Close modal after successful login
         setTimeout(() => {
           handleClose();
         }, 1000);
-        
+
       } else if (view === 'register') {
         // Register
         if (registerForm.password !== registerForm.confirmPassword) {
@@ -220,30 +220,30 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           setLoading(false);
           return;
         }
-        
+
         if (!registerForm.terms) {
           setError('Please accept the terms and conditions');
           setLoading(false);
           return;
         }
-        
+
         const response = await authService.register({
           name: registerForm.name,
           email: registerForm.email,
           password: registerForm.password,
         });
-        
+
         setSuccess(response.message || 'Registration successful!');
-        
+
         // Close modal after successful registration
         setTimeout(() => {
           handleClose();
         }, 1000);
-        
+
       } else if (view === 'reset') {
         // Password reset request
         const response = await authService.forgotPassword(resetForm.email);
-        
+
         setSuccess(response.message || 'Password reset link sent!');
         setResetSent(true);
       }
@@ -260,12 +260,12 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
       } else {
         setError('An error occurred. Please try again.');
       }
-      
+
       // Increment login attempts on failed login
       if (view === 'login') {
         const newAttempts = loginAttempts + 1;
         setLoginAttempts(newAttempts);
-        
+
         if (newAttempts >= maxAttempts) {
           setCooldown(30);
           const cooldownTimer = setInterval(() => {
@@ -608,13 +608,12 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                             <input type={showConfirmPassword ? 'text' : 'password'} placeholder="Confirm your password" required
                               value={registerForm.confirmPassword}
                               onChange={(e) => setRegisterForm({ ...registerForm, confirmPassword: e.target.value })}
-                              className={`${inputBase} pl-11 pr-12 ${
-                                registerForm.confirmPassword && registerForm.confirmPassword !== registerForm.password
+                              className={`${inputBase} pl-11 pr-12 ${registerForm.confirmPassword && registerForm.confirmPassword !== registerForm.password
                                   ? 'border-red-500/50 focus:border-red-500'
                                   : registerForm.confirmPassword && registerForm.confirmPassword === registerForm.password
-                                  ? 'border-purple-500/30 focus:border-purple-500/50'
-                                  : inputFocusRegister
-                              }`}
+                                    ? 'border-purple-500/30 focus:border-purple-500/50'
+                                    : inputFocusRegister
+                                }`}
                             />
                             <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                               className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 transition-colors">

@@ -104,6 +104,7 @@ const mainNavItems: NavItem[] = [
   { path: Routes.TESTIMONIALS, label: 'Testimonials', icon: MessageSquare },
   { path: Routes.BLOG, label: 'Blog', icon: BookOpen },
   { path: Routes.CONTACT, label: 'Contact', icon: Mail },
+  { path: Routes.IT_SERVICES_STORE, label: 'Store', icon: ShoppingCart },
 ];
 
 const playgroundItems: NavItem[] = [

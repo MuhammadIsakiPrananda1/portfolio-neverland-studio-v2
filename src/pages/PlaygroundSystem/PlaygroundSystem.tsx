@@ -122,14 +122,14 @@ const PlaygroundSystem = () => {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Playground
           </Button>
-          
+
           <div className="flex items-center justify-center mb-4">
             <Terminal className="w-12 h-12 text-green-500 mr-4" />
             <h1 className="text-4xl md:text-5xl font-bold text-white">
               System Security <span className="text-green-500">Playground</span>
             </h1>
           </div>
-          
+
           <p className="text-gray-400 text-lg mb-6 max-w-2xl mx-auto">
             Master command injection and system exploitation through hands-on challenges
           </p>
@@ -217,7 +217,6 @@ const PlaygroundSystem = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-              onClick={() => setSelectedChallenge(null)}
             >
               <motion.div
                 initial={{ scale: 0.9, opacity: 0 }}
@@ -269,11 +268,10 @@ const PlaygroundSystem = () => {
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className={`flex items-center p-4 rounded-lg mb-6 ${
-                      isCorrect
+                    className={`flex items-center p-4 rounded-lg mb-6 ${isCorrect
                         ? 'bg-green-500/10 border border-green-500/30'
                         : 'bg-red-500/10 border border-red-500/30'
-                    }`}
+                      }`}
                   >
                     {isCorrect ? (
                       <CheckCircle className="w-5 h-5 text-green-400 mr-3" />

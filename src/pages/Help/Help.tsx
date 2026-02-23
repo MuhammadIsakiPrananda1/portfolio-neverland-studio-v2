@@ -1,10 +1,10 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Search, 
-  Shield, 
-  User, 
-  Settings, 
-  MessageCircle, 
+import {
+  Search,
+  Shield,
+  User,
+  Settings,
+  MessageCircle,
   HelpCircle,
   ChevronDown,
   ChevronUp,
@@ -54,7 +54,7 @@ const HELP_CATEGORIES = [
 ];
 
 // FAQ by Help Category
-const CATEGORY_FAQS: Record<string, Array<{question: string; answer: string}>> = {
+const CATEGORY_FAQS: Record<string, Array<{ question: string; answer: string }>> = {
   'getting-started': [
     {
       question: "How do I get started with Neverland Studio services?",
@@ -405,8 +405,8 @@ export default function Help() {
   }, [isModalOpen]);
 
   // Filter FAQs based on selected category
-  const filteredFaqs = selectedCategory === 'All' 
-    ? FAQS 
+  const filteredFaqs = selectedCategory === 'All'
+    ? FAQS
     : FAQS.filter(faq => faq.category === selectedCategory);
 
   // Get unique categories from FAQs
@@ -416,7 +416,7 @@ export default function Help() {
     <div className="pt-32 pb-20">
       <div className="container-custom">
         {/* Clean Hero Section */}
-        <motion.div 
+        <motion.div
           className="text-center mb-20"
           variants={slideUp}
           initial="hidden"
@@ -430,7 +430,7 @@ export default function Help() {
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white">
             How can we help you?
           </h1>
-          
+
           <p className="text-lg text-gray-400 mb-10 max-w-2xl mx-auto">
             Search our knowledge base or browse categories to find answers to your questions.
           </p>
@@ -439,7 +439,7 @@ export default function Help() {
           <div className="max-w-2xl mx-auto">
             <div className="relative flex items-center bg-dark-800/50 border border-white/10 rounded-xl p-1.5 hover:border-white/20 transition-all duration-200">
               <Search className="w-5 h-5 text-gray-400 ml-4" />
-              <input 
+              <input
                 type="text"
                 placeholder="Search for help articles, guides, or FAQs..."
                 className="w-full bg-transparent border-none text-white placeholder-gray-500 px-4 py-3 focus:outline-none"
@@ -470,7 +470,7 @@ export default function Help() {
                 </h3>
                 <p className="text-sm text-gray-400">{contact.description}</p>
               </div>
-              
+
               {/* Accent Line */}
               <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[2px] bg-gradient-to-r from-purple-500 to-blue-500 group-hover:w-3/4 transition-all duration-500" />
             </a>
@@ -518,10 +518,9 @@ export default function Help() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                onClick={closeModal}
                 className="fixed inset-0 bg-black/70 backdrop-blur-md z-[9999]"
               />
-              
+
               {/* Modal Container */}
               <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 pointer-events-none">
                 <motion.div
@@ -530,116 +529,113 @@ export default function Help() {
                   exit={{ opacity: 0, scale: 0.95, y: 20 }}
                   className="w-full max-w-3xl max-h-[90vh] bg-dark-900 border border-white/5 rounded-2xl shadow-2xl flex flex-col overflow-hidden pointer-events-auto"
                 >
-                {/* Modal Header */}
-                <div className="relative border-b border-white/5 p-6 shrink-0 bg-white/[0.02]">
-                  {/* Top Accent */}
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
-                  
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-start gap-4">
-                      <div className="inline-flex p-3 rounded-lg bg-purple-500/5 border border-purple-500/10">
-                        <selectedHelpCategory.icon className="w-7 h-7 text-purple-400" />
-                      </div>
-                      <div>
-                        <h2 className="text-2xl font-bold text-white mb-2">
-                          {selectedHelpCategory.title}
-                        </h2>
-                        <p className="text-gray-400 text-sm">
-                          {selectedHelpCategory.description}
-                        </p>
-                      </div>
-                    </div>
-                    <button
-                      onClick={closeModal}
-                      className="text-gray-400 hover:text-white hover:bg-white/5 p-2 rounded-lg transition-all duration-200 flex-shrink-0"
-                      aria-label="Close modal"
-                    >
-                      <X className="w-6 h-6" />
-                    </button>
-                  </div>
-                </div>
+                  {/* Modal Header */}
+                  <div className="relative border-b border-white/5 p-6 shrink-0 bg-white/[0.02]">
+                    {/* Top Accent */}
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-px bg-gradient-to-r from-transparent via-purple-500/50 to-transparent" />
 
-                {/* Modal Content */}
-                <div className="flex-1 overflow-y-auto p-6 space-y-3 custom-scrollbar">
-                  <div className="mb-4">
-                    <h3 className="text-lg font-bold text-white mb-2 flex items-center gap-2">
-                      <HelpCircle className="w-5 h-5 text-purple-400" />
-                      Frequently Asked Questions
-                    </h3>
-                    <p className="text-sm text-gray-400">
-                      Find answers to common questions about {selectedHelpCategory.title.toLowerCase()}
-                    </p>
-                  </div>
-
-                  {CATEGORY_FAQS[selectedHelpCategory.id]?.map((faq, index) => (
-                    <div
-                      key={index}
-                      className={`rounded-xl border transition-all duration-200 ${
-                        modalOpenFaq === index 
-                          ? 'bg-white/[0.05] border-purple-500/30' 
-                          : 'bg-white/[0.02] border-white/5 hover:border-white/10'
-                      }`}
-                    >
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-start gap-4">
+                        <div className="inline-flex p-3 rounded-lg bg-purple-500/5 border border-purple-500/10">
+                          <selectedHelpCategory.icon className="w-7 h-7 text-purple-400" />
+                        </div>
+                        <div>
+                          <h2 className="text-2xl font-bold text-white mb-2">
+                            {selectedHelpCategory.title}
+                          </h2>
+                          <p className="text-gray-400 text-sm">
+                            {selectedHelpCategory.description}
+                          </p>
+                        </div>
+                      </div>
                       <button
-                        onClick={() => toggleModalFaq(index)}
-                        className="w-full text-left p-4 flex items-start justify-between gap-4"
+                        onClick={closeModal}
+                        className="text-gray-400 hover:text-white hover:bg-white/5 p-2 rounded-lg transition-all duration-200 flex-shrink-0"
+                        aria-label="Close modal"
                       >
-                        <span className={`font-semibold text-sm transition-colors flex-1 ${
-                          modalOpenFaq === index ? 'text-purple-400' : 'text-white'
-                        }`}>
-                          {faq.question}
-                        </span>
-                        <div className={`p-1.5 rounded-lg flex-shrink-0 transition-colors ${
-                          modalOpenFaq === index 
-                            ? 'bg-purple-500/20 text-purple-400' 
-                            : 'bg-white/5 text-gray-400'
-                        }`}>
-                          {modalOpenFaq === index ? (
-                            <ChevronUp className="w-4 h-4" />
-                          ) : (
-                            <ChevronDown className="w-4 h-4" />
-                          )}
-                        </div>
+                        <X className="w-6 h-6" />
                       </button>
-                      
-                      <motion.div
-                        initial={false}
-                        animate={{ 
-                          height: modalOpenFaq === index ? 'auto' : 0, 
-                          opacity: modalOpenFaq === index ? 1 : 0 
-                        }}
-                        transition={{ duration: 0.2 }}
-                        className="overflow-hidden"
-                      >
-                        <div className="px-4 pb-4 text-sm text-gray-400 leading-relaxed border-t border-white/5 pt-3">
-                          {faq.answer}
-                        </div>
-                      </motion.div>
                     </div>
-                  ))}
-
-                  {!CATEGORY_FAQS[selectedHelpCategory.id] || CATEGORY_FAQS[selectedHelpCategory.id].length === 0 ? (
-                    <div className="text-center py-12 text-gray-400">
-                      <HelpCircle className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                      <p>No FAQs available for this category yet.</p>
-                    </div>
-                  ) : null}
-                </div>
-
-                {/* Modal Footer */}
-                <div className="p-6 border-t border-white/5 bg-white/[0.02] shrink-0">
-                  <div className="flex flex-col sm:flex-row items-center gap-3">
-                    <p className="text-sm text-gray-400 flex-1">
-                      Can't find what you're looking for?
-                    </p>
-                    <Link to={Routes.CONTACT} onClick={closeModal}>
-                      <Button variant="primary" size="sm">
-                        Contact Support
-                      </Button>
-                    </Link>
                   </div>
-                </div>
-              </motion.div>
+
+                  {/* Modal Content */}
+                  <div className="flex-1 overflow-y-auto p-6 space-y-3 custom-scrollbar">
+                    <div className="mb-4">
+                      <h3 className="text-lg font-bold text-white mb-2 flex items-center gap-2">
+                        <HelpCircle className="w-5 h-5 text-purple-400" />
+                        Frequently Asked Questions
+                      </h3>
+                      <p className="text-sm text-gray-400">
+                        Find answers to common questions about {selectedHelpCategory.title.toLowerCase()}
+                      </p>
+                    </div>
+
+                    {CATEGORY_FAQS[selectedHelpCategory.id]?.map((faq, index) => (
+                      <div
+                        key={index}
+                        className={`rounded-xl border transition-all duration-200 ${modalOpenFaq === index
+                            ? 'bg-white/[0.05] border-purple-500/30'
+                            : 'bg-white/[0.02] border-white/5 hover:border-white/10'
+                          }`}
+                      >
+                        <button
+                          onClick={() => toggleModalFaq(index)}
+                          className="w-full text-left p-4 flex items-start justify-between gap-4"
+                        >
+                          <span className={`font-semibold text-sm transition-colors flex-1 ${modalOpenFaq === index ? 'text-purple-400' : 'text-white'
+                            }`}>
+                            {faq.question}
+                          </span>
+                          <div className={`p-1.5 rounded-lg flex-shrink-0 transition-colors ${modalOpenFaq === index
+                              ? 'bg-purple-500/20 text-purple-400'
+                              : 'bg-white/5 text-gray-400'
+                            }`}>
+                            {modalOpenFaq === index ? (
+                              <ChevronUp className="w-4 h-4" />
+                            ) : (
+                              <ChevronDown className="w-4 h-4" />
+                            )}
+                          </div>
+                        </button>
+
+                        <motion.div
+                          initial={false}
+                          animate={{
+                            height: modalOpenFaq === index ? 'auto' : 0,
+                            opacity: modalOpenFaq === index ? 1 : 0
+                          }}
+                          transition={{ duration: 0.2 }}
+                          className="overflow-hidden"
+                        >
+                          <div className="px-4 pb-4 text-sm text-gray-400 leading-relaxed border-t border-white/5 pt-3">
+                            {faq.answer}
+                          </div>
+                        </motion.div>
+                      </div>
+                    ))}
+
+                    {!CATEGORY_FAQS[selectedHelpCategory.id] || CATEGORY_FAQS[selectedHelpCategory.id].length === 0 ? (
+                      <div className="text-center py-12 text-gray-400">
+                        <HelpCircle className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                        <p>No FAQs available for this category yet.</p>
+                      </div>
+                    ) : null}
+                  </div>
+
+                  {/* Modal Footer */}
+                  <div className="p-6 border-t border-white/5 bg-white/[0.02] shrink-0">
+                    <div className="flex flex-col sm:flex-row items-center gap-3">
+                      <p className="text-sm text-gray-400 flex-1">
+                        Can't find what you're looking for?
+                      </p>
+                      <Link to={Routes.CONTACT} onClick={closeModal}>
+                        <Button variant="primary" size="sm">
+                          Contact Support
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                </motion.div>
               </div>
             </>
           )}
@@ -650,18 +646,17 @@ export default function Help() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-white mb-3">Frequently Asked Questions</h2>
             <p className="text-gray-400 mb-8">Find quick answers to common questions</p>
-            
+
             {/* Category Filter */}
             <div className="flex flex-wrap items-center justify-center gap-3">
               {faqCategories.map((category) => (
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
-                    selectedCategory === category
+                  className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${selectedCategory === category
                       ? 'bg-blue-500 text-white'
                       : 'bg-dark-800/50 text-gray-400 border border-white/10 hover:bg-dark-800 hover:text-white'
-                  }`}
+                    }`}
                 >
                   {category}
                 </button>
@@ -677,11 +672,10 @@ export default function Help() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.05 }}
-                className={`rounded-xl border transition-all duration-200 ${
-                  openFaq === index 
-                    ? 'bg-dark-800 border-blue-500/30' 
+                className={`rounded-xl border transition-all duration-200 ${openFaq === index
+                    ? 'bg-dark-800 border-blue-500/30'
                     : 'bg-dark-800/50 border-white/10 hover:border-white/20'
-                }`}
+                  }`}
               >
                 <button
                   onClick={() => toggleFaq(index)}
@@ -689,25 +683,22 @@ export default function Help() {
                 >
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <span className={`text-xs px-2.5 py-1 rounded-full font-semibold ${
-                        openFaq === index
+                      <span className={`text-xs px-2.5 py-1 rounded-full font-semibold ${openFaq === index
                           ? 'bg-blue-500/20 text-blue-400'
                           : 'bg-white/5 text-gray-500'
-                      }`}>
+                        }`}>
                         {faq.category}
                       </span>
                     </div>
-                    <span className={`font-semibold text-base transition-colors ${
-                      openFaq === index ? 'text-blue-400' : 'text-white'
-                    }`}>
+                    <span className={`font-semibold text-base transition-colors ${openFaq === index ? 'text-blue-400' : 'text-white'
+                      }`}>
                       {faq.question}
                     </span>
                   </div>
-                  <div className={`p-2 rounded-lg flex-shrink-0 transition-colors ${
-                    openFaq === index 
-                      ? 'bg-blue-500/20 text-blue-400' 
+                  <div className={`p-2 rounded-lg flex-shrink-0 transition-colors ${openFaq === index
+                      ? 'bg-blue-500/20 text-blue-400'
                       : 'bg-white/5 text-gray-400'
-                  }`}>
+                    }`}>
                     {openFaq === index ? (
                       <ChevronUp className="w-5 h-5" />
                     ) : (
@@ -715,7 +706,7 @@ export default function Help() {
                     )}
                   </div>
                 </button>
-                
+
                 <motion.div
                   initial={false}
                   animate={{ height: openFaq === index ? 'auto' : 0, opacity: openFaq === index ? 1 : 0 }}
@@ -738,7 +729,7 @@ export default function Help() {
         </div>
 
         {/* Need More Help Section */}
-        <motion.div 
+        <motion.div
           className="rounded-2xl bg-dark-800/50 border border-white/10 p-10 text-center"
           variants={slideUp}
           initial="hidden"

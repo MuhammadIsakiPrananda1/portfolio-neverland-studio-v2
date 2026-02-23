@@ -94,12 +94,12 @@ class AuthService {
       password: data.password,
       password_confirmation: data.password,
     });
-    
+
     // Store token and user data
     if (response.data.token) {
       this.setAuthData(response.data.token, response.data.user);
     }
-    
+
     return response.data;
   }
 
@@ -110,13 +110,14 @@ class AuthService {
     const response = await api.post<AuthResponse>('/auth/login', {
       email: credentials.email,
       password: credentials.password,
+      remember: credentials.remember,
     });
-    
+
     // Store token and user data
     if (response.data.token) {
       this.setAuthData(response.data.token, response.data.user);
     }
-    
+
     return response.data;
   }
 
@@ -138,10 +139,10 @@ class AuthService {
    */
   async getCurrentUser(): Promise<User> {
     const response = await api.get<User>('/auth/user');
-    
+
     // Update stored user data
     localStorage.setItem('auth_user', JSON.stringify(response.data));
-    
+
     return response.data;
   }
 
@@ -173,10 +174,10 @@ class AuthService {
    */
   async updateProfile(data: Partial<User>): Promise<User> {
     const response = await api.put<User>('/auth/profile', data);
-    
+
     // Update stored user data
     localStorage.setItem('auth_user', JSON.stringify(response.data));
-    
+
     return response.data;
   }
 

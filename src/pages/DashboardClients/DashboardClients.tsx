@@ -329,8 +329,8 @@ export default function DashboardClients() {
                       value={client.status}
                       onChange={(e) => handleStatusChange(client.id, e.target.value)}
                       className={`px-3 py-1.5 rounded-full text-xs font-bold border appearance-none cursor-pointer pr-8 shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-dark-900 ${client.status === 'active' ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400 focus:ring-emerald-500/50' :
-                          client.status === 'inactive' ? 'bg-gray-500/10 border-gray-500/30 text-gray-400 focus:ring-gray-500/50' :
-                            'bg-orange-500/10 border-orange-500/30 text-orange-400 focus:ring-orange-500/50'
+                        client.status === 'inactive' ? 'bg-gray-500/10 border-gray-500/30 text-gray-400 focus:ring-gray-500/50' :
+                          'bg-orange-500/10 border-orange-500/30 text-orange-400 focus:ring-orange-500/50'
                         }`}
                     >
                       <option value="active" className="bg-dark-900 text-emerald-500">Active</option>
@@ -367,7 +367,6 @@ export default function DashboardClients() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-            onClick={() => { setShowAddModal(false); setEditingClient(null); }}
           >
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
@@ -498,7 +497,6 @@ export default function DashboardClients() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-            onClick={() => setDeletingClient(null)}
           >
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }}

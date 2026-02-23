@@ -119,6 +119,12 @@ class VMController extends Controller
             // APT is now ready - user can install packages themselves
             // No automatic tool installation - let users install what they need
             
+            // Ensure container is running before returning
+            exec("docker ps -q -f name={$containerId}", $checkOutput);
+            if (empty($checkOutput)) {
+                throw new \Exception("Container failed to start properly");
+            }
+
             // Store session in database/cache with long TTL
             // We use manual expiry check in execute() and status() instead of relying on cache TTL
             cache()->put("vm_session_{$containerId}", [

@@ -3,6 +3,8 @@ import Navbar from '@components/organisms/Navbar';
 import Footer from '@components/organisms/Footer';
 import FloatingButtons from '@components/FloatingButtons';
 import AILiveChat from '@components/AILiveChat';
+import CartDrawer from '@components/organisms/CartDrawer/CartDrawer';
+import FloatingCartButton from '@components/FloatingCartButton';
 
 export default function MainLayout() {
   return (
@@ -16,6 +18,8 @@ export default function MainLayout() {
       </footer>
       <FloatingButtons />
       <AILiveChat />
+      <CartDrawer />
+      <FloatingCartButton />
     </>
   );
 }
