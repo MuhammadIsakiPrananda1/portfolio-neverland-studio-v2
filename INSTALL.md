@@ -1,10 +1,14 @@
-# Installation Guide
+<div align="center">
 
-Detailed installation instructions for Neverland Studio. For a quick overview, see [README.md](README.md).
+# 🚀 Installation Guide
+
+**Detailed installation instructions for Neverland Studio. For a quick overview, see [README.md](README.md).**
+
+</div>
 
 ---
 
-## Quick Start (Docker — 5 Minutes)
+## ⚡ Quick Start (Docker — 5 Minutes)
 
 ```bash
 # 1. Clone the repository
@@ -21,24 +25,24 @@ cp .env.example .env
 docker-compose up -d --build
 
 # 5. Done!
-# Dev frontend:  http://localhost:5173
-# Prod frontend: http://localhost:3000
-# Backend API:   http://localhost:8001
-# phpMyAdmin:    http://localhost:8080
+# 🟢 Dev frontend:  http://localhost:5173
+# 🔵 Prod frontend: http://localhost:3000
+# 🔴 Backend API:   http://localhost:8001
+# 🟠 phpMyAdmin:    http://localhost:8080
 ```
 
 ---
 
-## System Preparation
+## 💻 System Preparation
 
-### Windows
+### 🪟 Windows
 
 1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop)
 2. Install [Git for Windows](https://git-scm.com)
 3. Install [Node.js LTS](https://nodejs.org)
 4. *(Recommended)* Install [VS Code](https://code.visualstudio.com)
 
-### macOS
+### 🍎 macOS
 
 ```bash
 # Install Homebrew (if not already installed)
@@ -54,7 +58,10 @@ brew install git
 brew install node
 ```
 
-### Linux (Ubuntu / Debian)
+### 🐧 Linux (Ubuntu / Debian)
+
+<details>
+<summary><b>Click to expand Linux Setup Steps</b></summary>
 
 ```bash
 # Update system packages
@@ -83,9 +90,11 @@ curl -sS https://getcomposer.org/installer | php
 sudo mv composer.phar /usr/local/bin/composer
 ```
 
+</details>
+
 ---
 
-## Full Installation (Without Docker)
+## 🛠️ Full Installation (Without Docker)
 
 ### Step 1 — Clone the Repository
 
@@ -149,18 +158,18 @@ php artisan reverb:start
 
 ---
 
-## Post-Installation Setup
+## ⚙️ Post-Installation Setup
 
-### Default Admin Credentials
+### 🔑 Default Admin Credentials
 
-> ⚠️ **Change these immediately after first login!**
+> ⚠️ **IMPORTANT: Change these immediately after your first login!**
 
-```
+```text
 Email:    admin@neverlandstudio.com
 Password: password
 ```
 
-### Initial Configuration Checklist
+### ✅ Initial Configuration Checklist
 
 1. **Change Admin Password**
    - Log in to the dashboard
@@ -190,9 +199,9 @@ Password: password
 
 ---
 
-## Building for Production
+## 📦 Building for Production
 
-### Frontend
+### 🎨 Frontend
 
 ```bash
 # Type-check and build
@@ -201,10 +210,9 @@ npm run build
 # Preview the build locally
 npm run preview
 ```
+*Output is in the `dist/` directory, served by Nginx in Docker.*
 
-Output is in the `dist/` directory, served by Nginx in Docker.
-
-### Backend
+### 🐘 Backend
 
 ```bash
 cd backend
@@ -219,7 +227,7 @@ php artisan route:cache
 php artisan view:cache
 ```
 
-### Docker Production Deployment
+### 🐋 Docker Production Deployment
 
 ```bash
 # Build and start production containers
@@ -234,10 +242,12 @@ docker-compose logs -f
 
 ---
 
-## Troubleshooting
+## 🚑 Troubleshooting
+
+<details>
+<summary><b>View Common Errors & Solutions</b></summary>
 
 ### Port Already in Use
-
 ```bash
 # Windows
 netstat -ano | findstr :5173
@@ -249,26 +259,19 @@ kill -9 <PID>
 ```
 
 ### Database Error
-
 ```bash
 cd backend
-
-# Clear config cache first
 php artisan config:clear
-
-# Fresh migration with seed (⚠️ destroys existing data)
-php artisan migrate:fresh --seed
+php artisan migrate:fresh --seed  # ⚠️ destroys existing data
 ```
 
 ### Node Modules Error
-
 ```bash
 rm -rf node_modules package-lock.json
 npm install
 ```
 
 ### Composer Error
-
 ```bash
 cd backend
 composer clear-cache
@@ -277,35 +280,31 @@ composer install --no-interaction
 ```
 
 ### Docker Build Issues
-
 ```bash
-# Full clean rebuild
 docker-compose down -v --rmi all
 docker-compose build --no-cache
 docker-compose up -d
 ```
 
 ### Real-Time Dashboard Not Updating
-
 ```bash
-# Verify Reverb is running
 php artisan reverb:start
-
-# Check .env values
 cat backend/.env | grep REVERB
 cat .env | grep VITE_REVERB
 ```
 
+</details>
+
 ---
 
-## Next Steps
+## ⏭️ Next Steps
 
 After a successful installation:
-
 1. Read [README.md](README.md) for a full project overview
-2. Explore the [API Reference](README.md#api-reference) for available endpoints
+2. Explore the **API Reference** located in the `README.md`
 3. Read [CONTRIBUTING.md](CONTRIBUTING.md) if you'd like to contribute
 
----
-
-**Need help?** Open a GitHub issue or email: **Arlianto032@gmail.com**
+<div align="center">
+<br/>
+Need help? Open a <a href="https://github.com/MuhammadIsakiPrananda/portfolio-neverland-studio-v2/issues">GitHub issue</a> or email: <b>Arlianto032@gmail.com</b>
+</div>
